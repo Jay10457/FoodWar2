@@ -55,6 +55,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
         temp.name = userID;
         所有頭像.Add(temp);
         characterIDList.Add(characterID);
+        //Debug.LogError(characterID);
     }
     public void 移除頭像(string userID, int characterID)
     {
