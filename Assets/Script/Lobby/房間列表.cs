@@ -49,7 +49,7 @@ public class 房間列表 : WindowsPun<房間列表>
         }
 
         // 顯示內容
-        背景.sizeDelta = new Vector2(背景.sizeDelta.x, 100f* roomList.Count);
+        //背景.sizeDelta = new Vector2(背景.sizeDelta.x, 100f* roomList.Count);
         foreach (var r in roomList)
         {
             GameObject temp = Instantiate(房間物件, 背景);
