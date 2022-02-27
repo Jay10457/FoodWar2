@@ -14,7 +14,8 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     {
         刷新人數顯示();
     }
-    [SerializeField] GameObject 開始鈕 = null;
+    [SerializeField] GameObject StartGameButtom = null;
+    [SerializeField] GameObject ClientButtom = null;
     public void Start()
     {
         刷新人數顯示();
@@ -24,7 +25,17 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     {
         // 為自己生成一個玩家實體
         PhotonNetwork.Instantiate("UIPlayer", Vector3.zero, Quaternion.identity);
-        開始鈕.SetActive(PhotonNetwork.IsMasterClient);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartGameButtom.SetActive(true);
+            ClientButtom.SetActive(false);
+        }
+        else
+        {
+            ClientButtom.SetActive(true);
+            StartGameButtom.SetActive(false);
+        }
+       
     }
     public override void OnLeftRoom()
     {
