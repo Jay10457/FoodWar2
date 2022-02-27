@@ -38,11 +38,11 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - SetPlayerName
   - GetPos
-  - SetSkin
+  - RespawnSpaceship
   - SetOpenClose
+  - SetPlayerName
+  - SetSkin
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

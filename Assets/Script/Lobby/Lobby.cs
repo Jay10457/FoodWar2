@@ -12,11 +12,12 @@ public class Lobby : MonoBehaviourPunCallbacks
     {
         ins = this;
         
+
     }
 
     void Start()
     {
-        
+       
         // 自動將所有人拉到房主的場景
         PhotonNetwork.AutomaticallySyncScene = true;
 
@@ -43,6 +44,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         萬讀.ins.info = "連上伺服器...";
         萬讀.ins.isOpen = false;
         連上了 = true;
+        
         OpenMenu();
     }
     public override void OnDisconnected(DisconnectCause cause)
