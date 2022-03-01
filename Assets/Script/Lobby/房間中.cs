@@ -37,15 +37,31 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
         }
        
     }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartGameButtom.SetActive(true);
+            ClientButtom.SetActive(false);
+        }
+        else
+        {
+            ClientButtom.SetActive(true);
+            StartGameButtom.SetActive(false);
+        }
+    }
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
     }
 
     [SerializeField] Text 人數 = null;
+    [SerializeField] Text RoomId = null;
     void 刷新人數顯示()
     {
-        人數.text = PhotonNetwork.CurrentRoom.PlayerCount + " / " + PhotonNetwork.CurrentRoom.MaxPlayers+"\n"+ PhotonNetwork.CurrentRoom.Name;
+        人數.text = PhotonNetwork.CurrentRoom.PlayerCount + " / " + PhotonNetwork.CurrentRoom.MaxPlayers;
+        RoomId.text = PhotonNetwork.CurrentRoom.Name;
     }
     public void 退房()
     {

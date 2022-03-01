@@ -6,13 +6,14 @@ using Photon.Realtime;
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
     [SerializeField] Rigidbody rb = null;
+    [SerializeField] Transform playerPos = null;
+    [SerializeField] Transform cameraPos = null;
     float Speed = 5f;
     private void Reset()
     {
         rb = GetComponent<Rigidbody>();
     }
-    [SerializeField] Transform playerPos = null;
-    [SerializeField] Transform cameraPos = null;
+    
     private void Start()
     {
         // 如果我是本尊

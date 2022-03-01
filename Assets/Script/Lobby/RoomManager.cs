@@ -13,7 +13,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform[] 生成點 = new Transform[0];
     private void Start()
     {
+       
         // 每個人都生成自己的角色到場地上
         PhotonNetwork.Instantiate("Player", 生成點[Random.Range(0, 生成點.Length)].position, Quaternion.identity);
+        
     }
 }
