@@ -1,15 +1,12 @@
-using System.Collections;
+using Cinemachine;
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using Cinemachine;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
-    Animator ani;
-    Rigidbody rb;
-    //[SerializeField] Transform playerPos;
+    [SerializeField] Animator ani;
+    [SerializeField] Rigidbody rb;
     [SerializeField] Transform camLookAt = null;
     [SerializeField] CinemachineVirtualCamera Vcam = null;
     [SerializeField] Vector3 playerMoveInput = Vector3.zero;
@@ -25,27 +22,26 @@ public class PlayerController : MonoBehaviourPunCallbacks
     Vector3 angles = Vector3.zero;
 
     Vector3 rpcPos = Vector3.zero;
-    Quaternion rpcRot = Quaternion.identity;
     Vector3 lastPos = Vector3.zero;
 
-    
-    Quaternion nextRotation;
+
+    Vector2 lastAnim = Vector2.zero;
+
+
+   
 
 
 
-  
+
     private void Start()
     {
-        
-
-      
 
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
 
-            
-            photonView.RPC("SetCharacter", RpcTarget.All, 3);//SaveManager.instance.nowData.characterID
+
+            photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             camLookAt = this.gameObject.transform.Find("camLookAt");
 
@@ -57,58 +53,60 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 camLookAt.transform.localPosition = new Vector3(0, 3, 0);
             }
-           
 
-
-        }       
-        ani = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody>();
+        }
         if (!photonView.IsMine)
         {
             rb.isKinematic = true;
+
         }
 
     }
-    [PunRPC]
-    public void SetCharacter(int cid)
-    {
-        characters[cid].SetActive(true);
-    }
-
    
+
+
 
     //PlayerInput;
     private void Update()
     {
-        InputMagnitude();
-        
+        if (photonView.IsMine)
+        {
+            InputMagnitude();
+            
+        }
+
+
     }
+   
+
+
 
     void InputMagnitude()
     {
         playerMoveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
         yaw = -Input.GetAxis("Mouse Y");
         pitch = Input.GetAxis("Mouse X");
-        
-        
+
+
     }
+   
 
     private void LateUpdate()
     {
         if (photonView.IsMine)
         {
-            
+
             Vcam.Follow = camLookAt;
             CameraRotation();
-        }
-        else
-        {
+            AnimatePlayer();
+            SyncAnime();
+        }      
 
-        }
-        
     }
 
+    /// <summary>
+    /// Move the Character
+    /// </summary>
     private void Move()
     {
         moveDir = Vector3.ClampMagnitude(transform.TransformDirection(playerMoveInput), 1) * velocity;
@@ -123,34 +121,35 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
 
 
-        AnimatePlayer();
+
 
     }
-    [PunRPC]
+  
 
-    public void GetPos(Vector3 pos)
-    {
-        rpcPos = pos;
-    }
-    [PunRPC]
-
-    public void GetRot(Quaternion rot)
-    {
-        rpcRot = rot;
-    }
 
     private void FixedUpdate()
     {
         if (photonView.IsMine)
         {
             Move();
-            PlayerRotate();
+            
+            PlayerRotate();                       
         }
         else
         {
             rb.MovePosition(Vector3.Lerp(rb.position, rpcPos, Time.deltaTime * syncRate));
         }
-      
+
+    }
+    private void SyncAnime()
+    {
+        float 長度 = Vector2.Distance(lastAnim, new Vector2(playerMoveInput.x, playerMoveInput.z));
+        if (長度 > 0.01f)
+        {
+            lastAnim = new Vector2(playerMoveInput.x, playerMoveInput.z);
+            // 同步
+            photonView.RPC("SendAnim", RpcTarget.Others, lastAnim.x, lastAnim.y);
+        }
     }
 
     private void CameraRotation()
@@ -171,32 +170,52 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             angles.x = 45;
         }
-        
+
 
         camLookAt.transform.localEulerAngles = angles;
         //nextRotation = Quaternion.Lerp(camLookAt.transform.rotation, nextRotation, Time.deltaTime * 0.5f);
-        
-       
+
+
     }
 
     private void AnimatePlayer()
     {
         ani.SetFloat("MoveX", playerMoveInput.x);
         ani.SetFloat("MoveZ", playerMoveInput.z);
+
+
     }
 
     private void PlayerRotate()
     {
-       ;
+        ;
         Quaternion camDir = Quaternion.Euler(0, camLookAt.transform.rotation.eulerAngles.y, 0);
         //playerPos.rotation = Quaternion.Lerp(playerPos.rotation, camDir, Time.fixedDeltaTime * 10f);
 
         //rb.MoveRotation(Quaternion.Lerp(rb.rotation, camDir, Time.fixedDeltaTime * 2f));
-        
+
         rb.MoveRotation(camDir);
         camLookAt.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
 
     }
+    #region RPC Funtions
+    [PunRPC]
 
-
+    public void GetPos(Vector3 pos)
+    {
+        rpcPos = pos;
+    }
+    [PunRPC]
+    public void SetCharacter(int cid)
+    {
+        characters[cid].SetActive(true);
+        ani = characters[cid].GetComponent<Animator>();
+    }
+    [PunRPC]
+    public void SendAnim(float animX, float animZ)
+    {
+        ani.SetFloat("MoveX", animX);
+        ani.SetFloat("MoveZ", animZ);
+    }
+    #endregion
 }

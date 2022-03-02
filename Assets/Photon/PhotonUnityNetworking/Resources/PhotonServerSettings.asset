@@ -45,6 +45,9 @@ MonoBehaviour:
   - SetSkin
   - SetCharacter
   - GetRot
+  - SendAnim
+  - SendAnimX
+  - SendAnimZ
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

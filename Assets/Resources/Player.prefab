@@ -259,7 +259,7 @@ CapsuleCollider:
   m_Radius: 1.05
   m_Height: 4.5
   m_Direction: 1
-  m_Center: {x: 0, y: 2.25, z: 0}
+  m_Center: {x: 0, y: 2.27, z: 0}
 --- !u!1 &2466618739437064881
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,30 +506,6 @@ CapsuleCollider:
   m_Height: 4.5
   m_Direction: 1
   m_Center: {x: 0, y: 2.25, z: 0}
---- !u!114 &8500511332554247094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3228344931053702760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 1
-    SynchronizeType: 1
-    Name: MoveX
-  - Type: 1
-    SynchronizeType: 1
-    Name: MoveZ
-  m_SynchronizeLayers:
-  - SynchronizeType: 0
-    LayerIndex: 0
 --- !u!136 &286061288520850592
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -627,9 +603,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8210211198393601551}
   - {fileID: 285294498941548257}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 8500511332554247094}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -645,6 +618,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4570bb339f2a24ea7d77618609ef2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ani: {fileID: 0}
+  rb: {fileID: 7393333898943243804}
   camLookAt: {fileID: 0}
   Vcam: {fileID: 0}
   playerMoveInput: {x: 0, y: 0, z: 0}
@@ -689,7 +664,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3780361221915666280}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8efc6b1d64977384eb3405357896c656, type: 3}
   m_Name: 
@@ -1096,8 +1071,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 3447684270095796010}
     m_Modifications:
     - target: {fileID: 2084993729112021031, guid: 3d794fa0ad7b57a43ae1b74b6d5eecb0, type: 3}
-      propertyPath: m_CullingMode
+      propertyPath: m_UpdateMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084993729112021031, guid: 3d794fa0ad7b57a43ae1b74b6d5eecb0, type: 3}
+      propertyPath: m_CullingMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4703058492333627623, guid: 3d794fa0ad7b57a43ae1b74b6d5eecb0, type: 3}
       propertyPath: m_Name
@@ -1170,6 +1149,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3447684270095796010}
     m_Modifications:
+    - target: {fileID: 1092672835628239479, guid: b96f9571471e4264a8dd916fb64f101f, type: 3}
+      propertyPath: m_UpdateMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5945323664355003063, guid: b96f9571471e4264a8dd916fb64f101f, type: 3}
       propertyPath: m_Name
       value: Hch_00
