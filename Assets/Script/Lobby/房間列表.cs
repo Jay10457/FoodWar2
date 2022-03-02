@@ -53,7 +53,8 @@ public class 房間列表 : WindowsPun<房間列表>
         foreach (var r in roomList)
         {
             GameObject temp = Instantiate(房間物件, 背景);
-            temp.transform.GetChild(0).GetComponent<Text>().text = r.Name + " "+ r.PlayerCount + " / " +r.MaxPlayers;
+            temp.transform.GetChild(0).GetComponent<Text>().text = r.Name;
+            temp.transform.GetChild(1).GetComponent<Text>().text = r.PlayerCount + " / " + r.MaxPlayers;
             temp.GetComponent<房間物件>().房名 = r.Name;
             垃圾桶.Add(temp);
         }
