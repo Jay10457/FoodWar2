@@ -310,7 +310,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void PlayerRotate()
     {
-        ;
+        
         Quaternion camDir = Quaternion.Euler(0, camLookAt.transform.rotation.eulerAngles.y, 0);
         //playerPos.rotation = Quaternion.Lerp(playerPos.rotation, camDir, Time.fixedDeltaTime * 10f);
 
