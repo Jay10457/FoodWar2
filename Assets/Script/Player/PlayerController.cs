@@ -1,12 +1,14 @@
 using Cinemachine;
 using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] Animator ani;
-    [SerializeField] Rigidbody rb;
+    [SerializeField] Animator ani = null;
+    [SerializeField] Rigidbody rb = null;
+    [SerializeField] Collider characterCollider = null;
     [SerializeField] Transform camLookAt = null;
     [SerializeField] CinemachineVirtualCamera Vcam = null;
     [SerializeField] Vector3 playerMoveInput = Vector3.zero;
@@ -17,8 +19,23 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] float MOUSE_SENTIVY = 10f;
     [SerializeField] float syncRate = 10f;
     [SerializeField] float distanceToSync = 0.1f;
+    [SerializeField] float jumpForce = 0;
+    [SerializeField] float sprintForce = 0;
+    [SerializeField] float raycastDistance = 0;
+    [SerializeField] float sprintTime;
+    [SerializeField] float cdTime = 10;
+    [SerializeField] SkillCoolDown skillCoolDown;
+
     public List<GameObject> characters;
+    bool jump;
+    bool sprint;
+    bool isSprinting;
+    bool isSkillOk = true;
+   
+
     float angle = 0;
+    Color rayColor;
+
     Vector3 angles = Vector3.zero;
 
     Vector3 rpcPos = Vector3.zero;
@@ -28,7 +45,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     Vector2 lastAnim = Vector2.zero;
 
 
-   
+
 
 
 
@@ -36,14 +53,18 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private void Start()
     {
 
+
+        
+
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
 
-
+            skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
             photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             camLookAt = this.gameObject.transform.Find("camLookAt");
+            
 
             if (true)// if team == green
             {
@@ -62,7 +83,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
 
     }
-   
+
 
 
 
@@ -71,8 +92,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            InputMagnitude();
-            
+            InputMagnitude(!isSprinting);
+            Jump();
+            Sprint();
+
         }
 
 
@@ -81,15 +104,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
 
-    void InputMagnitude()
+    void InputMagnitude(bool sprinting)
     {
         playerMoveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         yaw = -Input.GetAxis("Mouse Y");
         pitch = Input.GetAxis("Mouse X");
+        jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
+        sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
 
 
     }
-   
+
 
     private void LateUpdate()
     {
@@ -100,7 +125,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             CameraRotation();
             AnimatePlayer();
             SyncAnime();
-        }      
+        }
 
     }
 
@@ -123,8 +148,75 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
 
+
     }
-  
+    private void Jump()
+    {
+        if (jump && isGrounded())
+        {
+            rb.velocity += Vector3.up * jumpForce;
+
+        }
+        else
+        {
+            // rb.AddForce(Physics.gravity * rb.mass, ForceMode.Force);
+        }
+    }
+
+    private void Sprint()
+    {
+        if (sprint && isSkillOk && !isSprinting)
+        {
+            Debug.LogError("sprint");
+            StartCoroutine(SprintCoroutine());
+
+        }
+
+    }
+    private IEnumerator SprintCoroutine()
+    {
+        float startTime = Time.time;
+        float originVelocity = velocity;
+
+        isSkillOk = false;
+        while (Time.time < startTime + sprintTime)
+        {
+
+            isSprinting = true;
+            velocity = sprintForce;
+
+
+            yield return null;
+            isSprinting = false;
+            
+            velocity = originVelocity;
+
+        }
+        StartCoroutine(CoolDown());
+    }
+    private IEnumerator CoolDown()
+    {
+        float startTime = Time.time;
+        skillCoolDown.timeText.gameObject.SetActive(true);
+       
+        while (Time.time < startTime + cdTime)
+        {
+
+           
+            skillCoolDown.timeText.text = ((startTime + cdTime) - Time.time).ToString("0");
+            skillCoolDown.cdProgress.fillAmount = ((startTime + cdTime) - Time.time) / cdTime;
+
+
+            yield return null;
+        }
+        skillCoolDown.timeText.gameObject.SetActive(false);
+        isSkillOk = true;
+
+    }
+
+
+
+
 
 
     private void FixedUpdate()
@@ -132,8 +224,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             Move();
-            
-            PlayerRotate();                       
+
+            PlayerRotate();
         }
         else
         {
@@ -182,9 +274,39 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         ani.SetFloat("MoveX", playerMoveInput.x);
         ani.SetFloat("MoveZ", playerMoveInput.z);
+        if (isSprinting)
+        {
+            ani.SetBool("Sprint", true);
+        }
+        else
+        {
+            ani.SetBool("Sprint", false);
+        }
 
 
     }
+    bool isGrounded()
+    {
+
+
+        if (Physics.Raycast(characterCollider.bounds.center, Vector3.down, characterCollider.bounds.extents.y + raycastDistance))
+        {
+
+            rayColor = Color.red;
+
+            return true;
+        }
+        else
+        {
+            rayColor = Color.white;
+
+            return false;
+        }
+
+
+
+    }
+
 
     private void PlayerRotate()
     {
@@ -198,7 +320,18 @@ public class PlayerController : MonoBehaviourPunCallbacks
         camLookAt.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
 
     }
+    private void OnDrawGizmos()
+    {
+        if (characterCollider != null)
+        {
+            Debug.DrawRay(characterCollider.bounds.center, Vector3.down * (characterCollider.bounds.extents.y + raycastDistance), rayColor);
+        }
+    }
+
+
+
     #region RPC Funtions
+
     [PunRPC]
 
     public void GetPos(Vector3 pos)
@@ -210,6 +343,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         characters[cid].SetActive(true);
         ani = characters[cid].GetComponent<Animator>();
+        characterCollider = characters[cid].GetComponent<Collider>();
     }
     [PunRPC]
     public void SendAnim(float animX, float animZ)
