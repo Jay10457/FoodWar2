@@ -28,7 +28,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (SceneManager.GetActiveScene().name == "S01")
         {
-            Debug.LogError("UI!");
+            //Debug.LogError("UI!");
         }
     }
 }

@@ -26,16 +26,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] float sprintTime;
     [SerializeField] float cdTime = 10;
     [SerializeField] float stunTime = 5f;
-    
+    float stunRemainTime = -1;
+
 
     public List<GameObject> characters;
     bool jump;
     bool sprint;
-    public bool isSprinting;
-    public bool isStun;
+    bool isSprinting;
+    bool isStun;
+
+
     bool isSkillOk = true;
-   
-   
+
+
 
     float angle = 0;
     Color rayColor;
@@ -58,17 +61,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
 
 
-        
+
 
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
 
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
-            photonView.RPC("SetCharacter", RpcTarget.All, 9);//SaveManager.instance.nowData.characterID
+            photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             camLookAt = this.gameObject.transform.Find("camLookAt");
-            
+
 
             if (true)// if team == green
             {
@@ -104,7 +107,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     }
-   
+
 
 
 
@@ -118,7 +121,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
             sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
         }
-       
+
 
 
     }
@@ -203,7 +206,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             yield return null;
             isSprinting = false;
-            
+
             velocity = originVelocity;
 
         }
@@ -213,11 +216,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         float startTime = Time.time;
         skillCoolDown.timeText.gameObject.SetActive(true);
-       
+
         while (Time.time < startTime + cdTime)
         {
 
-           
+
             skillCoolDown.timeText.text = ((startTime + cdTime) - Time.time).ToString("0");
             skillCoolDown.cdProgress.fillAmount = ((startTime + cdTime) - Time.time) / cdTime;
 
@@ -257,6 +260,23 @@ public class PlayerController : MonoBehaviourPunCallbacks
             // ¦P¨B
             photonView.RPC("SendAnim", RpcTarget.Others, lastAnim.x, lastAnim.y);
         }
+        if (isStun && stunRemainTime == stunTime)
+        {
+            SendStunAnim();
+                    
+        }
+        else if (!isStun && stunRemainTime == 0)
+        {
+            stunRemainTime = -1;
+            SendStunAnim();
+            
+        }
+
+    }
+    private void SendStunAnim()
+    {
+        photonView.RPC("StunAnim", RpcTarget.Others, isStun);
+        Debug.LogError("StunStop");
     }
 
     private void CameraRotation()
@@ -297,6 +317,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             ani.SetBool("Sprint", false);
         }
+        if (isStun)
+        {
+            ani.SetBool("Stun", true);
+        }
+        else
+        {
+            ani.SetBool("Stun", false);
+        }
 
 
     }
@@ -325,7 +353,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void PlayerRotate()
     {
-        
+
         Quaternion camDir = Quaternion.Euler(0, camLookAt.transform.rotation.eulerAngles.y, 0);
         //playerPos.rotation = Quaternion.Lerp(playerPos.rotation, camDir, Time.fixedDeltaTime * 10f);
 
@@ -351,19 +379,32 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             collision.gameObject.GetComponent<PhotonView>().RPC("ApplyStun", RpcTarget.All);
         }
-        
-        
+
+
     }
     private IEnumerator StunCountDown()
     {
         isStun = true;
+
         float startTime = Time.time;
-        while(Time.time < startTime + stunTime)
+
+
+        while (Time.time < startTime + stunTime)
         {
+            stunRemainTime = (startTime + stunTime) - Time.time;
+
             yield return null;
-            //Debug.LogError((startTime + stunTime) - Time.time);
+
+            stunRemainTime = 0;
         }
         isStun = false;
+        
+       
+        
+        
+
+
+
     }
 
 
@@ -372,22 +413,25 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     #region RPC Funtions
+
+    [PunRPC]
+    public void StunAnim(bool _stun)
+    {
+        ani.SetBool("Stun", _stun);
+    }
     [PunRPC]
     public void ApplyStun()
     {
         if (photonView.IsMine)
         {
             StartCoroutine(StunCountDown());
-            
-        }
-        
 
-    }  [PunRPC]
-    public void StunAnim()
-    {
-        Debug.LogError("StunAnim!");
+        }
+
+
     }
-  
+
+
     [PunRPC]
 
     public void GetPos(Vector3 pos)

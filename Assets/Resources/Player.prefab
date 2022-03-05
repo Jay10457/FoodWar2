@@ -417,8 +417,6 @@ MonoBehaviour:
   - {fileID: 7749860789131375008}
   - {fileID: 3301414789681905015}
   - {fileID: 7689622143530755680}
-  isSprinting: 0
-  isStun: 0
 --- !u!114 &8210211198393601551
 MonoBehaviour:
   m_ObjectHideFlags: 0
