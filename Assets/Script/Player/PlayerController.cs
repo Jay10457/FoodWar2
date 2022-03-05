@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] Animator ani = null;
     [SerializeField] Rigidbody rb = null;
     [SerializeField] Collider characterCollider = null;
+    [SerializeField] SkillCoolDown skillCoolDown;
     [SerializeField] Transform camLookAt = null;
     [SerializeField] CinemachineVirtualCamera Vcam = null;
     [SerializeField] Vector3 playerMoveInput = Vector3.zero;
@@ -24,13 +25,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] float raycastDistance = 0;
     [SerializeField] float sprintTime;
     [SerializeField] float cdTime = 10;
-    [SerializeField] SkillCoolDown skillCoolDown;
+    [SerializeField] float stunTime = 5f;
+    
 
     public List<GameObject> characters;
     bool jump;
     bool sprint;
-    bool isSprinting;
+    public bool isSprinting;
+    public bool isStun;
     bool isSkillOk = true;
+   
    
 
     float angle = 0;
@@ -92,7 +96,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            InputMagnitude(!isSprinting);
+            InputMagnitude(isStun);
             Jump();
             Sprint();
 
@@ -104,13 +108,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
 
-    void InputMagnitude(bool sprinting)
+    void InputMagnitude(bool _stun)
     {
-        playerMoveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        yaw = -Input.GetAxis("Mouse Y");
-        pitch = Input.GetAxis("Mouse X");
-        jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
-        sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
+        if (!_stun)
+        {
+            playerMoveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            yaw = -Input.GetAxis("Mouse Y");
+            pitch = Input.GetAxis("Mouse X");
+            jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
+            sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
+        }
+       
 
 
     }
@@ -150,6 +158,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     }
+    /// <summary>
+    ///  Jump
+    /// </summary>
     private void Jump()
     {
         if (jump && isGrounded())
@@ -163,6 +174,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
+
+    /// <summary>
+    /// Sprint
+    /// </summary>
     private void Sprint()
     {
         if (sprint && isSkillOk && !isSprinting)
@@ -329,9 +344,50 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
 
+    #region ApplyStun
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isSprinting && collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<PhotonView>().RPC("ApplyStun", RpcTarget.All);
+        }
+        
+        
+    }
+    private IEnumerator StunCountDown()
+    {
+        isStun = true;
+        float startTime = Time.time;
+        while(Time.time < startTime + stunTime)
+        {
+            yield return null;
+            //Debug.LogError((startTime + stunTime) - Time.time);
+        }
+        isStun = false;
+    }
+
+
+    #endregion
+
+
 
     #region RPC Funtions
+    [PunRPC]
+    public void ApplyStun()
+    {
+        if (photonView.IsMine)
+        {
+            StartCoroutine(StunCountDown());
+            
+        }
+        
 
+    }  [PunRPC]
+    public void StunAnim()
+    {
+        Debug.LogError("StunAnim!");
+    }
+  
     [PunRPC]
 
     public void GetPos(Vector3 pos)

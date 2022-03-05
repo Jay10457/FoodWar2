@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 285294498941548257}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -621,6 +621,7 @@ MonoBehaviour:
   ani: {fileID: 0}
   rb: {fileID: 7393333898943243804}
   characterCollider: {fileID: 0}
+  skillCoolDown: {fileID: 0}
   camLookAt: {fileID: 0}
   Vcam: {fileID: 0}
   playerMoveInput: {x: 0, y: 0, z: 0}
@@ -636,7 +637,7 @@ MonoBehaviour:
   raycastDistance: 0.3
   sprintTime: 0.5
   cdTime: 10
-  skillCoolDown: {fileID: 0}
+  stunTime: 5
   characters:
   - {fileID: 2424083426802799722}
   - {fileID: 128813815257600289}
@@ -648,6 +649,8 @@ MonoBehaviour:
   - {fileID: 7749860789131375008}
   - {fileID: 3301414789681905015}
   - {fileID: 1047414634705169462}
+  isSprinting: 0
+  isStun: 0
 --- !u!114 &8210211198393601551
 MonoBehaviour:
   m_ObjectHideFlags: 0
