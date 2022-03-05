@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -623603649343465320
-    second: Jch01_Run
+    second: Jch01_RunForward
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -38,7 +38,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Jch01_Run
+      name: Jch01_RunForward
       takeName: Scene
       internalID: 0
       firstFrame: 4
