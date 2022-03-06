@@ -386,6 +386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4570bb339f2a24ea7d77618609ef2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  head: {fileID: 0}
+  headOffset: {x: 0, y: 0, z: 0}
   ani: {fileID: 0}
   rb: {fileID: 7393333898943243804}
   characterCollider: {fileID: 0}

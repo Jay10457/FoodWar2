@@ -71,7 +71,20 @@ public class Movement : MonoBehaviour
     private void Update()
     {
         InputMagnitude();
+        #region testIK
 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ani.SetLayerWeight(1, 1);
+            ani.SetLayerWeight(2, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ani.SetLayerWeight(1, 0);
+            ani.SetLayerWeight(2, 1);
+
+        }
+        #endregion
     }
 
     void InputMagnitude()

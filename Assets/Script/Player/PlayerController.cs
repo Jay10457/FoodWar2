@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
+    
     [SerializeField] Animator ani = null;
     [SerializeField] Rigidbody rb = null;
     [SerializeField] Collider characterCollider = null;
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
             sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
         }
-
+       
 
 
     }
@@ -136,6 +137,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             CameraRotation();
             AnimatePlayer();
             SyncAnime();
+           
         }
 
     }
@@ -276,7 +278,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private void SendStunAnim()
     {
         photonView.RPC("StunAnim", RpcTarget.Others, isStun);
-        Debug.LogError("StunStop");
+        
     }
 
     private void CameraRotation()
@@ -395,8 +397,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             yield return null;
 
-            stunRemainTime = 0;
+            
         }
+        stunRemainTime = 0;
         isStun = false;
         
        
