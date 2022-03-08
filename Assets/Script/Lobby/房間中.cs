@@ -19,7 +19,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     public void Start()
     {
         刷新人數顯示();
-        Invoke("CreateMe", 0.3f);
+        Invoke("CreateMe", 0.2f);
     }
     void CreateMe()
     {
@@ -77,7 +77,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     public void 新增頭像(string userID, string 玩家名稱, int characterID)
     {
         GameObject temp =  Instantiate(頭像, 背景);
-        temp.transform.GetChild(0).GetComponent<Text>().text = 玩家名稱;
+        temp.transform.GetChild(11).GetComponent<Text>().text = 玩家名稱;
         temp.GetComponent<設定頭像>().選擇頭像(characterID);
         temp.name = userID;
         所有頭像.Add(temp);
@@ -99,6 +99,6 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
 
     public void StartGame()
     {
-        SceneManager.LoadSceneAsync("S01");
+        SceneManager.LoadSceneAsync("1");
     }
 }

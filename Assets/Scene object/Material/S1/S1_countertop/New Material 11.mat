@@ -10,7 +10,7 @@ Material:
   m_Name: New Material 11
   m_Shader: {fileID: 4800000, guid: bee44b4a58655ee4cbff107302a3e131, type: 3}
   m_ShaderKeywords: DR_RIM_ON _CELPRIMARYMODE_STEPS _TEXTUREBLENDINGMODE_MULTIPLY
-    _UNITYSHADOWMODE_MULTIPLY
+    _UNITYSHADOWMODE_MULTIPLY _UNITYSHADOW_OCCLUSION
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -124,7 +124,7 @@ Material:
     - _TextureImpact: 1
     - _UVSec: 0
     - _UnityShadowMode: 1
-    - _UnityShadowOcclusion: 0
+    - _UnityShadowOcclusion: 1
     - _UnityShadowPower: 0.2
     - _UnityShadowSharpness: 1
     - _VertexColorsEnabled: 0
@@ -135,12 +135,12 @@ Material:
     - _ColorDim: {r: 0.31132078, g: 0.13656996, b: 0.13656996, a: 1}
     - _ColorDimCurve: {r: 0.85023, g: 0.85034, b: 0.85045, a: 0.85056}
     - _ColorDimExtra: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorDimSteps: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+    - _ColorDimSteps: {r: 0.4245283, g: 0.11414204, b: 0.11414204, a: 1}
     - _ColorGradient: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FlatRimColor: {r: 0.8867924, g: 0.61565757, b: 0.53960484, a: 1}
     - _FlatSpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _LightmapDirection: {r: 0, g: 1, b: 0, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
-    - _UnityShadowColor: {r: 0.85023, g: 0.85034, b: 0.85045, a: 0.85056}
+    - _UnityShadowColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

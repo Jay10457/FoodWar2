@@ -69,19 +69,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
 
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
-            photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
+            photonView.RPC("SetCharacter", RpcTarget.All, SaveManager.instance.nowData.characterID);//SaveManager.instance.nowData.characterID
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             camLookAt = this.gameObject.transform.Find("camLookAt");
 
 
-            if (true)// if team == green
+            if (SaveManager.instance.nowData.characterID <= 4)// if team == green
             {
                 camLookAt.transform.localPosition = new Vector3(0, 3.5f, 0);
             }
-            else // if team == red 
+            else if (SaveManager.instance.nowData.characterID >= 5)// if team == red 
             {
                 camLookAt.transform.localPosition = new Vector3(0, 3, 0);
             }
+           
 
         }
         if (!photonView.IsMine)

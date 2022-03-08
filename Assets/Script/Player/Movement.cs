@@ -20,6 +20,8 @@ public class Movement : MonoBehaviour
     [SerializeField] float MOUSE_SENTIVY = 10f;
     [SerializeField] float syncRate = 10f;
     [SerializeField] float distanceToSync = 0.1f;
+    [SerializeField] GameObject gun;
+    [SerializeField] GameObject bumb;
     public List<GameObject> characters;
     float angle = 0;
     Vector3 angles = Vector3.zero;
@@ -40,6 +42,7 @@ public class Movement : MonoBehaviour
 
         ani = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
+
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -77,11 +80,15 @@ public class Movement : MonoBehaviour
         {
             ani.SetLayerWeight(1, 1);
             ani.SetLayerWeight(2, 0);
+            gun.SetActive(true);
+            bumb.SetActive(false);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ani.SetLayerWeight(1, 0);
             ani.SetLayerWeight(2, 1);
+            gun.SetActive(false);
+            bumb.SetActive(true);
 
         }
         #endregion
@@ -167,9 +174,10 @@ public class Movement : MonoBehaviour
         Quaternion camDir = Quaternion.Euler(0, camLookAt.transform.rotation.eulerAngles.y, 0);
         //playerPos.rotation = Quaternion.Lerp(playerPos.rotation, camDir, Time.fixedDeltaTime * 10f);
 
-        //rb.MoveRotation(Quaternion.Lerp(rb.rotation, camDir, Time.fixedDeltaTime * 2f));
+        //rb.MoveRotation(Quaternion.Lerp(rb.rotation, camDir, Time.fixedDeltaTime * 10f));
 
         rb.MoveRotation(camDir);
+        //rb.MoveRotation(Quaternion.Slerp(rb.rotation, camDir, 4f * Time.deltaTime));
         camLookAt.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
 
     }
