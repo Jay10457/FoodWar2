@@ -35,6 +35,7 @@ public class InventoryManager : MonoBehaviour
     public static int AddItemToInventory(Item item, int amount)
     {
         int remaining = amount;
+        //Debug.LogError("add");
 
         //check slots that contain same item
         foreach (InventorySlot slot in slots)

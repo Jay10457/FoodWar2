@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
+    
     [Tooltip("stack Limit")]
     public int stackLimit = 5;
     public Sprite itemSprite;
@@ -15,6 +16,8 @@ public class Item : ScriptableObject
     public Color itemBorderColor = new Color(1, 1, 1, 1);
     [Tooltip("If this is an equipable item, this is what GameObject will spawn when held/equipped.")]
     public GameObject equipPrefab;
+    public int dropAmount;
+   
 
 
     public enum Type
