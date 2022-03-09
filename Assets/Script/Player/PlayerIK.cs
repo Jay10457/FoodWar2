@@ -22,6 +22,7 @@ public class PlayerIK : MonoBehaviour
     [Range(0, 1)]
     [SerializeField] float rightHandWeight;
     [SerializeField] Transform lookAtTransform;
+    [SerializeField] Movement movement;
 
 
 
@@ -30,20 +31,27 @@ public class PlayerIK : MonoBehaviour
         lookAtTransform = GameObject.Find("CrossHairLookAt").transform;
 
         animator = GetComponent<Animator>();
+        movement = GetComponent<Movement>();
 
     }
 
     private void Update()
     {
-        lookAt = lookAtTransform.position;
+        if (!movement.isSprinting)
+        {
+            lookAt = lookAtTransform.position;
+        }
+        
 
     }
 
     private void OnAnimatorIK(int layerIndex)
     {
         //Look IK
-        animator.SetLookAtPosition(lookAt);
-        animator.SetLookAtWeight(weight, bodyWeight, headWeight);
+        if (!movement.isSprinting)
+        {
+            lookAtIK();
+        }
 
         if (layerIndex == 1 && animator.GetLayerWeight(1) == 1)
         {
@@ -56,6 +64,12 @@ public class PlayerIK : MonoBehaviour
 
 
 
+    }
+
+    private void lookAtIK()
+    {
+        animator.SetLookAtPosition(lookAt);
+        animator.SetLookAtWeight(weight, bodyWeight, headWeight);
     }
 
     public void GunIK()

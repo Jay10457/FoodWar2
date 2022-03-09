@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public List<GameObject> characters;
     bool jump;
     bool sprint;
-    bool isSprinting;
+    public bool isSprinting;
     bool isStun;
 
 

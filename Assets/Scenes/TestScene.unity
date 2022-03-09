@@ -147,12 +147,17 @@ MonoBehaviour:
   pitch: 0
   velocity: 15
   moveDir: {x: 0, y: 0, z: 0}
+  sprintForce: 0
+  sprintTime: 0
   MOUSE_SENTIVY: 10
   syncRate: 10
   distanceToSync: 0.1
+  cdTime: 10
   gun: {fileID: 0}
   bumb: {fileID: 0}
+  skillCoolDown: {fileID: 0}
   characters: []
+  isSprinting: 0
 --- !u!114 &9460271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +183,7 @@ MonoBehaviour:
   headWeight: 0.5
   rightHandWeight: 0
   lookAtTransform: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!4 &9460272 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6521158411488204951, guid: 7a2ddf9dc0be6c84c98dc9be60949b33, type: 3}
@@ -401,12 +407,17 @@ MonoBehaviour:
   pitch: 0
   velocity: 15
   moveDir: {x: 0, y: 0, z: 0}
+  sprintForce: 60
+  sprintTime: 0.5
   MOUSE_SENTIVY: 10
   syncRate: 10
   distanceToSync: 0.1
+  cdTime: 3
   gun: {fileID: 295282237}
   bumb: {fileID: 123594872}
+  skillCoolDown: {fileID: 0}
   characters: []
+  isSprinting: 0
 --- !u!54 &136256893
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -432,7 +443,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 136256891}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 1
   m_Height: 4.5
   m_Direction: 1
@@ -462,6 +473,7 @@ MonoBehaviour:
   headWeight: 0.5
   rightHandWeight: 1
   lookAtTransform: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!1 &176151019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,12 +1034,17 @@ MonoBehaviour:
   pitch: 0
   velocity: 15
   moveDir: {x: 0, y: 0, z: 0}
+  sprintForce: 0
+  sprintTime: 0
   MOUSE_SENTIVY: 10
   syncRate: 10
   distanceToSync: 0.1
+  cdTime: 10
   gun: {fileID: 0}
   bumb: {fileID: 0}
+  skillCoolDown: {fileID: 0}
   characters: []
+  isSprinting: 0
 --- !u!54 &955084041
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1051,7 +1068,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 955084037}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 291b129bfcaad534a9b59c3c3421b383, type: 3}
   m_Name: 
@@ -1069,6 +1086,7 @@ MonoBehaviour:
   headWeight: 0.5
   rightHandWeight: 0
   lookAtTransform: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!1 &1035238947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,12 +1557,17 @@ MonoBehaviour:
   pitch: 0
   velocity: 15
   moveDir: {x: 0, y: 0, z: 0}
+  sprintForce: 0
+  sprintTime: 0
   MOUSE_SENTIVY: 10
   syncRate: 10
   distanceToSync: 0.1
+  cdTime: 10
   gun: {fileID: 0}
   bumb: {fileID: 0}
+  skillCoolDown: {fileID: 0}
   characters: []
+  isSprinting: 0
 --- !u!114 &1861610410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1570,6 +1593,7 @@ MonoBehaviour:
   headWeight: 0.5
   rightHandWeight: 0
   lookAtTransform: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!1 &1946486848
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,6 +1749,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jch_02
       objectReference: {fileID: 0}
+    - target: {fileID: 1151908314390309552, guid: ac903ccf38785934585b1aec61dceb68, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac903ccf38785934585b1aec61dceb68, type: 3}
 --- !u!1001 &239940154341830575
@@ -1781,6 +1809,10 @@ PrefabInstance:
     - target: {fileID: 1122831844917955156, guid: a9d91e49470be8f47b463cc909c944b9, type: 3}
       propertyPath: m_Name
       value: Hch_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1122831844917955156, guid: a9d91e49470be8f47b463cc909c944b9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5926426932267272852, guid: a9d91e49470be8f47b463cc909c944b9, type: 3}
       propertyPath: m_Controller
@@ -1911,7 +1943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4319938079287983268, guid: 50c91c4880161554f8dc1cba2ef1a29b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4319938079287983268, guid: 50c91c4880161554f8dc1cba2ef1a29b, type: 3}
       propertyPath: m_TagString
@@ -2094,6 +2126,10 @@ PrefabInstance:
     - target: {fileID: 5410345711159117788, guid: acb790dd23dfafa4cb4cec50afdad1b0, type: 3}
       propertyPath: m_Name
       value: Hch_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 5410345711159117788, guid: acb790dd23dfafa4cb4cec50afdad1b0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5410345711159117788, guid: acb790dd23dfafa4cb4cec50afdad1b0, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2353,7 +2389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5945323664355003063, guid: b96f9571471e4264a8dd916fb64f101f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5945323664355003063, guid: b96f9571471e4264a8dd916fb64f101f, type: 3}
       propertyPath: m_TagString

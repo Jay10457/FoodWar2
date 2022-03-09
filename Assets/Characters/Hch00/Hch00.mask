@@ -7,5 +7,59 @@ AvatarMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hch00
-  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000000000000000000000100000001000000
-  m_Elements: []
+  m_Mask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: body
+    m_Weight: 1
+  - m_Path: bone
+    m_Weight: 1
+  - m_Path: bone/main_Bone
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_L/thigh_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_L/thigh_Bone_L/calf_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_L/thigh_Bone_L/calf_Bone_L/foot_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_L/thigh_Bone_L/calf_Bone_L/foot_Bone_L/toe_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_R/thigh_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_R/thigh_Bone_R/calf_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_R/thigh_Bone_R/calf_Bone_R/foot_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/ass_Bone_R/thigh_Bone_R/calf_Bone_R/foot_Bone_R/toe_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_L/shoulder_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_L/shoulder_Bone_L/arm_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_L/shoulder_Bone_L/arm_Bone_L/hand_Bone_L
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_R/shoulder_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_R/shoulder_Bone_R/arm_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/clavicle_R/shoulder_Bone_R/arm_Bone_R/hand_Bone_R
+    m_Weight: 1
+  - m_Path: bone/main_Bone/waist_Bone/neck_Bone/head_Bone
+    m_Weight: 1
+  - m_Path: foot
+    m_Weight: 1
+  - m_Path: hand
+    m_Weight: 1
