@@ -136,7 +136,7 @@ public class HotBar : MonoBehaviourPunCallbacks
 
     public void DropItem(Item item, int amount, bool removeCurrentItem = true)
     {
-        Debug.Log("D");
+      
         if (item == null)
             return;
         Vector3 random = new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(0f, 0.2f), Random.Range(-0.2f, 0.2f));
@@ -169,13 +169,6 @@ public class HotBar : MonoBehaviourPunCallbacks
 
         
     }
-   /* [PunRPC]
-    private void DropRPC(string itemName, Vector3 itemPos)
-    {
-        GameObject item = PhotonNetwork.Instantiate(dropItemName, itemSpawnPos, Quaternion.identity);
-        ItemPickUp itemPick = item.GetComponent<ItemPickUp>();
-
-
-    }*/
+   
 }
 

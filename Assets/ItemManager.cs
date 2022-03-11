@@ -13,8 +13,8 @@ public class ItemManager
                 // 初始化的時候存所有的道具備用
                 _instance = new ItemManager();
                 _instance.items = new List<Item>(Resources.LoadAll<Item>("Data"));
-                foreach (Item i in _instance.items)
-                    Debug.Log(i.name);
+                //foreach (Item i in _instance.items)
+                    //Debug.Log(i.name);
             }
             return _instance;
         }
