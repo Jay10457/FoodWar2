@@ -99,6 +99,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
 
     public void StartGame()
     {
+        
         SceneManager.LoadSceneAsync("S01");
     }
 }

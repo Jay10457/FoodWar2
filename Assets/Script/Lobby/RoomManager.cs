@@ -21,8 +21,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         GameObject.Instantiate(mainCam, mainCam.transform.position, mainCam.transform.rotation);
         PhotonNetwork.Instantiate("Player", 生成點[Random.Range(0, 生成點.Length)].position, Quaternion.identity);
         GameObject.Instantiate(playerUI, playerUI.transform.position, playerUI.transform.rotation);
-        
-        
+
+
         
     }
 

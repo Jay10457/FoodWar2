@@ -85,10 +85,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
            
 
         }
-        if (!photonView.IsMine)
+        else if (!photonView.IsMine)
         {
             rb.isKinematic = true;
-
         }
 
     }
@@ -188,7 +187,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (sprint && isSkillOk && !isSprinting)
         {
-            Debug.LogError("sprint");
+            
             StartCoroutine(SprintCoroutine());
 
         }
@@ -374,6 +373,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
+   
+
 
     #region ApplyStun
     private void OnCollisionEnter(Collision collision)
@@ -382,6 +383,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             collision.gameObject.GetComponent<PhotonView>().RPC("ApplyStun", RpcTarget.All);
         }
+
 
 
     }

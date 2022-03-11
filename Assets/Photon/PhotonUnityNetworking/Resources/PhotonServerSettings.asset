@@ -28,29 +28,30 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: jp
+  DevRegion: kr
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - ApplyStun
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
   - Fire
   - GetPos
+  - PickUpSend
   - RespawnSpaceship
+  - SendAnim
+  - SetCharacter
   - SetOpenClose
   - SetPlayerName
   - SetSkin
-  - SetCharacter
-  - GetRot
-  - SendAnim
-  - SendAnimX
-  - SendAnimZ
-  - SendVelocity
-  - ApplyStun
   - StunAnim
+  - DropItem
+  - DropRPC
+  - RPCSetUpPickupable
+  - RpcKillMe
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -51,16 +51,17 @@ public class PlayerIK : MonoBehaviour
         if (!movement.isSprinting)
         {
             lookAtIK();
+            if (layerIndex == 1 && animator.GetLayerWeight(1) == 1)
+            {
+                GunIK();
+            }
+            if (layerIndex == 2 && animator.GetLayerWeight(2) == 1)
+            {
+                BumbIK();
+            }
         }
 
-        if (layerIndex == 1 && animator.GetLayerWeight(1) == 1)
-        {
-            GunIK();
-        }
-        if (layerIndex == 2 && animator.GetLayerWeight(2) == 1)
-        {
-            BumbIK();
-        }
+       
 
 
 

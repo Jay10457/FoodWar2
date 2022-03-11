@@ -5,6 +5,8 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     static InventoryManager instance;
+    [SerializeField] Transform playerPos;
+    
 
     public static List<InventorySlot> slots;
     public List<Item> items;
@@ -18,6 +20,7 @@ public class InventoryManager : MonoBehaviour
         {
             instance = this;
         }
+        playerPos = GameObject.FindGameObjectWithTag("Player").transform;
 
         slots = new List<InventorySlot>();
         items = new List<Item>();
@@ -103,7 +106,21 @@ public class InventoryManager : MonoBehaviour
 
     public void DropItem(Item item, int amount, bool removeCurrentItem = true)
     {
+        if (item == null)
+            return;
+        Vector3 random = new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(0f, 0.2f), Random.Range(-0.2f, 0.2f));
+        Vector3 direction = playerPos.forward + random;
 
+        
+        ItemPickUp drop = (Instantiate(item.dropGameObj(), playerPos.position + direction * 5, Quaternion.identity) as GameObject).GetComponent<ItemPickUp>();
+        drop.SetUpPickupable(item.name, amount);
+        if (removeCurrentItem)
+        {
+            currentItem = null;
+            currentItemAmout = 0;
+            
+        }
+        
     }
     public bool CheckItem(Item item, int amount)
     {

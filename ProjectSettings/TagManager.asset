@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - J_pot
+  - FxTemporaire
+  - GameUI
+  - Weapon
   layers:
   - Default
   - TransparentFX

@@ -1,24 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class ItemPickUp : MonoBehaviour
+public class ItemPickUp : MonoBehaviourPunCallbacks
 {
-    Item _item;
-    int itemAmount;
+    public Item _item;
+    public int itemAmount;
 
 
 
-    public void SetUpPickupable(Item item, int amount)
+    public void SetUpPickupable(string itemName, int amount)
     {
-        _item = item;
-        itemAmount = amount;
-        GetComponentInChildren<SpriteRenderer>().sprite = item.itemSprite;
-        item.itemPrefab = GetComponent<GameObject>().gameObject;
+        photonView.RPC("RPCSetUpPickupable", RpcTarget.AllBuffered, itemName, amount);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    [PunRPC]
+    public void RPCSetUpPickupable(string itemName, int amount)
     {
+        _item = ItemManager.instance.GetItmeByName(itemName);
+        itemAmount = amount;
+        GetComponentInChildren<SpriteRenderer>().sprite = _item.itemSprite;
+    }
+    public void KillMe()
+    {
+        // 本地端無論如何都先消失 關碰撞 不動
+        this.transform.localScale = Vector3.zero;
+        this.GetComponent<Collider>().enabled = false;
+        this.GetComponent<Rigidbody>().isKinematic = true;
+
+        photonView.RPC("RpcKillMe", photonView.Owner);
+    }
+    [PunRPC]
+    public void RpcKillMe()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
+    }
+
+    /*
+    private void OnCollisionStay(Collision collision)
+    {
+       
         if (collision.gameObject.tag == "Player")
         {
             int remaining = InventoryManager.AddItemToInventory(_item, itemAmount);
@@ -33,4 +56,5 @@ public class ItemPickUp : MonoBehaviour
             }
         }
     }
+    */
 }

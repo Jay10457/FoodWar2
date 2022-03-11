@@ -115,7 +115,7 @@ public class Movement : MonoBehaviour
     {
         if (sprint && isSkillOk && !isSprinting)
         {
-            Debug.LogError("sprint");
+            //Debug.LogError("sprint");
             StartCoroutine(SprintCoroutine());
 
         }

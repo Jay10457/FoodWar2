@@ -5,12 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
-    
     [Tooltip("stack Limit")]
     public int stackLimit = 5;
     public Sprite itemSprite;
     [Tooltip("Game model of Item")]
-    public GameObject itemPrefab;
+    [SerializeField] private GameObject itemPrefab;
     public Type type;
     [Tooltip("Color of the item slot border.")]
     public Color itemBorderColor = new Color(1, 1, 1, 1);
@@ -19,7 +18,10 @@ public class Item : ScriptableObject
     public int dropAmount;
    
 
-
+    public GameObject dropGameObj()
+    {
+        return itemPrefab;
+    }
     public enum Type
     {
         dish,

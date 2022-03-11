@@ -89,13 +89,20 @@ public class ItemBox : MonoBehaviourPunCallbacks
         }
         else
         {
-            Instantiate(pickUpEffect, transform.position, Quaternion.identity);
-            this.gameObject.SetActive(false);
+            
+            photonView.RPC("PickUpSend", RpcTarget.All);
             
         }
         
 
 
 
+    }
+    [PunRPC]
+
+    public void PickUpSend()
+    {
+        this.gameObject.SetActive(false);
+        Instantiate(pickUpEffect, transform.position, Quaternion.identity);
     }
 }
