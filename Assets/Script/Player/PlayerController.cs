@@ -256,7 +256,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private void SyncAnime()
     {
         float 長度 = Vector2.Distance(lastAnim, new Vector2(playerMoveInput.x, playerMoveInput.z));
-        if (長度 > 0.01f)
+        if (長度 > 0.05f)
         {
             lastAnim = new Vector2(playerMoveInput.x, playerMoveInput.z);
             // 同步

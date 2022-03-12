@@ -96,15 +96,18 @@ public class HotBar : MonoBehaviourPunCallbacks
             if (photonView.IsMine)
             {
                 DropItem(slots[currentSlotIndex].currentItem, slots[currentSlotIndex].currentItemAmount);
+                IM.RemoveCurrentItem(currentSlotIndex, slots[currentSlotIndex].currentItem, slots[currentSlotIndex].currentItemAmount);
+               
+                
             }
             else
             {
                 
             }
+            
 
 
-
-            IM.RemoveItemFromInventory(slots[currentSlotIndex].currentItem, slots[currentSlotIndex].currentItemAmount);
+            
 
 
         }
@@ -159,7 +162,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         // 要求該物件改變(該物件自己同步)
         tempItemPickUp.SetUpPickupable(item.name, amount);
 
-        //drop.SetUpPickupable(item.name, amount);
+        
         if (removeCurrentItem)
         {
             currentItem = null;

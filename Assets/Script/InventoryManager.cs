@@ -77,7 +77,7 @@ public class InventoryManager : MonoBehaviour
 
         return remaining;
     }
-
+    /*
     public void RemoveItemFromInventory(Item item, int amount)
     {
         int remaining = amount;
@@ -102,8 +102,30 @@ public class InventoryManager : MonoBehaviour
             }
 
         }
+    }*/
+    public void RemoveCurrentItem(int slotIndex, Item _currentItem, int _currentAmount)
+    {
+        int remaining = _currentAmount;
+        if (slots[slotIndex].currentItem == _currentItem)
+        {
+            if (remaining >= slots[slotIndex].currentItemAmount)
+            {
+                remaining -= slots[slotIndex].currentItemAmount;
+                slots[slotIndex].SetItemInSlot(null, 0);
+            }
+            else
+            {
+                slots[slotIndex].SetItemInSlot(_currentItem, slots[slotIndex].currentItemAmount - remaining);
+                remaining = 0;
+            }
+            if (remaining <= 0)
+            {
+                return;
+            }
+        }
+       
     }
-
+    /*
     public void DropItem(Item item, int amount, bool removeCurrentItem = true)
     {
         if (item == null)
@@ -122,6 +144,7 @@ public class InventoryManager : MonoBehaviour
         }
         
     }
+    */
     public bool CheckItem(Item item, int amount)
     {
         int remaining = amount;
@@ -141,15 +164,17 @@ public class InventoryManager : MonoBehaviour
 
         return false;
     }
-    public void RemoveItem()
+    public void RemoveItem(Item _currentItem, int _currentItemAmount)
     {
-        currentItem = null;
-        currentItemAmout = 0;
+        _currentItem = null;
+        _currentItemAmount = 0;
     }
 
+    /*
     public void BinItem()
     {
         RemoveItem();
     }
+    */
 
 }
