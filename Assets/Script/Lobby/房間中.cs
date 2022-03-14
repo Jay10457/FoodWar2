@@ -99,7 +99,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
 
     public void StartGame()
     {
-        
+        PhotonNetwork.CurrentRoom.IsOpen = false;
         SceneManager.LoadSceneAsync("S01");
     }
 }

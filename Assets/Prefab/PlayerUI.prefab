@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6061121759585136643}
   - component: {fileID: 3362037149495336725}
   m_Layer: 5
-  m_Name: Image
+  m_Name: closshairUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
