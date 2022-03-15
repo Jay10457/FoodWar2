@@ -26,6 +26,7 @@ public class HotBar : MonoBehaviourPunCallbacks
     Vector3 itemSpawnPos = Vector3.zero;
 
     InventoryManager IM;
+    
 
 
     int currentSlotIndex;
@@ -39,6 +40,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         IM = GameObject.FindObjectOfType<InventoryManager>();
         weapons = this.gameObject.GetComponentsInChildren<WeaponBase>();
         PV = this.gameObject.GetPhotonView();
+        //weapons[0].gameObject.AddComponent<ProjectileWeapon>();
         for (int i = 0; i < weapons.Length; i++)
         {
             weapons[i].gameObject.SetActive(false);
@@ -128,6 +130,13 @@ public class HotBar : MonoBehaviourPunCallbacks
 
 
         }
+        /*
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            IM.RemoveCurrentItem(currentSlotIndex, slots[currentSlotIndex].currentItem, 1);
+        }
+        */
+        
 
     }
 

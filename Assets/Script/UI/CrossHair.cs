@@ -33,7 +33,7 @@ public class CrossHair : MonoBehaviour
             }
             else
             {
-                transform.position = ray.GetPoint(30f);
+                transform.position = ray.GetPoint(75f);
             }
             
            
