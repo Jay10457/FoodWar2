@@ -1,76 +1,196 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(LineRenderer))]
 public class TrajectoryManager : MonoBehaviour
 {
+    
+    [SerializeField] LayerMask ignoreLayer;
+    [SerializeField] bool showTrajectory;
+    [SerializeField] bool showTrajectoryAlways;
 
-    public enum lineMode
+    [SerializeField] int archLineCount;
+    [SerializeField] float archCalcInterval;
+    [SerializeField] float archHeightLimit;
+
+    [Range(0, 90)]
+    public float throwAngle;
+    public float shootRange;
+
+    [SerializeField] GameObject ground;
+    [SerializeField] Transform launchPoint;
+
+    [Header("LineSetting")]
+    [SerializeField] float startLineWidth;
+    [SerializeField] float endLineWidth;
+    [SerializeField] Color startColor;
+    [SerializeField] Color endColor;
+    [Range(0, 1)]
+    [SerializeField] float startAlpha;
+    [Range(0, 1)]
+    [SerializeField] float endAlpha;
+
+    float spdVec;
+    Vector3 launchVec;
+    public LineRenderer line;
+
+    private enum ArchLimit
     {
-        DrawRayEditorOnly = 1,
-        LineRendererBoth = 2
+        Height = 0,
+        Time = 1
     }
-    public enum predictionMode
+    private void Start()
     {
-        Prediction2D = 2,
-        Prediction3D = 3
-    };
-    #region LineSetting
-    [Header("Line Settings")]
-    [Tooltip("The type of line to draw for debug stuff. DrawRay: uses built in Debug.DrawRay only visible in editor." +
-        " LineRenderer: uses a line renderer on a separate created GameObject to draw the line, is visble in editor and play mode")]
-    public lineMode debugLineMode = lineMode.LineRendererBoth;
-    [Tooltip("Draw a debug line on object start? (Requires a rigidbody or rigidbody2D)")]
-    public bool drawDebugOnStart = false;
-    [Tooltip("Draw a debug line on object update? (Requires a rigidbody or rigidbody2D)")]
-    public bool drawDebugOnUpdate = false;
-    [Tooltip("Draw a debug line when predicting the trajectory")]
-    public bool drawDebugOnPrediction = false;
-    [Tooltip("Duration the prediction line lasts for. When predicting every frame its a good idea to update this value to Time.unscaledDeltaTime every frame."
-        + "(This is done automatically if you use the drawDebugOnUpdate option)")]
-    public float debugLineDuration = 4f;
-    [Tooltip("Number of frames that pass before the line is refreshed. Increasing this number could significantly improve performance with a large amount of lines being predicted at once."
-        + "(Only used if drawDebugOnUpdate is enabled.)")]
-    [Range(1, 10)]
-    public int debugLineUpdateRate = 1;
-    [Tooltip("If using the linerenderer, will reuse the gameobject and line renderer components instead of destroying and recreating them every time. " +
-        "This option improves performance for multiple succesive predictions DON'T use this for one-off predictions, " +
-        "as it will not take line duration into account and the line will stick around forever until the component is destroyed. " +
-        "NOTE: this option is automatically used by drawDebugOnUpdate and does not need to be enabled here for that to work.")]
-    public bool reuseLine = false;
-    [Tooltip("The name of the layer the line is drawn on. Only checked once on start")]
-    public string lineSortingLayerName;
-    private int lineSortingLayer = 0;
+        Init();
+        InitVariable();
+    }
 
-    [Tooltip("The order in the sorting layer the line is drawn.")]
-    public int lineSortingOrder = 0;
+    private void Init()
+    {
+        line = GetComponent<LineRenderer>();
 
-    [Header("Line Appearance")]
-    [Tooltip("Thickness of the debug line when using the line renderer mode.")]
-    public float lineWidth = 0.05f;
-    [Tooltip("Start color of the debug line")]
-    public Color lineStartColor = Color.white;
-    [Tooltip("End color of the debug line")]
-    public Color lineEndColor = Color.white;
-    [Tooltip("If provided, this shader will be used on the LineRenderer. (Recommended is the particles section of shaders)")]
-    public Shader lineShader;
-    [Tooltip("If provided, this texture will be added to the material of the LineRenderer. (A couple textures come packaged with the script)")]
-    public Texture lineTexture;
-    [Tooltip("Value to scale the tiling of the line texture by.")]
-    public float textureTilingMult = 1f;
-    #endregion
+        line.startWidth = startLineWidth;
+        line.endWidth = endLineWidth;
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] {new GradientColorKey(endColor, 0.0f), new GradientColorKey(startColor, 1.0f)},
+            new GradientAlphaKey[] {new GradientAlphaKey(endAlpha, 1.0f), new GradientAlphaKey(startAlpha, 1.0f)}
+            );
+        line.colorGradient = gradient;
+    }
 
-    [Header("Prediction Settings")]
-    [Range(0.7f, 0.9999f)]
-    [Tooltip("The accuracy of the prediction. This controls the distance between steps in calculation.")]
-    public float accuracy = 0.98f;
-    [Tooltip("Limit on how many steps the prediction can take before stopping.")]
-    public int iterationLimit = 150;
-    [Tooltip("Whether the prediction should be a 2D or 3D line.")]
-    public predictionMode predictionType = predictionMode.Prediction3D;
-    [Tooltip("The layer mask to use for raycasting when calculating the prediction. This setting only matters when checkForCollision is on.")]
-    public LayerMask raycastMask = -1;
-    [Tooltip("Stop the prediction where the line hits an object? This check works by using raycasts, so you can use the mask and putting objects on different layers to make them not be checked for collision.")]
-    public bool checkForCollision = true;
+    private void InitVariable()
+    {
+        showTrajectory = true;
+        showTrajectoryAlways = true;
 
+        archLineCount = 50;
+        archCalcInterval = 0.2f;
+        archHeightLimit = 0;
+        shootRange = 150f;
+
+        startLineWidth = 0.2f;
+        endLineWidth = 0.1f;
+
+        startColor = Color.red;
+        endColor = Color.cyan;
+
+        startAlpha = 0.6f;
+        endAlpha = 0.1f;
+
+        throwAngle = 30f;
+
+    }
+
+    public void ShootObj(GameObject shootObj, Vector3 hitPos)
+    {
+        CheckVector(hitPos);
+    }
+
+    public void CheckVector(Vector3 hitPos)
+    {
+        spdVec = CalculateVectorFromAngle(hitPos, throwAngle);
+        if (spdVec <= 0.0)
+        {
+            return;
+        }
+        launchVec = CovertVectorToVector3(spdVec, throwAngle, hitPos);
+        if (showTrajectory)
+        {
+            DisplayTrajectory(hitPos);
+            //Debug.LogError("display");
+        }
+        else
+        {
+
+        }
+        
+    }
+
+    private float CalculateVectorFromAngle(Vector3 pos, float angle)
+    {
+        Vector2 shootPos = new Vector2(launchPoint.transform.position.x, launchPoint.transform.position.z);
+        Vector2 hitPos = new Vector2(pos.x, pos.z);
+        float x = Vector2.Distance(shootPos, hitPos);
+        float g = Physics.gravity.y;
+        float y0 = launchPoint.transform.position.y;
+        float y = pos.y;
+        float rad = angle * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(rad);
+        float tan = Mathf.Tan(rad);
+
+        float v0Sq = g * x * x / (2 * cos * cos * (y - y0 - x * tan));
+        if (v0Sq <= 0.0f)
+        {
+            return 0.0f;
+
+        }
+        return Mathf.Sqrt(v0Sq);
+    }
+
+    private Vector3 CovertVectorToVector3(float spdVec, float angle, Vector3 pos)
+    {
+        Vector3 launchPos = launchPoint.transform.position;
+        Vector3 hitPos = pos;
+        launchPos.y = 0;
+        hitPos.y = 0;
+
+        Vector3 dir = (hitPos - launchPos).normalized;
+        Quaternion Rot3D = Quaternion.FromToRotation(Vector3.right, dir);
+        Vector3 vec = spdVec * Vector3.right;
+        vec = Rot3D * Quaternion.AngleAxis(angle, Vector3.forward) * vec;
+
+        return vec;
+    }
+    private void DisplayTrajectory(Vector3 hitPos)
+    {
+        float x;
+        float y = launchPoint.transform.position.y;
+        float y0 = y;
+        float g = Physics.gravity.y;
+        float rad = throwAngle * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+        float time;
+
+        List<Vector3> archVerts = new List<Vector3>();
+        Vector3 shootPos3 = launchPoint.transform.position;
+        hitPos.y = shootPos3.y;
+        Vector3 dir = (hitPos - shootPos3).normalized;
+        float spd = spdVec;
+        Quaternion yawRot = Quaternion.FromToRotation(Vector3.right, dir);
+        RaycastHit hit;
+
+        for (int i = 0; y > archHeightLimit; i++)
+        {
+            time = archCalcInterval * i;
+            x = spd * cos * time;
+            y = spd * sin * time + y0 + g * time * time / 2;
+            archVerts.Add(new Vector3(x, y, 0));
+            archVerts[i] = yawRot * archVerts[i];
+            archVerts[i] = new Vector3(archVerts[i].x + shootPos3.x, archVerts[i].y, archVerts[i].z + shootPos3.z);
+
+           
+        }
+        int lineLength = archLineCount;
+        archVerts.Reverse();
+        if (archVerts.Count < lineLength)
+        {
+            lineLength = archVerts.Count;
+        }
+
+        line.startWidth = endLineWidth;
+        line.endWidth = startLineWidth;
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(endColor, 0.0f), new GradientColorKey(startColor, 1.0f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(endAlpha, 0.0f), new GradientAlphaKey(startAlpha, 1.0f) }
+        );
+        line.colorGradient = gradient;
+        line.positionCount = archVerts.Count - (archVerts.Count - lineLength);
+        line.SetPositions(archVerts.ToArray());
+        line.useWorldSpace = true;
+
+    }
 }

@@ -8,26 +8,31 @@ public class 創建房間 : Windows<創建房間>
     [SerializeField] InputField 房名 = null;
     [SerializeField] Button plusConnection;
     [SerializeField] Button minusConnection;
-    [SerializeField] TMP_Text count;
+    [SerializeField] Image fourCount;
+    [SerializeField] Image sixCount;
     int connectionCount = 0;
     public override void OnOpen()
     {
         base.OnOpen();
         房名.text = Random.Range(1000, 9999).ToString();
         connectionCount = 4;
-        count.text = 4.ToString();
+        fourCount.gameObject.SetActive(true);
+        
     }
 
     public void OnConnectionPlus()
     {
         connectionCount = 6;
-        count.text = 6.ToString();
+        fourCount.gameObject.SetActive(false);
+        sixCount.gameObject.SetActive(true);
+
 
     }
     public void OnConnectionMinus()
     {
         connectionCount = 4;
-        count.text = 4.ToString();
+        fourCount.gameObject.SetActive(true);
+        sixCount.gameObject.SetActive(false);
     }
     public void 創建房間按鈕()
     {

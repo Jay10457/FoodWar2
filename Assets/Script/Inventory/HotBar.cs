@@ -11,6 +11,8 @@ public class HotBar : MonoBehaviourPunCallbacks
     [SerializeField] GameObject gameUI = null;
     [SerializeField] Transform playerPos = null;
     [SerializeField] WeaponBase[] weapons = null;
+    [SerializeField] PlayerIK playerIK = null;
+    [SerializeField] ParticleSystem dropFX;
     
 
 
@@ -40,6 +42,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         IM = GameObject.FindObjectOfType<InventoryManager>();
         weapons = this.gameObject.GetComponentsInChildren<WeaponBase>();
         PV = this.gameObject.GetPhotonView();
+       
         //weapons[0].gameObject.AddComponent<ProjectileWeapon>();
         for (int i = 0; i < weapons.Length; i++)
         {
@@ -48,6 +51,10 @@ public class HotBar : MonoBehaviourPunCallbacks
        
         
 
+    }
+    private void Awake()
+    {
+        playerIK = GetComponentInChildren<PlayerIK>();
     }
     private void Update()
     {
@@ -103,8 +110,14 @@ public class HotBar : MonoBehaviourPunCallbacks
                         photonView.RPC("EquipItem", RpcTarget.All, slots[currentSlotIndex].currentItem.Id);
                     }
 
+                    playerIK.currentWeaponId = slots[currentSlotIndex].currentItem.Id;
 
                 }
+                else if (slots[currentSlotIndex].currentItem == null)
+                {
+                    playerIK.currentWeaponId = -1;
+                }
+               
             }
           
 
@@ -115,6 +128,7 @@ public class HotBar : MonoBehaviourPunCallbacks
             if (PV.IsMine)
             {
                 DropItem(slots[currentSlotIndex].currentItem, slots[currentSlotIndex].currentItemAmount);
+                photonView.RPC("DropFX", RpcTarget.All, itemSpawnPos);
                 IM.RemoveCurrentItem(currentSlotIndex, slots[currentSlotIndex].currentItem, slots[currentSlotIndex].currentItemAmount);
                
                 
@@ -130,16 +144,21 @@ public class HotBar : MonoBehaviourPunCallbacks
 
 
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            IM.RemoveCurrentItem(currentSlotIndex, slots[currentSlotIndex].currentItem, 1);
-        }
-        */
+        
+        
         
 
     }
 
+    public void WeaponUse()
+    {
+        IM.RemoveCurrentItem(currentSlotIndex, slots[currentSlotIndex].currentItem, 1);
+    }
+    [PunRPC]
+    private void DropFX(Vector3 spawnPos)
+    {
+        Instantiate(dropFX, spawnPos, Quaternion.identity);
+    }
     [PunRPC]
     private void EquipItem(int itemId)
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ProjectileWeapon : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
-
+    [SerializeField] HotBar hotBar;
     [SerializeField] float shootForce;
     [SerializeField] float upwardForce;
     [SerializeField] float timeBetweenShooting;
@@ -23,6 +23,7 @@ public class ProjectileWeapon : MonoBehaviour
         cam = Camera.main;
         crossHair = cam.gameObject.GetComponentInChildren<CrossHair>();
         readyToShoot = true;
+        hotBar = GetComponentInParent<HotBar>();
     }
     private void Update()
     {
@@ -49,6 +50,7 @@ public class ProjectileWeapon : MonoBehaviour
         currentBullet.transform.forward = shootDir.normalized;
 
         currentBullet.GetComponent<Rigidbody>().AddForce(shootDir.normalized * shootForce, ForceMode.Impulse);
+        hotBar.WeaponUse();
         Invoke("ResetShoot", 0.1f);
     }
 
