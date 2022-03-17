@@ -9,6 +9,8 @@ TagManager:
   - GameUI
   - Weapon
   - RightHand
+  - Missile
+  - ThrowObj
   layers:
   - Default
   - TransparentFX

@@ -86,6 +86,11 @@ public class TrajectoryManager : MonoBehaviour
     public void ShootObj(GameObject shootObj, Vector3 hitPos)
     {
         CheckVector(hitPos);
+        GameObject obj = Instantiate(shootObj, launchPoint.transform.position, Quaternion.identity);
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        Vector3 force = launchVec * rb.mass;
+        rb.AddForce(force, ForceMode.Impulse);
+        line.positionCount = 0;
     }
 
     public void CheckVector(Vector3 hitPos)
@@ -101,10 +106,7 @@ public class TrajectoryManager : MonoBehaviour
             DisplayTrajectory(hitPos);
             //Debug.LogError("display");
         }
-        else
-        {
-
-        }
+       
         
     }
 
@@ -143,6 +145,8 @@ public class TrajectoryManager : MonoBehaviour
 
         return vec;
     }
+
+   
     private void DisplayTrajectory(Vector3 hitPos)
     {
         float x;
@@ -160,7 +164,7 @@ public class TrajectoryManager : MonoBehaviour
         Vector3 dir = (hitPos - shootPos3).normalized;
         float spd = spdVec;
         Quaternion yawRot = Quaternion.FromToRotation(Vector3.right, dir);
-        RaycastHit hit;
+       
 
         for (int i = 0; y > archHeightLimit; i++)
         {

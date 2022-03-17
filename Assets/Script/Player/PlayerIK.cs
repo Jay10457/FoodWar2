@@ -12,14 +12,17 @@ public class PlayerIK : MonoBehaviour
     [Range(0, 1)]
     [SerializeField] float weight = 1;
     [Range(0, 1)]
-    [SerializeField] float bodyWeight;
+    [SerializeField] float bodyWeight = 0.5f;
     [Range(0, 1)]
-    [SerializeField] float headWeight;
+    [SerializeField] float headWeight = 0.5f;
     [Range(0, 1)]
-    [SerializeField] public float rightHandWeight;
+    public float rightHandWeight;
+    public float leftHandWeight;
     [SerializeField] Transform rHand;
     [SerializeField] Transform rHint;
-    [SerializeField] Transform lookAtTransform;
+    [SerializeField] Transform lHand;
+    [SerializeField] Transform lHint;
+
 
     [SerializeField] Vector3 gunPos;
     [SerializeField] Quaternion gunRot;
@@ -29,14 +32,16 @@ public class PlayerIK : MonoBehaviour
     [SerializeField] Quaternion bombRot;
     [SerializeField] Vector3 bombHint;
 
+
+
     public int currentWeaponId;
 
 
 
     private void Awake()
     {
-       
-        lookAtTransform = GameObject.Find("CrossHairLookAt").transform;
+
+
 
         animator = GetComponent<Animator>();
         /*
@@ -54,7 +59,7 @@ public class PlayerIK : MonoBehaviour
     private void Update()
     {
 
-        lookAt = lookAtTransform.position;
+        lookAt = CrossHair.instance.transform.position;
 
 
 
@@ -91,19 +96,31 @@ public class PlayerIK : MonoBehaviour
             rHand.localRotation = gunRot;
             rHint.localPosition = gunHint;
             rightHandWeight = 0.8f;
-            
+            leftHandWeight = 0;
+
         }
         if (currentWeaponId == 1)
         {
             rHand.localPosition = bombPos;
             rHand.localRotation = bombRot;
             rHint.localPosition = bombHint;
-            rightHandWeight = 1f;
+            rightHandWeight = 0.9f;
+            leftHandWeight = 0.8f;
+        }
+        if (currentWeaponId == 2)
+        {
+            rHand.localPosition = gunPos;
+            rHand.localRotation = gunRot;
+            rHint.localPosition = gunHint;
+            rightHandWeight = 0.8f;
+            leftHandWeight = 0;
         }
         if (currentWeaponId == -1)
         {
             rightHandWeight = 0;
+            leftHandWeight = 0;
         }
+        #region RightHand
         animator.SetIKPosition(AvatarIKGoal.RightHand, rHand.position);
         animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightHandWeight);
 
@@ -112,10 +129,20 @@ public class PlayerIK : MonoBehaviour
 
         animator.SetIKRotation(AvatarIKGoal.RightHand, rHand.rotation);
         animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rightHandWeight);
+        #endregion
+        #region LeftHand
+        animator.SetIKPosition(AvatarIKGoal.LeftHand, lHand.position);
+        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftHandWeight);
 
+        animator.SetIKRotation(AvatarIKGoal.LeftHand, lHand.rotation);
+        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, leftHandWeight);
+
+        animator.SetIKHintPosition(AvatarIKHint.LeftElbow, lHint.position);
+        animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, leftHandWeight);
+        #endregion
     }
 
-  
+
 
 
 

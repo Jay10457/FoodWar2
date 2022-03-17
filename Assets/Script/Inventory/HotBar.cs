@@ -13,8 +13,8 @@ public class HotBar : MonoBehaviourPunCallbacks
     [SerializeField] WeaponBase[] weapons = null;
     [SerializeField] PlayerIK playerIK = null;
     [SerializeField] ParticleSystem dropFX;
-    
 
+    public static HotBar instance;
 
 
     GameObject currentEquip;
@@ -32,7 +32,7 @@ public class HotBar : MonoBehaviourPunCallbacks
 
 
     int currentSlotIndex;
-
+    
     private void Start()
 
     {
@@ -55,6 +55,10 @@ public class HotBar : MonoBehaviourPunCallbacks
     private void Awake()
     {
         playerIK = GetComponentInChildren<PlayerIK>();
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
     private void Update()
     {
