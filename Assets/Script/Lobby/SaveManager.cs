@@ -113,4 +113,6 @@ public struct PlayerData
     public int level;
     public int exp;
     public int characterID;
+    public int currentResolutionIndex;
+    public int currentQualityIndex;
 }

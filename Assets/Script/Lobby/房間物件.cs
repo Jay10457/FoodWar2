@@ -9,5 +9,7 @@ public class 房間物件 : MonoBehaviour
     {
         房間列表.ins.Close();
         Lobby.ins.進入房間(房名);
+        
     }
+    
 }

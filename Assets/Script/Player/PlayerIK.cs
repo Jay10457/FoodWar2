@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerIK : MonoBehaviour
 {
-    static PlayerIK instance;
+    
     [SerializeField] Animator animator;
     [SerializeField] Vector3 lookAt = Vector3.zero;
 
@@ -35,12 +35,12 @@ public class PlayerIK : MonoBehaviour
 
 
     public int currentWeaponId;
-
+    public bool isIKActive;
 
 
     private void Awake()
     {
-
+        isIKActive = true;
 
 
         animator = GetComponent<Animator>();
@@ -68,10 +68,13 @@ public class PlayerIK : MonoBehaviour
     private void OnAnimatorIK(int layerIndex)
     {
         //Look IK
+        if (isIKActive)
+        {
+            lookAtIK();
 
-        lookAtIK();
-
-        WeaponIK();
+            WeaponIK();
+        }
+       
 
 
 
@@ -84,6 +87,7 @@ public class PlayerIK : MonoBehaviour
 
     private void lookAtIK()
     {
+
         animator.SetLookAtPosition(lookAt);
         animator.SetLookAtWeight(weight, bodyWeight, headWeight);
     }
@@ -104,7 +108,7 @@ public class PlayerIK : MonoBehaviour
             rHand.localPosition = bombPos;
             rHand.localRotation = bombRot;
             rHint.localPosition = bombHint;
-            rightHandWeight = 0.9f;
+            rightHandWeight = 1f;
             leftHandWeight = 0.8f;
         }
         if (currentWeaponId == 2)

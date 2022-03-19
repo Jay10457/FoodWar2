@@ -219,6 +219,7 @@ MonoBehaviour:
   bombRot: {x: -0.33930358, y: 0.93947846, z: 0.032550927, w: 0.03455078}
   bombHint: {x: 1.645, y: 1.356, z: 0.236}
   currentWeaponId: 0
+  isIKActive: 0
 --- !u!1 &2780449458600743017
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +444,7 @@ MonoBehaviour:
   characterCollider: {fileID: 0}
   skillCoolDown: {fileID: 0}
   camLookAt: {fileID: 0}
+  playerIK: {fileID: 0}
   Vcam: {fileID: 0}
   playerMoveInput: {x: 0, y: 0, z: 0}
   yaw: 0

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] Collider characterCollider = null;
     [SerializeField] SkillCoolDown skillCoolDown;
     [SerializeField] Transform camLookAt = null;
+    [SerializeField] PlayerIK playerIK;
     [SerializeField] CinemachineVirtualCamera Vcam = null;
     [SerializeField] Vector3 playerMoveInput = Vector3.zero;
     [SerializeField] float yaw = 0;
@@ -67,7 +68,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
-
+            playerIK = GetComponentInChildren<PlayerIK>();
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
             photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
@@ -201,13 +202,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
         isSkillOk = false;
         while (Time.time < startTime + sprintTime)
         {
-
+            
             isSprinting = true;
+            playerIK.isIKActive = false;
             velocity = sprintForce;
 
 
             yield return null;
             isSprinting = false;
+            playerIK.isIKActive = true;
 
             velocity = originVelocity;
 
