@@ -58,4 +58,7 @@ public abstract class Windows<T> : SingletonMonoBehaviour<T> where T : class
     virtual public void OnOpen() { }
     /// <summary>充分完成關閉介面</summary>
     virtual public void OnClose() { }
+
+
+   
 }

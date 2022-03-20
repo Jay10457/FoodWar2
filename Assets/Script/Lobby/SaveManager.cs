@@ -37,6 +37,7 @@ public class SaveManager
             tempPlayerData.playerName = "未命名";
             tempPlayerData.level = 1;
             tempPlayerData.exp = 0;
+            tempPlayerData.currentResolutionIndex = -1;
             // <<添加資料>>
             // 憑空做一個全體資料
             AllSaveData tempAllSaveData = new AllSaveData();
@@ -77,6 +78,8 @@ public class SaveManager
         tempPlayerData.playerName = "未命名";
         tempPlayerData.level = 1;
         tempPlayerData.exp = 0;
+        tempPlayerData.currentResolutionIndex = -1;
+
         // 把剛剛創造的新資料當成目前的資料
         nowData = tempPlayerData;
     }
@@ -115,4 +118,5 @@ public struct PlayerData
     public int characterID;
     public int currentResolutionIndex;
     public int currentQualityIndex;
+    public bool isFullScreen;
 }
