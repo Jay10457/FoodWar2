@@ -37,6 +37,7 @@ public class HotBar : MonoBehaviourPunCallbacks
 
     {
         playerPos = this.gameObject.transform;
+        playerIK = GetComponentInChildren<PlayerIK>();
         gameUI = GameObject.FindWithTag("GameUI");
         slots = gameUI.GetComponentsInChildren<InventorySlot>();
         IM = GameObject.FindObjectOfType<InventoryManager>();

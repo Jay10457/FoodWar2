@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class PlayerIK : MonoBehaviour
+public class PlayerIK : MonoBehaviourPunCallbacks
 {
-    
+
     [SerializeField] Animator animator;
     [SerializeField] Vector3 lookAt = Vector3.zero;
 
@@ -32,7 +34,7 @@ public class PlayerIK : MonoBehaviour
     [SerializeField] Quaternion bombRot;
     [SerializeField] Vector3 bombHint;
 
-
+    [SerializeField] PhotonView PV;
 
     public int currentWeaponId;
     public bool isIKActive;
@@ -41,18 +43,12 @@ public class PlayerIK : MonoBehaviour
     private void Awake()
     {
         isIKActive = true;
-
+        PV = GetComponentInParent<PhotonView>();
 
         animator = GetComponent<Animator>();
-        /*
-        gunPos = new Vector3(1.65999997f, 1.99000001f, 1);
-        gunRot = Quaternion.Euler(359.612396f, 36.8660126f, 353.045959f);
-        gunHint = new Vector3(1.86099994f, 1.5f, 0.236000001f);
-        bombPos = new Vector3(1.66999996f, 2.66000009f, -0.0900000036f);
-        bombRot = Quaternion.Euler(355.146515f, 177.536423f, 320.388885f);
-        bombHint = new Vector3(1.64499998f, 1.35599995f, 0.236000001f);
-        */
+
         currentWeaponId = -1;
+
 
     }
 
@@ -62,19 +58,34 @@ public class PlayerIK : MonoBehaviour
         lookAt = CrossHair.instance.transform.position;
 
 
-
     }
 
     private void OnAnimatorIK(int layerIndex)
     {
-        //Look IK
         if (isIKActive)
         {
-            lookAtIK();
+            if (PV.IsMine)
+            {
+                //Look IK
+                lookAtIK();
 
-            WeaponIK();
+
+
+
+
+
+                WeaponIK();
+            }
+          
+
+
+
+
         }
-       
+
+
+
+
 
 
 
@@ -91,8 +102,9 @@ public class PlayerIK : MonoBehaviour
         animator.SetLookAtPosition(lookAt);
         animator.SetLookAtWeight(weight, bodyWeight, headWeight);
     }
+   
 
-    private void WeaponIK()
+    public void WeaponIK()
     {
         if (currentWeaponId == 0)
         {

@@ -12,6 +12,7 @@ public class Setting : Windows<Setting>
     [SerializeField] private Dropdown resolutionDropdown;
     [SerializeField] private InputField playerNameInput;
     [SerializeField] private Toggle isFullScreen;
+    [SerializeField] private CanvasGroup saveInfo;
 
     
 
@@ -48,6 +49,7 @@ public class Setting : Windows<Setting>
         //SaveManager.instance.nowData.currentResolutionIndex = currentResolutionIndex;
         SaveManager.instance.nowData.playerName = playerNameInput.text;
         SaveManager.instance.SaveGame();
+        StartCoroutine(FadeCanvasGroup(saveInfo, saveInfo.alpha, 0));
     }
 
     private void GetResolutions()
@@ -119,5 +121,27 @@ public class Setting : Windows<Setting>
             SaveManager.instance.nowData.isFullScreen = false;
             SaveManager.instance.SaveGame();
         }
+    }
+    public IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 0.75f)
+    {
+        saveInfo.gameObject.SetActive(true);
+        float _timeStartedlerping = Time.time;
+        float timeSinceStarted = Time.time - _timeStartedlerping;
+        float percentageComplete = timeSinceStarted / lerpTime;
+
+        while (true)
+        {
+            timeSinceStarted = Time.time - _timeStartedlerping;
+            percentageComplete = timeSinceStarted / lerpTime;
+
+            float currentValue = Mathf.Lerp(start, end, percentageComplete);
+            cg.alpha = currentValue;
+            if (percentageComplete >= 1) break;
+
+            yield return new WaitForEndOfFrame();
+
+        }
+        saveInfo.gameObject.SetActive(false);
+        saveInfo.alpha = 1;
     }
 }

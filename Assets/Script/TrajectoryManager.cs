@@ -51,7 +51,7 @@ public class TrajectoryManager : MonoBehaviour
 
         line.startWidth = startLineWidth;
         line.endWidth = endLineWidth;
-        line.material = new Material(Shader.Find("Sprites/Default"));
+       
         Gradient gradient = new Gradient();
         gradient.SetKeys(
             new GradientColorKey[] {new GradientColorKey(endColor, 0.0f), new GradientColorKey(startColor, 1.0f)},
@@ -70,14 +70,14 @@ public class TrajectoryManager : MonoBehaviour
         archHeightLimit = 0;
         shootRange = 150f;
 
-        startLineWidth = 0.2f;
-        endLineWidth = 0.1f;
+        startLineWidth = 0.3f;
+        endLineWidth = 0.2f;
 
         startColor = Color.red;
         endColor = Color.cyan;
 
-        startAlpha = 0.6f;
-        endAlpha = 0.1f;
+        startAlpha = 0.8f;
+        endAlpha = 0.5f;
 
         throwAngle = 30f;
 

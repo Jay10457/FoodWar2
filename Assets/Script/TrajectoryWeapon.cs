@@ -8,35 +8,35 @@ public class TrajectoryWeapon : MonoBehaviour
     [SerializeField] Transform launchPoint;
     [SerializeField] float force = 10f;
     [SerializeField] float flySpeed = 1f;
-    
+
     [SerializeField] Vector3 launchToPos;
 
     Vector3 randomPosOffset = Vector3.zero;
     [SerializeField] TrajectoryManager tm;
     bool launch;
-   
 
-   
+
+
 
     private void Start()
     {
         tm = GetComponent<TrajectoryManager>();
-        
+
         randomPosOffset = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
-       
+
 
     }
     private void Update()
     {
         ShootInput();
     }
-   
+
 
     private void ShootInput()
     {
-        
+
         AimState state = GetAimState();
-        
+
         if (state == AimState.Start)
         {
             launchToPos = CrossHair.instance.transform.position;
@@ -55,19 +55,24 @@ public class TrajectoryWeapon : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && state == AimState.Move)
         {
+
             tm.ShootObj(Bullet, launchToPos);
             HotBar.instance.WeaponUse();
+          
+            
+
         }
-        else if(Input.GetMouseButtonDown(0) && state == AimState.None)
+        else if (Input.GetMouseButtonDown(0) && state == AimState.None)
         {
-            launchToPos = CrossHair.instance.transform.position + randomPosOffset;
-            tm.ShootObj(Bullet, launchToPos);
+
+            tm.ShootObj(Bullet, launchToPos + randomPosOffset);
             HotBar.instance.WeaponUse();
+            
         }
-       
+
     }
 
-    
+
     private AimState GetAimState()
     {
         if (Input.GetMouseButtonDown(1)) { return AimState.Start; }
@@ -77,14 +82,14 @@ public class TrajectoryWeapon : MonoBehaviour
         {
             return AimState.None;
         }
-        
+
     }
 
     private void FireBullet()
     {
 
     }
-    
+
     private enum AimState
     {
         Start = 0,

@@ -68,10 +68,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
-            playerIK = GetComponentInChildren<PlayerIK>();
+           
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
             photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
+            playerIK = this.gameObject.GetComponentInChildren<PlayerIK>();
             camLookAt = this.gameObject.transform.Find("camLookAt");
 
 
@@ -83,7 +84,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 camLookAt.transform.localPosition = new Vector3(0, 3, 0);
             }
-           
+            
 
         }
         else if (!photonView.IsMine)
@@ -246,6 +247,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
+          
             Move();
 
             PlayerRotate();
@@ -395,7 +397,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         isStun = true;
 
         float startTime = Time.time;
-
+        rb.velocity = Vector3.zero;
+        rb.rotation = Quaternion.Euler(Vector3.zero);
 
         while (Time.time < startTime + stunTime)
         {
