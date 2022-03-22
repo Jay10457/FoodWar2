@@ -36,38 +36,40 @@ public class TrajectoryWeapon : MonoBehaviour
     {
 
         AimState state = GetAimState();
+        if (!CookUI.instance._isCookerOpen)
+        {
+            if (state == AimState.Start)
+            {
+                launchToPos = CrossHair.instance.transform.position;
+                tm.CheckVector(launchToPos);
+            }
+            if (state == AimState.Move)
+            {
+                launchToPos = CrossHair.instance.transform.position;
+                tm.CheckVector(launchToPos);
+            }
+            if (state == AimState.Ended)
+            {
+                launchToPos = CrossHair.instance.transform.position;
+                tm.CheckVector(launchToPos);
+                tm.line.positionCount = 0;
+            }
+            if (Input.GetMouseButtonDown(0) && state == AimState.Move)
+            {
 
-        if (state == AimState.Start)
-        {
-            launchToPos = CrossHair.instance.transform.position;
-            tm.CheckVector(launchToPos);
-        }
-        if (state == AimState.Move)
-        {
-            launchToPos = CrossHair.instance.transform.position;
-            tm.CheckVector(launchToPos);
-        }
-        if (state == AimState.Ended)
-        {
-            launchToPos = CrossHair.instance.transform.position;
-            tm.CheckVector(launchToPos);
-            tm.line.positionCount = 0;
-        }
-        if (Input.GetMouseButtonDown(0) && state == AimState.Move)
-        {
+                tm.ShootObj(Bullet, launchToPos);
+                HotBar.instance.WeaponUse();
 
-            tm.ShootObj(Bullet, launchToPos);
-            HotBar.instance.WeaponUse();
-          
-            
 
-        }
-        else if (Input.GetMouseButtonDown(0) && state == AimState.None)
-        {
 
-            tm.ShootObj(Bullet, launchToPos + randomPosOffset);
-            HotBar.instance.WeaponUse();
-            
+            }
+            else if (Input.GetMouseButtonDown(0) && state == AimState.None)
+            {
+
+                tm.ShootObj(Bullet, launchToPos + randomPosOffset);
+                HotBar.instance.WeaponUse();
+
+            }
         }
 
     }
@@ -75,6 +77,7 @@ public class TrajectoryWeapon : MonoBehaviour
 
     private AimState GetAimState()
     {
+
         if (Input.GetMouseButtonDown(1)) { return AimState.Start; }
         if (Input.GetMouseButton(1)) { return AimState.Move; }
         if (Input.GetMouseButtonUp(1)) { return AimState.Ended; }
@@ -82,6 +85,9 @@ public class TrajectoryWeapon : MonoBehaviour
         {
             return AimState.None;
         }
+
+
+
 
     }
 

@@ -48,7 +48,7 @@ public class TrajectoryManager : MonoBehaviour
     private void Init()
     {
         line = GetComponent<LineRenderer>();
-
+        ground = GameObject.FindGameObjectWithTag("Floor");
         line.startWidth = startLineWidth;
         line.endWidth = endLineWidth;
        
@@ -67,7 +67,7 @@ public class TrajectoryManager : MonoBehaviour
 
         archLineCount = 50;
         archCalcInterval = 0.2f;
-        archHeightLimit = 0;
+        archHeightLimit = ground.transform.position.y;
         shootRange = 150f;
 
         startLineWidth = 0.3f;

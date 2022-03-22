@@ -13,6 +13,7 @@ public class ProjectileWeapon : MonoBehaviour
     [SerializeField] float timeBetweenShoot;
     [SerializeField] Transform firePoint;
     [SerializeField] Camera cam;
+  
 
 
     [SerializeField] CrossHair crossHair;
@@ -32,7 +33,7 @@ public class ProjectileWeapon : MonoBehaviour
 
     void ShootInput()
     {
-        if (Input.GetMouseButtonDown(0) && readyToShoot)
+        if (Input.GetMouseButtonDown(0) && readyToShoot && !CookUI.instance._isCookerOpen)
         {
             //Debug.LogError("shoot");
             Shoot();

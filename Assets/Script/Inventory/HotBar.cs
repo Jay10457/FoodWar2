@@ -63,38 +63,42 @@ public class HotBar : MonoBehaviourPunCallbacks
     }
     private void Update()
     {
-
-        //Scale up currently selected slot
-        for (int i = 0; i < slots.Length; i++)
+        if (PV.IsMine)
         {
-            if (i == currentSlotIndex)//&& slots[i].currentItem != null
+
+
+            //Scale up currently selected slot
+            for (int i = 0; i < slots.Length; i++)
             {
-                slots[i].transform.localScale = Vector3.one * 1.1f;
-                slots[currentSlotIndex].transform.GetChild(1).GetComponent<Image>().enabled = true;
+                if (i == currentSlotIndex)//&& slots[i].currentItem != null
+                {
+                    slots[i].transform.localScale = Vector3.one * 1.1f;
+                    slots[currentSlotIndex].transform.GetChild(1).GetComponent<Image>().enabled = true;
+
+                }
+
+                else
+                {
+                    slots[i].transform.localScale = Vector3.one;
+                    slots[i].transform.GetChild(1).GetComponent<Image>().enabled = false;
+                }
 
             }
-
-            else
+            if (Input.mouseScrollDelta.y < 0)
             {
-                slots[i].transform.localScale = Vector3.one;
-                slots[i].transform.GetChild(1).GetComponent<Image>().enabled = false;
+                if (currentSlotIndex >= slots.Length - 1)
+                    currentSlotIndex = 0;
+                else
+                    currentSlotIndex++;
             }
+            else if (Input.mouseScrollDelta.y > 0)
+            {
+                if (currentSlotIndex <= 0)
+                    currentSlotIndex = slots.Length - 1;
+                else
+                    currentSlotIndex--;
 
-        }
-        if (Input.mouseScrollDelta.y < 0)
-        {
-            if (currentSlotIndex >= slots.Length - 1)
-                currentSlotIndex = 0;
-            else
-                currentSlotIndex++;
-        }
-        else if (Input.mouseScrollDelta.y > 0)
-        {
-            if (currentSlotIndex <= 0)
-                currentSlotIndex = slots.Length - 1;
-            else
-                currentSlotIndex--;
-
+            }
         }
         if (lastItem != slots[currentSlotIndex].currentItem)
         {
@@ -110,6 +114,7 @@ public class HotBar : MonoBehaviourPunCallbacks
                 //Instantiate equip item if currentItem type = Hand
                 if (slots[currentSlotIndex].currentItem != null/*&& slots[currentSlotIndex].currentItem.type == Item.Type.Weapons*/)
                 {
+                    playerIK.isEquipWeapon = true;
                     if (slots[currentSlotIndex].currentItem.type == Item.Type.weapons)
                     {
                         photonView.RPC("EquipItem", RpcTarget.All, slots[currentSlotIndex].currentItem.Id);
@@ -121,6 +126,7 @@ public class HotBar : MonoBehaviourPunCallbacks
                 else if (slots[currentSlotIndex].currentItem == null)
                 {
                     playerIK.currentWeaponId = -1;
+                    playerIK.isEquipWeapon = false;
                 }
                
             }

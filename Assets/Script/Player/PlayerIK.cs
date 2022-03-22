@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-
+//[RequireComponent(typeof(PhotonView))]
 public class PlayerIK : MonoBehaviourPunCallbacks
 {
 
@@ -38,13 +38,18 @@ public class PlayerIK : MonoBehaviourPunCallbacks
 
     public int currentWeaponId;
     public bool isIKActive;
-
+    Vector3 rpcRhandP;
+    Quaternion rpcRhandR;
+    Vector3 rpcRhintP;
+    float rpcRweight;
+    Vector3 lastIKPos;
+    public bool isEquipWeapon;
 
     private void Awake()
     {
         isIKActive = true;
         PV = GetComponentInParent<PhotonView>();
-
+        //PV = this.gameObject.GetPhotonView();
         animator = GetComponent<Animator>();
 
         currentWeaponId = -1;
@@ -69,14 +74,33 @@ public class PlayerIK : MonoBehaviourPunCallbacks
                 //Look IK
                 lookAtIK();
 
+                if (isEquipWeapon && Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    photonView.RPC("IKSend", RpcTarget.Others, gunPos, gunRot, gunHint, rightHandWeight);
+                }
+               
+                
 
-
-
-
+                
+                 
+                
 
                 WeaponIK();
             }
-          
+            else
+            {
+              
+                animator.SetIKPosition(AvatarIKGoal.RightHand, rpcRhintP);
+                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rpcRweight);
+
+                animator.SetIKHintPosition(AvatarIKHint.RightElbow, rpcRhintP);
+                animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, rpcRweight);
+
+                animator.SetIKRotation(AvatarIKGoal.RightHand, rpcRhandR);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rpcRweight);
+                
+
+            }
 
 
 
@@ -102,7 +126,17 @@ public class PlayerIK : MonoBehaviourPunCallbacks
         animator.SetLookAtPosition(lookAt);
         animator.SetLookAtWeight(weight, bodyWeight, headWeight);
     }
-   
+
+    [PunRPC]
+    public void IKSend(Vector3 _rhandP, Quaternion _rhandR, Vector3 _rhintP, float _rWeigjt)
+    {
+       
+        rpcRhandP = _rhandP;
+        rpcRhandR = _rhandR;
+        rpcRhintP = _rhintP;
+       
+        rpcRweight = _rWeigjt;
+    }
 
     public void WeaponIK()
     {
@@ -157,12 +191,6 @@ public class PlayerIK : MonoBehaviourPunCallbacks
         animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, leftHandWeight);
         #endregion
     }
-
-
-
-
-
-
 
 
 }

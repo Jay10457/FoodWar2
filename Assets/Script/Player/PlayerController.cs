@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
-    
+    [SerializeField] Transform closePotTrans = null;
     [SerializeField] Animator ani = null;
     [SerializeField] Rigidbody rb = null;
     [SerializeField] Collider characterCollider = null;
+    [SerializeField] CookUI cookUI = null;
     [SerializeField] SkillCoolDown skillCoolDown;
     [SerializeField] Transform camLookAt = null;
     [SerializeField] PlayerIK playerIK;
@@ -36,10 +37,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     bool sprint;
     public bool isSprinting;
     bool isStun;
-
+    public int _characterId;
 
     bool isSkillOk = true;
 
+    public bool inCookerArea;
+    bool isOpenCooker;
+    FoodTeam teamValue;
 
 
     float angle = 0;
@@ -54,7 +58,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     Vector2 lastAnim = Vector2.zero;
 
 
-
+   
 
 
 
@@ -68,9 +72,22 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
-           
+            CrossHair.instance.gameObject.transform.position = this.gameObject.transform.forward;
+
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
+            cookUI = CookUI.instance;
+            cookUI.gameObject.SetActive(false);
+            _characterId = SaveManager.instance.nowData.characterID;
+            if (_characterId <= 4)
+            {
+                teamValue = FoodTeam.GOOD;
+            }
+            else
+            {
+                teamValue = FoodTeam.BAD;
+            }
             photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
+            _characterId = SaveManager.instance.nowData.characterID;
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             playerIK = this.gameObject.GetComponentInChildren<PlayerIK>();
             camLookAt = this.gameObject.transform.Find("camLookAt");
@@ -105,6 +122,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             InputMagnitude(isStun);
             Jump();
             Sprint();
+            OpenCooker();
 
         }
 
@@ -119,8 +137,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!_stun)
         {
             playerMoveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            yaw = -Input.GetAxis("Mouse Y");
-            pitch = Input.GetAxis("Mouse X");
+            if (!isOpenCooker)
+            {
+                yaw = -Input.GetAxis("Mouse Y");
+                pitch = Input.GetAxis("Mouse X");
+            }
+           
             jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
             sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
         }
@@ -129,7 +151,45 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     }
 
+    private void OpenCooker()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && inCookerArea)
+        {
+            yaw = 0f;
+            pitch = 0f;
+            
+            cookUI.gameObject.SetActive(!cookUI.gameObject.activeSelf);
+            if (cookUI.gameObject.activeSelf)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                
+                isOpenCooker = true;
+                cookUI._isCookerOpen = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                isOpenCooker = false;
+                cookUI._isCookerOpen = false;
 
+            }
+
+
+        }
+      
+        
+       
+    }
+    private void CloseCooker()
+    {
+        cookUI.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        isOpenCooker = false;
+        cookUI._isCookerOpen = false;
+    }
+
+    
+   
     private void LateUpdate()
     {
         if (photonView.IsMine)
@@ -187,7 +247,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     /// </summary>
     private void Sprint()
     {
-        if (sprint && isSkillOk && !isSprinting)
+        if (sprint && isSkillOk && !isSprinting && moveDir != Vector3.zero)
         {
             
             StartCoroutine(SprintCoroutine());
@@ -370,16 +430,35 @@ public class PlayerController : MonoBehaviourPunCallbacks
         camLookAt.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
 
     }
-    private void OnDrawGizmos()
+
+
+    #region CheckPot
+    private void OnTriggerEnter(Collider other)
     {
-        if (characterCollider != null)
+
+        if (other.tag == "Pot" && other != null && other.gameObject.GetComponent<Cooker>().cookerTeam.ToString() == teamValue.ToString())
         {
-            Debug.DrawRay(characterCollider.bounds.center, Vector3.down * (characterCollider.bounds.extents.y + raycastDistance), rayColor);
+            closePotTrans = other.transform;
+         
+            cookUI.SetCookerUIBillboard(closePotTrans.position);
+            
+            inCookerArea = true;
+           
         }
+
     }
 
-   
-
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Pot")
+        {
+            CloseCooker();
+            closePotTrans = null;
+            inCookerArea = false;
+            
+        }
+    }
+    #endregion
 
     #region ApplyStun
     private void OnCollisionEnter(Collision collision)
@@ -395,10 +474,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private IEnumerator StunCountDown()
     {
         isStun = true;
-
+        yaw = 0f;
+        pitch = 0f;
         float startTime = Time.time;
-        rb.velocity = Vector3.zero;
-        rb.rotation = Quaternion.Euler(Vector3.zero);
+        playerMoveInput = Vector2.zero;
+
 
         while (Time.time < startTime + stunTime)
         {

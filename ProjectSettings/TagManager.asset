@@ -11,6 +11,10 @@ TagManager:
   - RightHand
   - Missile
   - ThrowObj
+  - Obstacle
+  - Pot
+  - Character
+  - Floor
   layers:
   - Default
   - TransparentFX

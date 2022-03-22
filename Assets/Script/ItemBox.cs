@@ -11,7 +11,7 @@ public class ItemBox : MonoBehaviourPunCallbacks
     public GameObject itemPrefab;
     public int dropAmount;
     public int dropPerItem;
-    Light rainbowLight;
+    
     MeshRenderer mr;
     [SerializeField] [Range(0, 1)] float lerpTime;
     [SerializeField] Color[] lightColor;
@@ -24,7 +24,7 @@ public class ItemBox : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        rainbowLight = GetComponentInChildren<Light>();
+        
         mr = GetComponent<MeshRenderer>();
         colorLenth = lightColor.Length;
         floating();
@@ -32,7 +32,7 @@ public class ItemBox : MonoBehaviourPunCallbacks
     }
     void floating()
     {
-        LeanTween.moveLocalY(gameObject, 3, 1).setLoopPingPong();
+        LeanTween.moveLocalY(gameObject, this.gameObject.transform.position.y + 1, 1).setLoopPingPong();
        
     }
     private void Update()
@@ -43,7 +43,7 @@ public class ItemBox : MonoBehaviourPunCallbacks
     {
         
         mr.material.color = Color.Lerp(mr.material.color, lightColor[colorIndex], lerpTime);
-        rainbowLight.color = Color.Lerp(rainbowLight.color, lightColor[colorIndex], lerpTime);
+        
         t = Mathf.Lerp(t, 1f, lerpTime);
         if (t > 0.9f)
         {
