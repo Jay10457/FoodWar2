@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] float sprintTime;
     [SerializeField] float cdTime = 10;
     [SerializeField] float stunTime = 5f;
+    [SerializeField] int currentConnections;
     float stunRemainTime = -1;
 
 
@@ -40,10 +41,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public int _characterId;
 
     bool isSkillOk = true;
+    bool isGameBegin = false;
 
     public bool inCookerArea;
     bool isOpenCooker;
     FoodTeam teamValue;
+  
 
 
     float angle = 0;
@@ -58,20 +61,24 @@ public class PlayerController : MonoBehaviourPunCallbacks
     Vector2 lastAnim = Vector2.zero;
 
 
-   
 
 
+    private void Awake()
+    {
+       
+    }
 
 
     private void Start()
     {
 
-
+        
 
 
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
+           
             CrossHair.instance.gameObject.transform.position = this.gameObject.transform.forward;
 
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
@@ -101,7 +108,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 camLookAt.transform.localPosition = new Vector3(0, 3, 0);
             }
-            
+
 
         }
         else if (!photonView.IsMine)
@@ -111,13 +118,43 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     }
 
-
-
-
+    private void ConnectionCheck()
+    {
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (GameObject.FindWithTag("Player"))
+            {
+                currentConnections++;
+            }
+        }
+        if (currentConnections == PhotonNetwork.CurrentRoom.PlayerCount)
+        {
+            photonView.RPC("StartGameCountDown", RpcTarget.All);
+        }
+    }
+   
+    
+    private IEnumerator GameBeginCountdown()
+    {
+        GameBeginCountDown.instance.countDownText.gameObject.SetActive(true);
+        float startTime = Time.time;
+        while (Time.time < startTime + 5)
+        {
+            GameBeginCountDown.instance.countDownText.SetText(((startTime + 5) - Time.time).ToString("0"));
+            yield return null;
+        }
+        GameBeginCountDown.instance.countDownText.gameObject.SetActive(false);
+        isGameBegin = true;
+    }
+   
     //PlayerInput;
     private void Update()
     {
-        if (photonView.IsMine)
+        if (!isGameBegin && this.gameObject != null)
+        {
+            ConnectionCheck();
+        }
+        if (photonView.IsMine && isGameBegin)
         {
             InputMagnitude(isStun);
             Jump();
@@ -125,7 +162,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             OpenCooker();
 
         }
-
+       
 
     }
 
@@ -142,11 +179,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 yaw = -Input.GetAxis("Mouse Y");
                 pitch = Input.GetAxis("Mouse X");
             }
-           
+
             jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
             sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
         }
-       
+
 
 
     }
@@ -157,12 +194,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             yaw = 0f;
             pitch = 0f;
-            
+
             cookUI.gameObject.SetActive(!cookUI.gameObject.activeSelf);
             if (cookUI.gameObject.activeSelf)
             {
                 Cursor.lockState = CursorLockMode.None;
-                
+
                 isOpenCooker = true;
                 cookUI._isCookerOpen = true;
             }
@@ -176,9 +213,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
         }
-      
-        
-       
+
+
+
     }
     private void CloseCooker()
     {
@@ -188,8 +225,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         cookUI._isCookerOpen = false;
     }
 
-    
-   
+
+
     private void LateUpdate()
     {
         if (photonView.IsMine)
@@ -199,7 +236,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             CameraRotation();
             AnimatePlayer();
             SyncAnime();
-           
+
         }
 
     }
@@ -249,7 +286,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (sprint && isSkillOk && !isSprinting && moveDir != Vector3.zero)
         {
-            
+
             StartCoroutine(SprintCoroutine());
 
         }
@@ -263,7 +300,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         isSkillOk = false;
         while (Time.time < startTime + sprintTime)
         {
-            
+
             isSprinting = true;
             playerIK.isIKActive = false;
             velocity = sprintForce;
@@ -307,7 +344,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-          
+
             Move();
 
             PlayerRotate();
@@ -330,20 +367,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (isStun && stunRemainTime == stunTime)
         {
             SendStunAnim();
-                    
+
         }
         else if (!isStun && stunRemainTime == 0)
         {
             stunRemainTime = -1;
             SendStunAnim();
-            
+
         }
 
     }
     private void SendStunAnim()
     {
         photonView.RPC("StunAnim", RpcTarget.Others, isStun);
-        
+
     }
 
     private void CameraRotation()
@@ -435,28 +472,40 @@ public class PlayerController : MonoBehaviourPunCallbacks
     #region CheckPot
     private void OnTriggerEnter(Collider other)
     {
-
-        if (other.tag == "Pot" && other != null && other.gameObject.GetComponent<Cooker>().cookerTeam.ToString() == teamValue.ToString())
+        if (photonView.IsMine)
         {
-            closePotTrans = other.transform;
-         
-            cookUI.SetCookerUIBillboard(closePotTrans.position);
-            
-            inCookerArea = true;
-           
+            if (other.tag == "Pot" && other != null && other.gameObject.GetComponent<Cooker>().cookerTeam.ToString() == teamValue.ToString())
+            {
+                closePotTrans = other.transform;
+
+                cookUI.SetCookerUIBillboard(closePotTrans.position);
+
+                inCookerArea = true;
+
+
+
+            }
         }
+        
 
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Pot")
+        if (photonView.IsMine)
         {
-            CloseCooker();
-            closePotTrans = null;
-            inCookerArea = false;
-            
+            if (other.tag == "Pot")
+            {
+
+                CloseCooker();
+                closePotTrans = null;
+                inCookerArea = false;
+
+
+
+            }
         }
+       
     }
     #endregion
 
@@ -486,14 +535,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             yield return null;
 
-            
+
         }
         stunRemainTime = 0;
         isStun = false;
-        
-       
-        
-        
+
+
+
+
 
 
 
@@ -505,6 +554,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     #region RPC Funtions
+   
+    [PunRPC]
+    public void StartGameCountDown()
+    {
+        if (photonView.IsMine)
+        {
+            StartCoroutine(GameBeginCountdown());
+        }
+    }
 
     [PunRPC]
     public void StunAnim(bool _stun)

@@ -770,6 +770,7 @@ MonoBehaviour:
   sprintTime: 0.5
   cdTime: 10
   stunTime: 5
+  currentConnections: 0
   characters:
   - {fileID: 2424083426802799722}
   - {fileID: 128813815257600289}

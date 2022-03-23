@@ -119,4 +119,5 @@ public struct PlayerData
     public int currentResolutionIndex;
     public int currentQualityIndex;
     public bool isFullScreen;
+    public string loadedScene;
 }

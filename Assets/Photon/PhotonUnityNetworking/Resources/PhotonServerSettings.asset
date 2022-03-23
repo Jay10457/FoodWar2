@@ -63,6 +63,13 @@ MonoBehaviour:
   - IKSend
   - SendisCookerOccupy
   - whoCanOpenCooker
+  - Loading
+  - ClientCallbacks
+  - CallBacksRPC
+  - CallbackRPC
+  - ClientLoading
+  - A
+  - StartGameCountDown
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

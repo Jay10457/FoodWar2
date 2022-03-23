@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 public class 房間列表 : WindowsPun<房間列表>
 {
     public override void Open()
@@ -54,7 +55,7 @@ public class 房間列表 : WindowsPun<房間列表>
         {
             GameObject temp = Instantiate(房間物件, 背景);
             temp.transform.GetChild(0).GetComponent<Text>().text = r.Name;
-            temp.transform.GetChild(1).GetComponent<Text>().text = r.PlayerCount + " / " + r.MaxPlayers;
+            temp.transform.GetChild(1).GetComponent<TMP_Text>().text = r.PlayerCount + " / " + r.MaxPlayers;
             temp.GetComponent<房間物件>().房名 = r.Name;
             垃圾桶.Add(temp);
         }

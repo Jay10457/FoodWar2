@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class 房間中 : SingletonMonoBehaviourPun<房間中>
 {
+    
+   
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         刷新人數顯示();
@@ -18,15 +20,18 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     [SerializeField] GameObject ClientButtom = null;
     public void Start()
     {
+        loadingPanel.gameObject.SetActive(false);
+      
         刷新人數顯示();
         Invoke("CreateMe", 0.2f);
     }
     void CreateMe()
     {
         // 為自己生成一個玩家實體
-        PhotonNetwork.Instantiate("UIPlayer", Vector3.zero, Quaternion.identity);
+         PhotonNetwork.Instantiate("UIPlayer", Vector3.zero, Quaternion.identity);
         if (PhotonNetwork.IsMasterClient)
         {
+            
             StartGameButtom.SetActive(true);
             ClientButtom.SetActive(false);
         }
@@ -35,7 +40,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
             ClientButtom.SetActive(true);
             StartGameButtom.SetActive(false);
         }
-       
+
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -67,7 +72,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     {
         PhotonNetwork.LeaveRoom();
         //Debug.LogError("leaveRoom");
-        
+
     }
 
     [SerializeField] RectTransform 背景 = null;
@@ -76,7 +81,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     public List<int> characterIDList = new List<int>();
     public void 新增頭像(string userID, string 玩家名稱, int characterID)
     {
-        GameObject temp =  Instantiate(頭像, 背景);
+        GameObject temp = Instantiate(頭像, 背景);
         temp.transform.GetChild(11).GetComponent<Text>().text = 玩家名稱;
         temp.GetComponent<設定頭像>().選擇頭像(characterID);
         temp.name = userID;
@@ -96,10 +101,23 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
             }
         }
     }
-
+    [SerializeField] LoadingPanel loadingPanel;
+    public AsyncOperation async;
     public void StartGame()
     {
+
         PhotonNetwork.CurrentRoom.IsOpen = false;
-        SceneManager.LoadSceneAsync("1");
+
+        async = SceneManager.LoadSceneAsync("S01");
+        async.allowSceneActivation = false;
+        loadingPanel.gameObject.SetActive(true);
+
+
+
+
+
+
     }
+
+
 }
