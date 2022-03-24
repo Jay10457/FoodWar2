@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028377, g: 0.22571409, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18346667, g: 0.22904266, b: 0.3058616, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -172,18 +172,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   lookAt: {x: 0, y: 0, z: 0}
-  gunPos: {fileID: 0}
-  bumbPos: {fileID: 0}
-  rGunHintPos: {fileID: 0}
-  rBumbHintPos: {fileID: 0}
-  lHand: {fileID: 0}
-  lHintPos: {fileID: 0}
   weight: 1
   bodyWeight: 0.5
   headWeight: 0.5
   rightHandWeight: 0
-  lookAtTransform: {fileID: 0}
-  movement: {fileID: 0}
+  leftHandWeight: 0
+  rHand: {fileID: 0}
+  rHint: {fileID: 0}
+  lHand: {fileID: 0}
+  lHint: {fileID: 0}
+  gunPos: {x: 0, y: 0, z: 0}
+  gunRot: {x: 0, y: 0, z: 0, w: 0}
+  gunHint: {x: 0, y: 0, z: 0}
+  bombPos: {x: 0, y: 0, z: 0}
+  bombRot: {x: 0, y: 0, z: 0, w: 0}
+  bombHint: {x: 0, y: 0, z: 0}
+  PV: {fileID: 0}
+  currentWeaponId: 0
+  isIKActive: 0
+  isEquipWeapon: 0
 --- !u!4 &9460272 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6521158411488204951, guid: 7a2ddf9dc0be6c84c98dc9be60949b33, type: 3}
@@ -462,18 +469,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   lookAt: {x: 0, y: 0, z: 0}
-  gunPos: {fileID: 1684137763}
-  bumbPos: {fileID: 176151020}
-  rGunHintPos: {fileID: 267251972}
-  rBumbHintPos: {fileID: 466364151}
-  lHand: {fileID: 804545213}
-  lHintPos: {fileID: 255208506}
   weight: 1
   bodyWeight: 0.5
   headWeight: 0.5
   rightHandWeight: 1
-  lookAtTransform: {fileID: 0}
-  movement: {fileID: 0}
+  leftHandWeight: 0
+  rHand: {fileID: 0}
+  rHint: {fileID: 0}
+  lHand: {fileID: 804545213}
+  lHint: {fileID: 0}
+  gunPos: {x: 0, y: 0, z: 0}
+  gunRot: {x: 0, y: 0, z: 0, w: 0}
+  gunHint: {x: 0, y: 0, z: 0}
+  bombPos: {x: 0, y: 0, z: 0}
+  bombRot: {x: 0, y: 0, z: 0, w: 0}
+  bombHint: {x: 0, y: 0, z: 0}
+  PV: {fileID: 0}
+  currentWeaponId: 0
+  isIKActive: 0
+  isEquipWeapon: 0
 --- !u!1 &176151019
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,13 +841,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 470102239}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.31132278, y: -0.5459726, z: 0.08408952, w: 0.77325356}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.98, y: -75.151, z: -14.843}
 --- !u!114 &470102242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1031,18 +1045,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   lookAt: {x: 0, y: 0, z: 0}
-  gunPos: {fileID: 0}
-  bumbPos: {fileID: 0}
-  rGunHintPos: {fileID: 0}
-  rBumbHintPos: {fileID: 0}
-  lHand: {fileID: 0}
-  lHintPos: {fileID: 0}
   weight: 1
   bodyWeight: 0.5
   headWeight: 0.5
   rightHandWeight: 0
-  lookAtTransform: {fileID: 0}
-  movement: {fileID: 0}
+  leftHandWeight: 0
+  rHand: {fileID: 0}
+  rHint: {fileID: 0}
+  lHand: {fileID: 0}
+  lHint: {fileID: 0}
+  gunPos: {x: 0, y: 0, z: 0}
+  gunRot: {x: 0, y: 0, z: 0, w: 0}
+  gunHint: {x: 0, y: 0, z: 0}
+  bombPos: {x: 0, y: 0, z: 0}
+  bombRot: {x: 0, y: 0, z: 0, w: 0}
+  bombHint: {x: 0, y: 0, z: 0}
+  PV: {fileID: 0}
+  currentWeaponId: 0
+  isIKActive: 0
+  isEquipWeapon: 0
 --- !u!1 &1035238947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1538,18 +1559,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   lookAt: {x: 0, y: 0, z: 0}
-  gunPos: {fileID: 0}
-  bumbPos: {fileID: 0}
-  rGunHintPos: {fileID: 0}
-  rBumbHintPos: {fileID: 0}
-  lHand: {fileID: 0}
-  lHintPos: {fileID: 0}
   weight: 1
   bodyWeight: 0.5
   headWeight: 0.5
   rightHandWeight: 0
-  lookAtTransform: {fileID: 0}
-  movement: {fileID: 0}
+  leftHandWeight: 0
+  rHand: {fileID: 0}
+  rHint: {fileID: 0}
+  lHand: {fileID: 0}
+  lHint: {fileID: 0}
+  gunPos: {x: 0, y: 0, z: 0}
+  gunRot: {x: 0, y: 0, z: 0, w: 0}
+  gunHint: {x: 0, y: 0, z: 0}
+  bombPos: {x: 0, y: 0, z: 0}
+  bombRot: {x: 0, y: 0, z: 0, w: 0}
+  bombHint: {x: 0, y: 0, z: 0}
+  PV: {fileID: 0}
+  currentWeaponId: 0
+  isIKActive: 0
+  isEquipWeapon: 0
 --- !u!1 &1946486848
 GameObject:
   m_ObjectHideFlags: 0
@@ -2396,6 +2424,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 277881141, guid: 13fd5c2d2651b1842bc462365ef29d13, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7147313246848752848, guid: 13fd5c2d2651b1842bc462365ef29d13, type: 3}
       propertyPath: m_Name
       value: Props_L_LotteryBox

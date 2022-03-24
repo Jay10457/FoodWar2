@@ -25,7 +25,7 @@ public class CrossHair : MonoBehaviour
             ray.direction = mainCam.transform.forward;
             Physics.Raycast(ray, out hitInfo);
             if (hitInfo.collider != null && hitInfo.collider.tag != "ThrowObj" && hitInfo.collider.tag != "Obstacle"
-                && hitInfo.collider.tag != "Pot" && hitInfo.collider.tag != "Player")
+                && hitInfo.collider.tag != "Pot" && hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "Weapon")
             {
                 transform.position = hitInfo.point;
 

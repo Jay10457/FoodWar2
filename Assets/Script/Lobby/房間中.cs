@@ -20,7 +20,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     [SerializeField] GameObject ClientButtom = null;
     public void Start()
     {
-        loadingPanel.gameObject.SetActive(false);
+      
       
         刷新人數顯示();
         Invoke("CreateMe", 0.2f);
@@ -101,16 +101,16 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
             }
         }
     }
-    [SerializeField] LoadingPanel loadingPanel;
-    public AsyncOperation async;
+  
     public void StartGame()
     {
 
         PhotonNetwork.CurrentRoom.IsOpen = false;
-
-        async = SceneManager.LoadSceneAsync("S01");
-        async.allowSceneActivation = false;
-        loadingPanel.gameObject.SetActive(true);
+        //SceneManager.LoadSceneAsync("S01");
+        PhotonNetwork.LoadLevel("S01");
+        //async = SceneManager.LoadSceneAsync("S01");
+        //async.allowSceneActivation = false;
+        //loadingPanel.gameObject.SetActive(true);
 
 
 

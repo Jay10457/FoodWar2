@@ -26,6 +26,7 @@ public class Item : ScriptableObject
     public enum Type
     {
         dish,
-        weapons
+        weapons,
+        ingredient
     }
 }

@@ -21,6 +21,7 @@ public class HotBar : MonoBehaviourPunCallbacks
     Item lastItem;
     Item currentItem;
     PhotonView PV;
+    ItemManager itemManager;
     
    
     int currentItemAmount;
@@ -60,6 +61,8 @@ public class HotBar : MonoBehaviourPunCallbacks
         {
             instance = this;
         }
+        itemManager = ItemManager.instance;
+        
     }
     private void Update()
     {

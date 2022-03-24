@@ -6,7 +6,7 @@ using Photon.Realtime;
 
 public class Cooker : MonoBehaviourPunCallbacks
 {
-    bool isCooking;
+    public bool isCooking;
     public bool inCookArea;
     public FoodTeam cookerTeam;
 

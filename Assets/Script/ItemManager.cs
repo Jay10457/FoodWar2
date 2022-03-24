@@ -14,7 +14,7 @@ public class ItemManager
                 _instance = new ItemManager();
                 _instance.items = new List<Item>(Resources.LoadAll<Item>("Data"));
                 //foreach (Item i in _instance.items)
-                    //Debug.Log(i.name);
+                   // Debug.LogError(i.name);
             }
             return _instance;
         }

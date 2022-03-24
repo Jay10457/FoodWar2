@@ -45,8 +45,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public bool inCookerArea;
     bool isOpenCooker;
-    FoodTeam teamValue;
   
+    FoodTeam teamValue;
+
 
 
     float angle = 0;
@@ -65,20 +66,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-       
+
     }
 
 
     private void Start()
     {
 
-        
+
 
 
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
-           
+
             CrossHair.instance.gameObject.transform.position = this.gameObject.transform.forward;
 
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
@@ -89,10 +90,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 teamValue = FoodTeam.GOOD;
             }
-            else
+            else if (_characterId >= 5)
             {
                 teamValue = FoodTeam.BAD;
             }
+           
             photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
             _characterId = SaveManager.instance.nowData.characterID;
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
@@ -132,8 +134,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             photonView.RPC("StartGameCountDown", RpcTarget.All);
         }
     }
-   
-    
+
+
     private IEnumerator GameBeginCountdown()
     {
         GameBeginCountDown.instance.countDownText.gameObject.SetActive(true);
@@ -146,7 +148,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         GameBeginCountDown.instance.countDownText.gameObject.SetActive(false);
         isGameBegin = true;
     }
-   
+
     //PlayerInput;
     private void Update()
     {
@@ -159,10 +161,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
             InputMagnitude(isStun);
             Jump();
             Sprint();
+
             OpenCooker();
 
+
+
         }
-       
+
 
     }
 
@@ -202,12 +207,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 isOpenCooker = true;
                 cookUI._isCookerOpen = true;
+                CurrentStatus.instance.gameObject.SetActive(false);
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 isOpenCooker = false;
                 cookUI._isCookerOpen = false;
+                CurrentStatus.instance.gameObject.SetActive(true);
 
             }
 
@@ -476,6 +483,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if (other.tag == "Pot" && other != null && other.gameObject.GetComponent<Cooker>().cookerTeam.ToString() == teamValue.ToString())
             {
+
+                CurrentStatus.instance.gameObject.SetActive(true);
+                CurrentStatus.instance.statusText.text = "«ö -E- ¥´¶}Áç¤l";
                 closePotTrans = other.transform;
 
                 cookUI.SetCookerUIBillboard(closePotTrans.position);
@@ -485,8 +495,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
             }
+           
         }
-        
+
 
     }
 
@@ -500,12 +511,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 CloseCooker();
                 closePotTrans = null;
                 inCookerArea = false;
+                CurrentStatus.instance.gameObject.SetActive(false);
 
 
 
             }
         }
-       
+
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        
     }
     #endregion
 
@@ -554,7 +570,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     #region RPC Funtions
-   
+
     [PunRPC]
     public void StartGameCountDown()
     {
