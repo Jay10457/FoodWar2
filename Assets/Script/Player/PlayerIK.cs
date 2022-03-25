@@ -36,7 +36,22 @@ public class PlayerIK : MonoBehaviourPunCallbacks
 
     [SerializeField] PhotonView PV;
 
-    public int currentWeaponId;
+    public int currentWeaponId
+    {
+        get { return _currentWeaponId; }
+        set
+        {
+            _currentWeaponId = value;
+            if (PV.IsMine)
+                photonView.RPC("RPCcurrentWeaponId", RpcTarget.Others, value);
+        }
+    }
+    int _currentWeaponId = -1;
+    [PunRPC]
+    public void RPCcurrentWeaponId(int v)
+    {
+        currentWeaponId = v;
+    }
     public bool isIKActive;
     Vector3 rpcRhandP;
     Quaternion rpcRhandR;
@@ -67,18 +82,14 @@ public class PlayerIK : MonoBehaviourPunCallbacks
 
     private void OnAnimatorIK(int layerIndex)
     {
+      
+
         if (isIKActive)
         {
-            if (PV.IsMine)
-            {
-                //Look IK
-                lookAtIK();
+           
+                if (PV.IsMine)
+                    lookAtIK();
 
-                if (isEquipWeapon && Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    photonView.RPC("IKSend", RpcTarget.Others, gunPos, gunRot, gunHint, rightHandWeight);
-                }
-               
                 
 
                 
@@ -86,21 +97,7 @@ public class PlayerIK : MonoBehaviourPunCallbacks
                 
 
                 WeaponIK();
-            }
-            else
-            {
-              
-                animator.SetIKPosition(AvatarIKGoal.RightHand, rpcRhintP);
-                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rpcRweight);
-
-                animator.SetIKHintPosition(AvatarIKHint.RightElbow, rpcRhintP);
-                animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, rpcRweight);
-
-                animator.SetIKRotation(AvatarIKGoal.RightHand, rpcRhandR);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rpcRweight);
-                
-
-            }
+       
 
 
 
@@ -122,24 +119,16 @@ public class PlayerIK : MonoBehaviourPunCallbacks
 
     private void lookAtIK()
     {
-
         animator.SetLookAtPosition(lookAt);
         animator.SetLookAtWeight(weight, bodyWeight, headWeight);
     }
 
-    [PunRPC]
-    public void IKSend(Vector3 _rhandP, Quaternion _rhandR, Vector3 _rhintP, float _rWeigjt)
-    {
-       
-        rpcRhandP = _rhandP;
-        rpcRhandR = _rhandR;
-        rpcRhintP = _rhintP;
-       
-        rpcRweight = _rWeigjt;
-    }
 
     public void WeaponIK()
     {
+
+      
+
         if (currentWeaponId == 0)
         {
             rHand.localPosition = gunPos;

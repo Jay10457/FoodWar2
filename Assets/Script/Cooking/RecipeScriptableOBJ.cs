@@ -7,6 +7,7 @@ public class RecipeScriptableOBJ : ScriptableObject
 {
     public Ingredient[] ingredients;
     public Item resultDish;
+    public float cookinTime = 15;
     public int resultDishAmount = 1;
   
     [System.Serializable]

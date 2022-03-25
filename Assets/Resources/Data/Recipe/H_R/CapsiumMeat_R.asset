@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ba31f8904bc14844baeb4f608e8cd6c, type: 3}
-  m_Name: BigNutBag_R
+  m_Name: CapsiumMeat_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
+  - material: {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
     amount: 1
-  - material: {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
+  - material: {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
     amount: 1
-  resultDish: {fileID: 0}
+  resultDish: {fileID: 11400000, guid: c8aafc98178b4c445a61bf0f1b783577, type: 2}
+  cookinTime: 15
   resultDishAmount: 1

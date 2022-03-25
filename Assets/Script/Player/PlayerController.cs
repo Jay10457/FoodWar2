@@ -3,6 +3,8 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] float cdTime = 10;
     [SerializeField] float stunTime = 5f;
     [SerializeField] int currentConnections;
+    [SerializeField] TextMesh floatingId;
     float stunRemainTime = -1;
 
 
@@ -96,6 +99,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
            
             photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
+            photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName);
             _characterId = SaveManager.instance.nowData.characterID;
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             playerIK = this.gameObject.GetComponentInChildren<PlayerIK>();
@@ -610,6 +614,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         characters[cid].SetActive(true);
         ani = characters[cid].GetComponent<Animator>();
         characterCollider = characters[cid].GetComponent<Collider>();
+    }
+    [PunRPC]
+    public void SetPlayerName(string playerName)
+    {
+        floatingId.text = playerName;
     }
     [PunRPC]
     public void SendAnim(float animX, float animZ)

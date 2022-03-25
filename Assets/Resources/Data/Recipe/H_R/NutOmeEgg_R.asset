@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba31f8904bc14844baeb4f608e8cd6c, type: 3}
+  m_Name: NutOmeEgg_R
+  m_EditorClassIdentifier: 
+  ingredients:
+  - material: {fileID: 11400000, guid: 96ae6ec326aca5149876c4092001dbc6, type: 2}
+    amount: 1
+  - material: {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
+    amount: 1
+  resultDish: {fileID: 11400000, guid: bee89766ddc22a242900ccf4291cd29b, type: 2}
+  cookinTime: 15
+  resultDishAmount: 1
