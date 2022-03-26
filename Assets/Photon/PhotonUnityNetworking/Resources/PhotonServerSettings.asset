@@ -71,6 +71,7 @@ MonoBehaviour:
   - A
   - StartGameCountDown
   - RPCcurrentWeaponId
+  - PotionFX
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

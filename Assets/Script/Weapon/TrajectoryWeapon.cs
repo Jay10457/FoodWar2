@@ -65,7 +65,7 @@ public class TrajectoryWeapon : MonoBehaviour
             }
             else if (Input.GetMouseButtonDown(0) && state == AimState.None)
             {
-
+                launchToPos = CrossHair.instance.transform.position;
                 tm.ShootObj(Bullet, launchToPos + randomPosOffset);
                 HotBar.instance.WeaponUse();
 

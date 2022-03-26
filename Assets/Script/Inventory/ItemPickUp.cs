@@ -8,9 +8,18 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
 {
     public Item _item;
     public int itemAmount;
+    float destroyTime = 5;
 
-
-
+   
+    public IEnumerator countDownToDetroy()
+    {
+        float startTime = Time.time;
+        while (Time.time < startTime + destroyTime)
+        {
+            yield return null;
+        }
+        KillMe();
+    }
     public void SetUpPickupable(string itemName, int amount)
     {
         photonView.RPC("RPCSetUpPickupable", RpcTarget.AllBuffered, itemName, amount);
@@ -38,23 +47,5 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
         PhotonNetwork.Destroy(this.gameObject);
     }
 
-    /*
-    private void OnCollisionStay(Collision collision)
-    {
-       
-        if (collision.gameObject.tag == "Player")
-        {
-            int remaining = InventoryManager.AddItemToInventory(_item, itemAmount);
-
-            if (remaining > 0)
-            {
-                itemAmount = remaining;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
-    */
+    
 }

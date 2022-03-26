@@ -15,6 +15,7 @@ TagManager:
   - Pot
   - Character
   - Floor
+  - Potion
   layers:
   - Default
   - TransparentFX

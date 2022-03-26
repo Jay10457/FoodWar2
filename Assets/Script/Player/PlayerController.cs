@@ -33,8 +33,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] float stunTime = 5f;
     [SerializeField] int currentConnections;
     [SerializeField] TextMesh floatingId;
+    [SerializeField] SpriteRenderer nameSlot;
+    [SerializeField] float R, G, B;
     float stunRemainTime = -1;
-
+   
+    
 
     public List<GameObject> characters;
     bool jump;
@@ -51,7 +54,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
   
     FoodTeam teamValue;
 
-
+    Vector3 nameSlotPos;
 
     float angle = 0;
     Color rayColor;
@@ -92,14 +95,24 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (_characterId <= 4)
             {
                 teamValue = FoodTeam.GOOD;
+                R = 0.3764706f;
+                G = 0.5686275f;
+                B = 0.4470588f;
+                nameSlotPos = new Vector3(0, 5.3f, 0);
+                
             }
             else if (_characterId >= 5)
             {
                 teamValue = FoodTeam.BAD;
+                R = 0.9137255f;
+                G = 0.282353f;
+                B = 0.2745098f;
+                nameSlotPos = new Vector3(0, 4.5f, 0);
             }
-           
-            photonView.RPC("SetCharacter", RpcTarget.All, 0);//SaveManager.instance.nowData.characterID
-            photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName);
+
+            photonView.RPC("SetCharacter", RpcTarget.All, _characterId);//SaveManager.instance.nowData.characterID
+            photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName, R, G, B, nameSlotPos);
+            
             _characterId = SaveManager.instance.nowData.characterID;
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             playerIK = this.gameObject.GetComponentInChildren<PlayerIK>();
@@ -616,9 +629,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         characterCollider = characters[cid].GetComponent<Collider>();
     }
     [PunRPC]
-    public void SetPlayerName(string playerName)
+    public void SetPlayerName(string playerName, float r, float g, float b, Vector3 namePos)
     {
+        nameSlot.transform.localPosition = namePos;
         floatingId.text = playerName;
+        nameSlot.color = new Color(r, g, b, 1);
+      
+
     }
     [PunRPC]
     public void SendAnim(float animX, float animZ)

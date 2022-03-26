@@ -10,7 +10,15 @@ public class ExtendPotion : MonoBehaviourPunCallbacks
     GameObject currentTarget;
     [SerializeField] ParticleSystem potionFX;
     [SerializeField] PhotonView PV;
-    
+
+
+
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        currentTarget = null;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,7 +28,7 @@ public class ExtendPotion : MonoBehaviourPunCallbacks
             {
                 isUseAble = true;
                 currentTarget = other.gameObject;
-                currentTarget.GetComponent<MeshRenderer>().material.color = Color.red;
+               
             }
         }
         
@@ -33,7 +41,7 @@ public class ExtendPotion : MonoBehaviourPunCallbacks
             if (other.tag == "Pot")
             {
                 isUseAble = false;
-                currentTarget.GetComponent<MeshRenderer>().material.color = Color.white;
+            
                 currentTarget = null;
             }
         }
@@ -42,16 +50,31 @@ public class ExtendPotion : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isUseAble && !CookUI.instance.gameObject.activeSelf)
+        UsePotion();
+    }
+
+    private void UsePotion()
+    {
+        if (Input.GetMouseButtonDown(0) && isUseAble && !CookUI.instance.gameObject.activeSelf && currentTarget != null)
         {
-            
+
             if (currentTarget.gameObject.GetComponent<Cooker>())
             {
-                Instantiate(potionFX, currentTarget.transform.position, Quaternion.Euler(-90, 0, 0));
+                if (PV.IsMine)
+                {
+                    photonView.RPC("PotionFX", RpcTarget.All, currentTarget.transform.position);
+                }
+                
                 HotBar.instance.WeaponUse();
                 currentTarget.GetComponent<MeshRenderer>().material.color = Color.white;
+
             }
         }
+    }
+    [PunRPC]
+    public void PotionFX(Vector3 pos)
+    {
+        Instantiate(potionFX, pos, Quaternion.Euler(-90, 0, 0));
     }
 
 }

@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 116bc16d5b98fb44fb302f30cb5ddd80, type: 3}
+        m_Texture: {fileID: 2800000, guid: 82d096e4fb6c6f04bab5ab8d4a86def7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -124,7 +124,7 @@ Material:
     - _UVSec: 0
     - _UnityShadowMode: 1
     - _UnityShadowOcclusion: 0
-    - _UnityShadowPower: 0.5
+    - _UnityShadowPower: 0.471
     - _UnityShadowSharpness: 1
     - _VertexColorsEnabled: 0
     - _ZWrite: 1

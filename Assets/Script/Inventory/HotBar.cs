@@ -219,13 +219,12 @@ public class HotBar : MonoBehaviourPunCallbacks
         itemSpawnPos = playerPos.position + direction * 5;
         
 
-       // ItemPickUp drop = (PhotonNetwork.Instantiate(dropItemName, itemSpawnPos, Quaternion.identity) as GameObject).GetComponent<ItemPickUp>();
-        //photonView.RPC("DropRPC", RpcTarget.Others, dropItemName, itemSpawnPos);
-        // 建立網路物件
+       
         GameObject dropTemp = PhotonNetwork.Instantiate(item.name, itemSpawnPos, Quaternion.identity);
         ItemPickUp tempItemPickUp = dropTemp.GetComponent<ItemPickUp>();
         // 要求該物件改變(該物件自己同步)
         tempItemPickUp.SetUpPickupable(item.name, amount);
+        tempItemPickUp.StartCoroutine(tempItemPickUp.countDownToDetroy());
 
         
         if (removeCurrentItem)

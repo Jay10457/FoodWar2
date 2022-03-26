@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5307296881391079655}
   - component: {fileID: 3342196699923017456}
   - component: {fileID: -1080269631418895087}
-  - component: {fileID: 6999965604524457947}
+  - component: {fileID: 962392909997651960}
   m_Layer: 0
   m_Name: JunkFryer
   m_TagString: Untagged
@@ -119,9 +119,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a00d7247173864da9271250f139233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCooking: 0
   inCookArea: 0
   cookerTeam: 0
---- !u!65 &6999965604524457947
+--- !u!65 &962392909997651960
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,8 +133,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.7216063, y: 2.9011245, z: 2.8344464}
-  m_Center: {x: 0, y: 0, z: -0.1730988}
+  m_Size: {x: 3.7216063, y: 2.9011245, z: 2.5987687}
+  m_Center: {x: 0, y: 0, z: -0.29093766}
 --- !u!1001 &41184211984428177
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -14,8 +14,9 @@ public class Setting : Windows<Setting>
     [SerializeField] private Toggle isFullScreen;
     [SerializeField] private CanvasGroup saveInfo;
 
-    
 
+
+   
     public override void OnOpen()
     {
         base.OnOpen();

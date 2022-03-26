@@ -6,7 +6,7 @@ public class ProjectileWeapon : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
    
-    [SerializeField] float shootForce;
+    [SerializeField] float shootForce = 400;
     [SerializeField] float upwardForce;
     [SerializeField] float timeBetweenShooting;
     [SerializeField] float spread;

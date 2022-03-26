@@ -47,11 +47,7 @@ public class PlayerIK : MonoBehaviourPunCallbacks
         }
     }
     int _currentWeaponId = -1;
-    [PunRPC]
-    public void RPCcurrentWeaponId(int v)
-    {
-        currentWeaponId = v;
-    }
+
     public bool isIKActive;
     Vector3 rpcRhandP;
     Quaternion rpcRhandR;
@@ -63,7 +59,7 @@ public class PlayerIK : MonoBehaviourPunCallbacks
     private void Awake()
     {
         isIKActive = true;
-        PV = GetComponentInParent<PhotonView>();
+        
         //PV = this.gameObject.GetPhotonView();
         animator = GetComponent<Animator>();
 
@@ -82,22 +78,23 @@ public class PlayerIK : MonoBehaviourPunCallbacks
 
     private void OnAnimatorIK(int layerIndex)
     {
-      
+
 
         if (isIKActive)
         {
-           
-                if (PV.IsMine)
-                    lookAtIK();
 
-                
 
-                
-                 
-                
 
-                WeaponIK();
-       
+            WeaponIK();
+
+
+
+
+
+
+
+
+
 
 
 
@@ -127,7 +124,7 @@ public class PlayerIK : MonoBehaviourPunCallbacks
     public void WeaponIK()
     {
 
-      
+
 
         if (currentWeaponId == 0)
         {
@@ -181,5 +178,9 @@ public class PlayerIK : MonoBehaviourPunCallbacks
         #endregion
     }
 
-
+    [PunRPC]
+    public void RPCcurrentWeaponId(int v)
+    {
+        currentWeaponId = v;
+    }
 }

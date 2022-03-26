@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
+using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 
-public class LoadingPanel : MonoBehaviour
+public class LoadingPanel : MonoBehaviourPunCallbacks
 {
     [SerializeField] VideoClip[] videos;
     [SerializeField] RenderTexture renderImage;
@@ -14,22 +16,42 @@ public class LoadingPanel : MonoBehaviour
     [SerializeField] string[] sceneToLoad;// sceneName 
     [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] TMP_Text progressText;
-    [SerializeField] ©Ð¶¡¤¤ inRoom;
 
+    AsyncOperation async;
 
     public string sceneName;
     float progress = 0f;
 
-
-
-    private void OnEnable()
+    private void Start()
     {
+        progress = 0f;
         RandomLoadingVideo();
-
-        //StartCoroutine(LoadingScene());
-
+        if (PhotonNetwork.IsMasterClient)
+        {
+            async = SceneManager.LoadSceneAsync("1");
+            async.allowSceneActivation = false;
+            StartCoroutine(LoadingScene());
+        }
+        else
+        {
+            StartCoroutine(ClinetLoading());
+        }
+        
+       
     }
-    /*
+
+   public IEnumerator ClinetLoading()
+    {
+        while (progress < 0.99)
+        {
+            progress += 0.5f * Time.deltaTime;
+            progressBar.value = progress;
+            progressText.SetText(Mathf.Floor(progress * 100f).ToString("0") + "%");
+            yield return null;
+        }
+        
+    }
+    
    public IEnumerator LoadingScene()
    {
 
@@ -37,7 +59,7 @@ public class LoadingPanel : MonoBehaviour
 
        while (progress < 0.99f)
        {
-           progress = Mathf.Lerp(progress, inRoom.async.progress / 9 * 10, Time.deltaTime);
+           progress = Mathf.Lerp(progress, async.progress / 9 * 10, Time.deltaTime);
            //progress += Mathf.Clamp(0, 0.01f, BoltNetwork.CurrentAsyncOperation.progress);
            progressBar.value = progress;
            progressText.SetText(Mathf.Floor(progress * 100f).ToString() + "%");
@@ -47,7 +69,7 @@ public class LoadingPanel : MonoBehaviour
        progress = 1f;
        progressBar.value = 1f;
 
-       inRoom.async.allowSceneActivation = true;
+       async.allowSceneActivation = true;
        progress = 0f;
 
 
@@ -57,7 +79,7 @@ public class LoadingPanel : MonoBehaviour
      
 
 }
-      */
+      
     void RandomLoadingVideo()
     {
         videoPlayer.clip = videos[Random.Range(0, videos.Length)];

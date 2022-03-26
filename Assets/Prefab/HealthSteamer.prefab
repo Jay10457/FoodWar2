@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7187227401678041703}
   - component: {fileID: -3036961485262978928}
   - component: {fileID: 3347937387597154312}
-  - component: {fileID: 2952959046180355351}
+  - component: {fileID: 2386051362410497481}
   m_Layer: 0
   m_Name: HealthSteamer
   m_TagString: Untagged
@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a00d7247173864da9271250f139233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCooking: 0
   inCookArea: 0
   cookerTeam: 0
 --- !u!114 &3347937387597154312
@@ -120,7 +121,7 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!65 &2952959046180355351
+--- !u!65 &2386051362410497481
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
