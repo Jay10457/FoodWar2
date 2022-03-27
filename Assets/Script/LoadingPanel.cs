@@ -28,7 +28,7 @@ public class LoadingPanel : MonoBehaviourPunCallbacks
         RandomLoadingVideo();
         if (PhotonNetwork.IsMasterClient)
         {
-            async = SceneManager.LoadSceneAsync("1");
+            async = SceneManager.LoadSceneAsync(sceneToLoad[Random.Range(0, sceneToLoad.Length)]);
             async.allowSceneActivation = false;
             StartCoroutine(LoadingScene());
         }

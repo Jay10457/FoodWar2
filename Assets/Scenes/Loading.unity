@@ -247,7 +247,9 @@ MonoBehaviour:
   - {fileID: 32900000, guid: 8c4762e1f4dfa674f8f567147261aff7, type: 3}
   renderImage: {fileID: 8400000, guid: 1644ce57e10dfff4b88b8a2df780fa77, type: 2}
   progressBar: {fileID: 4381173849626289975}
-  sceneToLoad: []
+  sceneToLoad:
+  - 1
+  - 2
   videoPlayer: {fileID: 810650316}
   progressText: {fileID: 4381173849184633530}
   sceneName: 

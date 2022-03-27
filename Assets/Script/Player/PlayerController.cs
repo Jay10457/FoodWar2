@@ -501,8 +501,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (other.tag == "Pot" && other != null && other.gameObject.GetComponent<Cooker>().cookerTeam.ToString() == teamValue.ToString())
             {
 
-                CurrentStatus.instance.gameObject.SetActive(true);
-                CurrentStatus.instance.statusText.text = "按 -E- 打開鍋子";
+                //CurrentStatus.instance.gameObject.SetActive(true);
+                //CurrentStatus.instance.statusText.text = "按 -E- 打開鍋子";
                 closePotTrans = other.transform;
 
                 cookUI.SetCookerUIBillboard(closePotTrans.position);
@@ -528,7 +528,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 CloseCooker();
                 closePotTrans = null;
                 inCookerArea = false;
-                CurrentStatus.instance.gameObject.SetActive(false);
+                //CurrentStatus.instance.gameObject.SetActive(false);
 
 
 
