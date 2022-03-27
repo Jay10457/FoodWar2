@@ -2444,7 +2444,7 @@ MonoBehaviour:
   jumpForce: 20
   sprintForce: 60
   raycastDistance: 0.3
-  sprintTime: 0.5
+  sprintTime: 0.3
   cdTime: 10
   stunTime: 5
   currentConnections: 0

@@ -224,14 +224,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 isOpenCooker = true;
                 cookUI._isCookerOpen = true;
-                CurrentStatus.instance.gameObject.SetActive(false);
+                //CurrentStatus.instance.gameObject.SetActive(false);
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 isOpenCooker = false;
                 cookUI._isCookerOpen = false;
-                CurrentStatus.instance.gameObject.SetActive(true);
+                //CurrentStatus.instance.gameObject.SetActive(true);
 
             }
 
@@ -294,6 +294,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (jump && isGrounded())
         {
             rb.velocity += Vector3.up * jumpForce;
+          
 
         }
         else
