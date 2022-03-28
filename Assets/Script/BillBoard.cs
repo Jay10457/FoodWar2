@@ -12,7 +12,18 @@ public class BillBoard : MonoBehaviour
     }
     private void LateUpdate()
     {
-        this.transform.LookAt(cam.transform);
-        this.transform.rotation = Quaternion.LookRotation(cam.transform.forward);
+        if (cam != null)
+        {
+
+            gameObject.transform.LookAt(cam.transform);
+
+            gameObject.transform.rotation = Quaternion.LookRotation(cam.transform.forward);
+            
+        }
+        else
+        {
+            cam = Camera.main;
+        }
+
     }
 }

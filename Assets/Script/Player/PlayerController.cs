@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] SpriteRenderer nameSlot;
     [SerializeField] float R, G, B;
     float stunRemainTime = -1;
-   
-    
+
+
 
     public List<GameObject> characters;
     bool jump;
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public bool inCookerArea;
     bool isOpenCooker;
-  
+
     FoodTeam teamValue;
 
     Vector3 nameSlotPos;
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 G = 0.5686275f;
                 B = 0.4470588f;
                 nameSlotPos = new Vector3(0, 5.3f, 0);
-                
+
             }
             else if (_characterId >= 5)
             {
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             photonView.RPC("SetCharacter", RpcTarget.All, _characterId);//SaveManager.instance.nowData.characterID
             photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName, R, G, B, nameSlotPos);
-            
+
             _characterId = SaveManager.instance.nowData.characterID;
             Vcam = FindObjectOfType<CinemachineVirtualCamera>();
             playerIK = this.gameObject.GetComponentInChildren<PlayerIK>();
@@ -224,14 +224,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 isOpenCooker = true;
                 cookUI._isCookerOpen = true;
-                //CurrentStatus.instance.gameObject.SetActive(false);
+                cooker.openRemain.SetActive(false);
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 isOpenCooker = false;
                 cookUI._isCookerOpen = false;
-                //CurrentStatus.instance.gameObject.SetActive(true);
+                cooker.openRemain.SetActive(true);
 
             }
 
@@ -294,7 +294,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (jump && isGrounded())
         {
             rb.velocity += Vector3.up * jumpForce;
-          
+
 
         }
         else
@@ -373,6 +373,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Move();
 
             PlayerRotate();
+            if (isGameBegin)
+            {
+                GetPot(5, 60);
+            }
+            
         }
         else
         {
@@ -495,51 +500,68 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     #region CheckPot
-    private void OnTriggerEnter(Collider other)
+   
+    Cooker cooker;
+    
+    public void GetPot(int radius, int angle)
     {
-        if (photonView.IsMine)
+        Collider[] cols = Physics.OverlapSphere(this.transform.position, radius,1 << LayerMask.NameToLayer("Pot") );
+
+        if (cols.Length > 0)
         {
-            if (other.tag == "Pot" && other != null && other.gameObject.GetComponent<Cooker>().cookerTeam.ToString() == teamValue.ToString())
+            for (int i = 0; i < cols.Length; i++)
             {
+               
+                Vector3 dir = cols[i].transform.position - this.transform.position;
+                if (Vector3.Angle(dir, this.transform.forward) < angle)
+                {
 
-                //CurrentStatus.instance.gameObject.SetActive(true);
-                //CurrentStatus.instance.statusText.text = "«ö -E- ¥´¶}Áç¤l";
-                closePotTrans = other.transform;
+                    cooker = cols[i].GetComponent<Cooker>();
+                    if (cooker.cookerTeam.ToString() == teamValue.ToString())
+                    {
+                        if (!isOpenCooker)
+                        {
+                            cooker.openRemain.SetActive(true);
+                        }
+                        else
+                        {
+                            cooker.openRemain.SetActive(false);
+                        }
+                        
+                        closePotTrans = cooker.gameObject.transform;
+                        cookUI.SetCookerUIBillboard(closePotTrans.position);
 
-                cookUI.SetCookerUIBillboard(closePotTrans.position);
+                        inCookerArea = true;
+                    }
+                   
 
-                inCookerArea = true;
+
+                }
+                else if(cooker != null)
+                {
+                    cooker.openRemain.SetActive(false);
+                    cooker = null;
+                    CloseCooker();
+                    closePotTrans = null;
+                    inCookerArea = false;
+                }
+
+
+
 
 
 
             }
-           
         }
-
-
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (photonView.IsMine)
+        else if(cooker != null)
         {
-            if (other.tag == "Pot")
-            {
-
-                CloseCooker();
-                closePotTrans = null;
-                inCookerArea = false;
-                //CurrentStatus.instance.gameObject.SetActive(false);
-
-
-
-            }
+            cooker.openRemain.SetActive(false);
+            cooker = null;
+            CloseCooker();
+            closePotTrans = null;
+            inCookerArea = false;
         }
 
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        
     }
     #endregion
 
@@ -635,7 +657,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         nameSlot.transform.localPosition = namePos;
         floatingId.text = playerName;
         nameSlot.color = new Color(r, g, b, 1);
-      
+
 
     }
     [PunRPC]

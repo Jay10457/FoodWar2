@@ -10,6 +10,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     public bool inCookArea;
     public FoodTeam cookerTeam;
     bool isPotionNearBy;
+    public GameObject openRemain;
     PhotonView PV;
     MeshRenderer meshRenderer;
 
@@ -17,6 +18,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
         PV = this.gameObject.GetComponent<PhotonView>();
+        openRemain.SetActive(false);
     }
    
     private void OnTriggerStay(Collider other)
