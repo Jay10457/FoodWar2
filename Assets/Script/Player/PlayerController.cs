@@ -501,7 +501,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     #region CheckPot
    
-    Cooker cooker;
+    public Cooker cooker;
     
     public void GetPot(int radius, int angle)
     {

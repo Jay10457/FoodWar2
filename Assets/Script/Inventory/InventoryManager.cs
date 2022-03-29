@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    static InventoryManager instance;
+    public static InventoryManager instance;
     [SerializeField] Transform playerPos;
     
 
@@ -34,7 +34,31 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-
+    public int AddItemToInventoryInCurrentSlot(Item item, int amount, IngredientSlot currentSlot)
+    {
+        int remaining = amount;
+        if (currentSlot.currentItem == item)
+        {
+            int overflow = currentSlot.AddItemToSlot(item, remaining);
+            if (overflow > 0)
+            {
+                remaining = overflow;
+            }
+            else
+            {
+                remaining = 0;
+            }
+        }
+        if (remaining <= 0)
+        {
+            return 0;
+        }
+        if (currentSlot.currentItem == null)
+        {
+            remaining = currentSlot.AddItemToSlot(item, amount);
+        }
+        return remaining;
+    }
     public static int AddItemToInventory(Item item, int amount)
     {
         int remaining = amount;
@@ -77,32 +101,7 @@ public class InventoryManager : MonoBehaviour
 
         return remaining;
     }
-    /*
-    public void RemoveItemFromInventory(Item item, int amount)
-    {
-        int remaining = amount;
-
-        foreach (InventorySlot slot in slots)
-        {
-            if (slot.currentItem == item)
-            {
-                if (remaining >= slot.currentItemAmount)
-                {
-                    remaining -= slot.currentItemAmount;
-                    slot.SetItemInSlot(null, 0);
-                }
-                else
-                {
-                    slot.SetItemInSlot(item, slot.currentItemAmount - remaining);
-                    remaining = 0;
-                }
-
-                if (remaining <= 0)
-                    return;
-            }
-
-        }
-    }*/
+    
     public void RemoveCurrentItem(int slotIndex, Item _currentItem, int _currentAmount)
     {
         int remaining = _currentAmount;
@@ -125,26 +124,7 @@ public class InventoryManager : MonoBehaviour
         }
        
     }
-    /*
-    public void DropItem(Item item, int amount, bool removeCurrentItem = true)
-    {
-        if (item == null)
-            return;
-        Vector3 random = new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(0f, 0.2f), Random.Range(-0.2f, 0.2f));
-        Vector3 direction = playerPos.forward + random;
-
-        
-        ItemPickUp drop = (Instantiate(item.dropGameObj(), playerPos.position + direction * 5, Quaternion.identity) as GameObject).GetComponent<ItemPickUp>();
-        drop.SetUpPickupable(item.name, amount);
-        if (removeCurrentItem)
-        {
-            currentItem = null;
-            currentItemAmout = 0;
-            
-        }
-        
-    }
-    */
+   
     public bool CheckItem(Item item, int amount)
     {
         int remaining = amount;

@@ -13,14 +13,28 @@ public class Cooker : MonoBehaviourPunCallbacks
     public GameObject openRemain;
     PhotonView PV;
     MeshRenderer meshRenderer;
+    RecipeManager recipeManager;
+    public Item[] ingredients;
 
     private void Awake()
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
+        recipeManager = RecipeManager.instance;
     }
    
+
+
+
+
+
+
+
+
+
+
+
     private void OnTriggerStay(Collider other)
     {
         
