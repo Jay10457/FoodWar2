@@ -13,12 +13,9 @@ public class IngredientSlot : InventorySlot
     {
         includeInInventory = false;
         addIngredientButtom = this.GetComponent<Button>();
-        addIngredientButtom.onClick.AddListener(delegate () { AddIngredient(); });
+        
 
     }
 
-    private void AddIngredient()
-    {
-        InventoryManager.instance.AddItemToInventoryInCurrentSlot(ingredient, 1, this);
-    }
+   
 }

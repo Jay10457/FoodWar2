@@ -135,6 +135,7 @@ public class CookManager : MonoBehaviourPunCallbacks
                     
                     if (currentCooker.cookerTeam.ToString() == playerController.teamValue.ToString())
                     {
+                        currentCooker.openRemain.SetActive(true);
                         currentCookerTrans = cols[i].transform;
                         inCookerArea = true;
                     }
@@ -142,6 +143,7 @@ public class CookManager : MonoBehaviourPunCallbacks
                 }
                 else if (currentCooker != null)
                 {
+                    currentCooker.openRemain.SetActive(false);
                     inCookerArea = false;
                     currentCooker = null;
                     currentCookerTrans = null;
@@ -153,7 +155,7 @@ public class CookManager : MonoBehaviourPunCallbacks
         }
         else if (currentCooker != null)
         {
-
+            currentCooker.openRemain.SetActive(false);
             inCookerArea = false;
             currentCooker = null;
             currentCookerTrans = null;

@@ -27,17 +27,17 @@ public class Cooker : MonoBehaviourPunCallbacks
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-        
+
         isOccupy = false;
-       
+
     }
 
 
     public void SendToServerCooker(string _userId)
     {
-       
-            photonView.RPC("SendRequest", RpcTarget.MasterClient, _userId);
-        
+
+        photonView.RPC("SendRequest", RpcTarget.MasterClient, _userId);
+
     }
 
 
@@ -47,8 +47,8 @@ public class Cooker : MonoBehaviourPunCallbacks
     private void SendRequest(string _userId)
     {
         userId = _userId;
-        Debug.LogError(_userId);
-        
+        //Debug.LogError(_userId);
+
     }
 
 

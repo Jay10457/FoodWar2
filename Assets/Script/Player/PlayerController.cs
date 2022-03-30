@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] SpriteRenderer nameSlot;
     [SerializeField] float R, G, B;
     [SerializeField] CookManager cookManager;
-    [SerializeField] GameObject[] playerList;
+    [SerializeField] List<GameObject> playerList;
     float stunRemainTime = -1;
 
 
@@ -78,8 +78,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
 
 
-
-
+        playerList = new List<GameObject>();
         Cursor.lockState = CursorLockMode.Locked;
         if (photonView.IsMine)
         {
@@ -136,18 +135,18 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void ConnectionCheck()
     {
-
+       
         if (!isGameBegin && gameObject != null)
         {
-            if (GameObject.FindWithTag("Player") && currentConnections < PhotonNetwork.CurrentRoom.PlayerCount)
+            if ( playerList.Count < PhotonNetwork.CurrentRoom.PlayerCount && !playerList.Contains(gameObject))
             {
 
-                currentConnections++;
 
+                playerList.Add(GameObject.FindGameObjectWithTag("Player"));
             }
-            if (currentConnections == PhotonNetwork.CurrentRoom.PlayerCount)
+            if (playerList.Count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
-                currentConnections ++;
+                playerList.Add(null);
                 photonView.RPC("StartGameCountDown", RpcTarget.All);
             }
         }
