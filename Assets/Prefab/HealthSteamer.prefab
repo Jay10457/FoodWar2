@@ -193,9 +193,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCooking: 0
+  isOccupy: 1
   inCookArea: 0
   cookerTeam: 0
   openRemain: {fileID: 8113018450240491087}
+  ingredients: []
 --- !u!114 &3347937387597154312
 MonoBehaviour:
   m_ObjectHideFlags: 0

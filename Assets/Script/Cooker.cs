@@ -7,6 +7,8 @@ using Photon.Realtime;
 public class Cooker : MonoBehaviourPunCallbacks
 {
     public bool isCooking;
+    public bool isOccupy;
+    bool lastOccupy;
     public bool inCookArea;
     public FoodTeam cookerTeam;
     bool isPotionNearBy;
@@ -15,6 +17,9 @@ public class Cooker : MonoBehaviourPunCallbacks
     MeshRenderer meshRenderer;
     RecipeManager recipeManager;
     public Item[] ingredients;
+    string cookerId;
+    int PVVeiwId;
+    string userId;
 
     private void Awake()
     {
@@ -22,58 +27,34 @@ public class Cooker : MonoBehaviourPunCallbacks
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-    }
-   
-
-
-
-
-
-
-
-
-
-
-
-    private void OnTriggerStay(Collider other)
-    {
         
-        if (other.tag == "Potion")
-        {
-            isPotionNearBy = true;
-        }
-        else if (other.tag != "Potion")
-        {
-            isPotionNearBy = false;
-            
-        }
+        isOccupy = false;
        
-      
     }
-    private void OnTriggerExit(Collider other)
+
+
+    public void SendToServerCooker(string _userId)
     {
-        if (other.tag == "Potion")
-        {
-            isPotionNearBy = false;
-        }
-    }
-    private void Update()
-    {
-        ChangeColor();
-        
+       
+            photonView.RPC("SendRequest", RpcTarget.MasterClient, _userId);
         
     }
 
-    private void ChangeColor()
+
+
+
+    [PunRPC]
+    private void SendRequest(string _userId)
     {
-        if (isPotionNearBy)
-        {
-            meshRenderer.material.color = Color.red;
-        }
-        else
-        {
-            meshRenderer.material.color = Color.white;
-        }
+        userId = _userId;
+        Debug.LogError(_userId);
+        
     }
+
+
+
+
+
+
 
 }
