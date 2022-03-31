@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class IngredientSlot : InventorySlot
 {
-    [SerializeField] Button addIngredientButtom;
-    private event Action addIngredient;
-    [SerializeField] Item ingredient;
+    public Button addIngredientButtom;
+    [SerializeField] int index;
+    
+    
     private void Awake()
     {
         includeInInventory = false;

@@ -38,42 +38,30 @@ MonoBehaviour:
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
+  - DropFX
+  - EquipItem
   - Fire
   - GetPos
   - PickUpSend
+  - PotionFX
   - RespawnSpaceship
+  - RespondRPCCooker
+  - RPCcurrentWeaponId
+  - RpcKillMe
+  - RPCSetUpPickupable
   - SendAnim
+  - SendRequest
   - SetCharacter
   - SetOpenClose
   - SetPlayerName
   - SetSkin
-  - StunAnim
-  - DropItem
-  - DropRPC
-  - RPCSetUpPickupable
-  - RpcKillMe
-  - EquipItem
-  - unEquipItem
-  - DropFX
-  - WeaponIK
-  - SendIkPos
-  - SendTest
-  - SendIK
-  - Sendint
-  - IKSend
-  - SendisCookerOccupy
-  - whoCanOpenCooker
-  - Loading
-  - ClientCallbacks
-  - CallBacksRPC
-  - CallbackRPC
-  - ClientLoading
-  - A
   - StartGameCountDown
-  - RPCcurrentWeaponId
-  - PotionFX
-  - SendOccupyInfo
-  - SendRequest
+  - StunAnim
+  - unEquipItem
+  - RespondCloseRPCCooker
+  - RespondOpenRPCCooker
+  - SendCloseRequest
+  - SendOpenRequest
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
   DevRegionSetOnce: 1

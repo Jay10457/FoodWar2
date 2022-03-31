@@ -85,7 +85,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         }
         else
         {
-            幹話.ins.講幹話("目前沒有連上機房，請稍後再試。");
+            幹話.ins.講幹話("伺服器無法連線，請稍後再試。");
         }
            
     }

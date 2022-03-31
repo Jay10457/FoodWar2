@@ -113,8 +113,8 @@ RectTransform:
   - {fileID: 2977068643757938033}
   - {fileID: 8918747250399239937}
   - {fileID: 6450603975197776940}
-  - {fileID: 3404940353900546086}
   - {fileID: 1872275551494188170}
+  - {fileID: 3404940353900546086}
   m_Father: {fileID: 7495303642271209474}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -174,9 +174,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ingredientSlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4643225112067084057}
+  - {fileID: 3063850416367852017}
+  - {fileID: 3100979718976858164}
   startCooking: {fileID: 7933399490734404132}
   BGs:
   - {fileID: 3387087223126131300}
@@ -936,11 +936,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 366662591967569767}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000014305, y: -93.811676}
+  m_AnchoredPosition: {x: 0, y: -93.811676}
   m_SizeDelta: {x: 156.9712, y: 75.7263}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2168280824289045439
@@ -1702,8 +1702,8 @@ MonoBehaviour:
   borderImage: {fileID: 2820655927213534072}
   stackImage: {fileID: 7131251363489665862}
   stackText: {fileID: 7119125559747936726}
-  addIngredientButtom: {fileID: 0}
-  ingredient: {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
+  addIngredientButtom: {fileID: 5576897361056838021}
+  index: 0
 --- !u!1 &6722314229695057101
 GameObject:
   m_ObjectHideFlags: 0
@@ -3562,6 +3562,18 @@ MonoBehaviour:
   - {fileID: 7495303642078085325}
   - {fileID: 7495303642229340978}
   - {fileID: 7495303640759759294}
+  materialItems:
+  - {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
+  - {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
+  - {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
+  - {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
+  - {fileID: 11400000, guid: 96ae6ec326aca5149876c4092001dbc6, type: 2}
+  - {fileID: 11400000, guid: 5d9096a639bd35d4c9cd643b9203e568, type: 2}
+  - {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
+  - {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
+  - {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
+  - {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
+  currentCharacterMat: {fileID: 0}
 --- !u!1 &7495303641252888457
 GameObject:
   m_ObjectHideFlags: 0
@@ -6487,8 +6499,8 @@ MonoBehaviour:
   borderImage: {fileID: 7638418218270490576}
   stackImage: {fileID: 7017197832415893038}
   stackText: {fileID: 5240060520218722540}
-  addIngredientButtom: {fileID: 0}
-  ingredient: {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
+  addIngredientButtom: {fileID: 9129602398511819595}
+  index: 0
 --- !u!1 &7763049340235031260
 GameObject:
   m_ObjectHideFlags: 0
@@ -6524,7 +6536,7 @@ RectTransform:
   - {fileID: 258741941581141460}
   - {fileID: 6860580759876184165}
   m_Father: {fileID: 366662591967569767}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6632,8 +6644,8 @@ MonoBehaviour:
   borderImage: {fileID: 1627462662978126168}
   stackImage: {fileID: 2647527706131854105}
   stackText: {fileID: 8167203484860488959}
-  addIngredientButtom: {fileID: 0}
-  ingredient: {fileID: 11400000, guid: 96ae6ec326aca5149876c4092001dbc6, type: 2}
+  addIngredientButtom: {fileID: 4263157833642033050}
+  index: 0
 --- !u!1 &7816883783410402204
 GameObject:
   m_ObjectHideFlags: 0

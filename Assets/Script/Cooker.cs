@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class Cooker : MonoBehaviourPunCallbacks
 {
+    [SerializeField] CookManager myPlayerReference = null;
     public bool isCooking;
     public bool isOccupy;
-    bool lastOccupy;
     public bool inCookArea;
-    public FoodTeam cookerTeam;
+    bool lastOccupy;
     bool isPotionNearBy;
+    public FoodTeam cookerTeam;
+    
     public GameObject openRemain;
     PhotonView PV;
     MeshRenderer meshRenderer;
@@ -21,38 +24,95 @@ public class Cooker : MonoBehaviourPunCallbacks
     int PVVeiwId;
     string userId;
 
+
+
+    private new void OnEnable()
+    {
+        //Cooker to Ui
+        EventManager.instance.CookerToUI = SendMaterialToServer;
+    }
+    private new void OnDisable()
+    {
+        //disable cooker to Ui
+        EventManager.instance.CookerToUI -= SendMaterialToServer;
+    }
+
+
     private void Awake()
     {
+       
         meshRenderer = this.GetComponent<MeshRenderer>();
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-
-        isOccupy = false;
+        
 
     }
+    private void Start()
+    {
+        myPlayerReference = FindObjectOfType<RoomManager>().myPlayer;
 
-
-    public void SendToServerCooker(string _userId)
+    }
+   
+    public void SendMaterialToServer(string itemPacket)
+    {
+        Debug.LogError(string.Format("SendMaterial and item is {0}", itemPacket));
+    }
+    public void SendOpenRequestServerCooker(string _userId)
     {
 
-        photonView.RPC("SendRequest", RpcTarget.MasterClient, _userId);
+        photonView.RPC("SendOpenRequest", RpcTarget.MasterClient, _userId);
 
     }
-
-
+    public void SendCloseRequestServerCooker(string _userId)
+    {
+        photonView.RPC("SendCloseRequest", RpcTarget.MasterClient, _userId);
+    }
 
 
     [PunRPC]
-    private void SendRequest(string _userId)
+    private void SendCloseRequest(string _userId)
+    {
+        userId = _userId;
+        photonView.RPC("RespondCloseRPCCooker", RpcTarget.All, _userId);
+    }
+
+    [PunRPC]
+    private void SendOpenRequest(string _userId)
     {
         userId = _userId;
         //Debug.LogError(_userId);
+        photonView.RPC("RespondOpenRPCCooker", RpcTarget.All, _userId);
+
+    }
+    [PunRPC]
+    private void RespondOpenRPCCooker(string _userId)
+    {
+       // Debug.LogError(string.Format("your Id is {0}", _userId));
+        if (myPlayerReference.userId == _userId)
+        {
+            
+            CookUI.instance.gameObject.SetActive(true);
+            CookUI.instance.SetCookerUIBillboard(this.transform.position);
+            Cursor.lockState = CursorLockMode.None;
+        }
+       
+    }
+    [PunRPC]
+    private void RespondCloseRPCCooker(string _userId)
+    {
+        //Debug.LogError(string.Format("your Id is {0}", _userId));
+        if (myPlayerReference.userId == _userId)
+        {
+            
+            CookUI.instance.gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            //CookUI.instance.SetCookerUIBillboard(this.transform.position);
+        }
 
     }
 
-
-
+   
 
 
 

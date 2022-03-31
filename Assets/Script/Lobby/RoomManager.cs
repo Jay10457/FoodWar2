@@ -16,6 +16,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform[] 生成點 = new Transform[0];
     [SerializeField] Transform[] goodSpawnPoint = new Transform[0];
     [SerializeField] Transform[] badSpawnPoint = new Transform[0];
+    public CookManager myPlayer = null;
     private void Start()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -27,7 +28,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
        
         // 每個人都生成自己的角色到場地上
         GameObject.Instantiate(mainCam, mainCam.transform.position, mainCam.transform.rotation);
-        PhotonNetwork.Instantiate("Player", 生成點[Random.Range(0, 生成點.Length)].position, Quaternion.identity);
+        myPlayer = PhotonNetwork.Instantiate("Player", 生成點[Random.Range(0, 生成點.Length)].position, Quaternion.identity).GetComponent<CookManager>();
         GameObject.Instantiate(playerUI, playerUI.transform.position, playerUI.transform.rotation);
         
 

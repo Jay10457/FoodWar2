@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!_stun)
         {
             playerMoveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            if (!cookManager.isOpenCooker)
+            if (!CookUI.instance.gameObject.activeSelf)
             {
                 yaw = -Input.GetAxis("Mouse Y");
                 pitch = Input.GetAxis("Mouse X");
