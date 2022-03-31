@@ -50,7 +50,7 @@ public class Cooker : MonoBehaviourPunCallbacks
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-        
+        ingredients = new Item[3];
 
     }
     private void Start()
@@ -127,6 +127,7 @@ public class Cooker : MonoBehaviourPunCallbacks
         ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
 
         sendItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
+        ingredients[0] = sendItem;
         Debug.LogError(string.Format("Material is {0}, amount is {1}", sendItem.name, itemPacket.amount));
     }
 
