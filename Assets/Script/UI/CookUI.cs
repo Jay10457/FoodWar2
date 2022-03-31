@@ -16,6 +16,7 @@ public class CookUI : MonoBehaviour
     [SerializeField] Vector3 offset;
     ItemPacket itemPacket = new ItemPacket();
 
+   
      struct ItemPacket
     {
         public int itemId;

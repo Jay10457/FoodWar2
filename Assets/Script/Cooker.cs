@@ -13,6 +13,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     public bool inCookArea;
     bool lastOccupy;
     bool isPotionNearBy;
+    Item sendItem;
     public FoodTeam cookerTeam;
     
     public GameObject openRemain;
@@ -24,7 +25,11 @@ public class Cooker : MonoBehaviourPunCallbacks
     int PVVeiwId;
     string userId;
 
-
+    struct ItemPacket
+    {
+        public int itemId;
+        public int amount;
+    }
 
     private new void OnEnable()
     {
@@ -57,6 +62,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     public void SendMaterialToServer(string itemPacket)
     {
         Debug.LogError(string.Format("SendMaterial and item is {0}", itemPacket));
+        photonView.RPC("SendAddMaterialRequest", RpcTarget.MasterClient, itemPacket);
     }
     public void SendOpenRequestServerCooker(string _userId)
     {
@@ -69,7 +75,7 @@ public class Cooker : MonoBehaviourPunCallbacks
         photonView.RPC("SendCloseRequest", RpcTarget.MasterClient, _userId);
     }
 
-
+    #region OpenUIRPC
     [PunRPC]
     private void SendCloseRequest(string _userId)
     {
@@ -85,6 +91,7 @@ public class Cooker : MonoBehaviourPunCallbacks
         photonView.RPC("RespondOpenRPCCooker", RpcTarget.All, _userId);
 
     }
+    
     [PunRPC]
     private void RespondOpenRPCCooker(string _userId)
     {
@@ -111,8 +118,17 @@ public class Cooker : MonoBehaviourPunCallbacks
         }
 
     }
+    #endregion
 
-   
+    [PunRPC]
+    public void SendAddMaterialRequest(string _itemPacket)
+    {
+       
+        ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
+
+        sendItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
+        Debug.LogError(string.Format("Material is {0}, amount is {1}", sendItem.name, itemPacket.amount));
+    }
 
 
 

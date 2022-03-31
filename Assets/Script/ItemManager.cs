@@ -14,7 +14,7 @@ public class ItemManager
                 _instance = new ItemManager();
                 _instance.items = new List<Item>(Resources.LoadAll<Item>("Data"));
                 //foreach (Item i in _instance.items)
-                   // Debug.LogError(i.name);
+                // Debug.LogError(i.name);
             }
             return _instance;
         }
@@ -29,10 +29,22 @@ public class ItemManager
     /// <returns></returns>
     public Item GetItmeByName(string itemName)
     {
-        for(int i = 0; i < items.Count; i++)
+        for (int i = 0; i < items.Count; i++)
         {
             if (items[i].name == itemName)
                 return items[i];
+        }
+        return null;
+    }
+
+    public Item GetMaterialById(int materialId)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].Id == materialId)
+                return items[i];
+
+            
         }
         return null;
     }
