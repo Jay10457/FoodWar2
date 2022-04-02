@@ -134,7 +134,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 2022-03-31 15:33:38 v400
+  bundleVersion: 2022-04-02 23:06:56 v406
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -156,10 +156,10 @@ PlayerSettings:
     Standalone: com.DefaultCompany.FoodWar2
   buildNumber:
     Standalone: 0
-    iPhone: 400
+    iPhone: 406
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 400
+  AndroidBundleVersionCode: 406
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

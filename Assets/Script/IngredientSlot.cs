@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class IngredientSlot : InventorySlot
 {
     public Button addIngredientButtom;
-    [SerializeField] int index;
+    public int index;
+    public Action<int> addButtomOnClick;
     
     
     private void Awake()
@@ -17,6 +18,15 @@ public class IngredientSlot : InventorySlot
         
 
     }
+    private void OnEnable()
+    {
+        addIngredientButtom.onClick.RemoveAllListeners();
+        addIngredientButtom.onClick.AddListener(() => { if (addButtomOnClick != null) addButtomOnClick(index); });
+    }
+    private void OnDisable()
+    {
+        addIngredientButtom.onClick.RemoveAllListeners();
+    }
 
-   
+
 }

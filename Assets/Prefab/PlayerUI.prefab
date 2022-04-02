@@ -182,6 +182,7 @@ MonoBehaviour:
   - {fileID: 3387087223126131300}
   - {fileID: 1864917396081555141}
   offset: {x: 8, y: 120, z: 0}
+  myPlayerRef: {fileID: 0}
   _isCookerOpen: 0
 --- !u!1 &1380834481839622847
 GameObject:
@@ -6500,7 +6501,7 @@ MonoBehaviour:
   stackImage: {fileID: 7017197832415893038}
   stackText: {fileID: 5240060520218722540}
   addIngredientButtom: {fileID: 9129602398511819595}
-  index: 0
+  index: 1
 --- !u!1 &7763049340235031260
 GameObject:
   m_ObjectHideFlags: 0
@@ -6645,7 +6646,7 @@ MonoBehaviour:
   stackImage: {fileID: 2647527706131854105}
   stackText: {fileID: 8167203484860488959}
   addIngredientButtom: {fileID: 4263157833642033050}
-  index: 0
+  index: 2
 --- !u!1 &7816883783410402204
 GameObject:
   m_ObjectHideFlags: 0

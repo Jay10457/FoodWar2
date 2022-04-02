@@ -14,6 +14,8 @@ public class CookUI : MonoBehaviour
     private Camera cam;
     [SerializeField] GameObject[] BGs;
     [SerializeField] Vector3 offset;
+    [SerializeField] CookManager myPlayerRef = null;
+  
     ItemPacket itemPacket = new ItemPacket();
 
    
@@ -21,6 +23,7 @@ public class CookUI : MonoBehaviour
     {
         public int itemId;
         public int amount;
+        public string userId;
     }
 
     int cId;
@@ -32,30 +35,40 @@ public class CookUI : MonoBehaviour
     {
         //subscribe Cooker
         //EventManager.instance.UIToCooker
-        _ingredientSlots[0].addIngredientButtom.onClick.RemoveAllListeners();
-        _ingredientSlots[0].addIngredientButtom.onClick.AddListener(delegate { EventManager.instance.CookerToUI(covertedItemPacketJson()); });
+        for (int i = 0; i < _ingredientSlots.Length; i++)
+        {
+
+            
+            _ingredientSlots[i].addButtomOnClick = SendSlotIndex;
+        }
+       
 
 
+    }
+    private void SendSlotIndex(int index)
+    {
+        myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
     }
     private void OnDisable()
     {
         //Desubscribe Cooker
         //EventManager.instance.UIToCooker
     }
-
+    
     private void InitPacket()
     {
         itemPacket.itemId = MaterialSlot.instance.currentCharacterMat.Id;
         itemPacket.amount = 1;
+        itemPacket.userId = RoomManager.instance.myPlayer.userId;
        
 
     }
-
-
+  
     private void Awake()
     {
         cam = Camera.main;
         cId = SaveManager.instance.nowData.characterID;
+        myPlayerRef = RoomManager.instance.myPlayer;
         if (instance == null)
         {
             instance = this;
@@ -69,6 +82,7 @@ public class CookUI : MonoBehaviour
     private void Start()
     {
         InitPacket();
+        //Debug.LogError(covertedItemPacketJson());
        
     }
 

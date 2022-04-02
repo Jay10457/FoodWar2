@@ -150,11 +150,7 @@ public class InventoryManager : MonoBehaviour
         _currentItemAmount = 0;
     }
 
-    /*
-    public void BinItem()
-    {
-        RemoveItem();
-    }
-    */
+    
+    
 
 }

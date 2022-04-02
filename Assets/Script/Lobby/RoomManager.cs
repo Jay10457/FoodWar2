@@ -21,9 +21,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.Instantiate("GoodPot", goodSpawnPoint[0].position, Quaternion.identity);
-
-            PhotonNetwork.Instantiate("BadPot", badSpawnPoint[0].position, Quaternion.identity);
+            for (int i = 0; i < goodSpawnPoint.Length; i++)
+            {
+                PhotonNetwork.Instantiate("GoodPot", goodSpawnPoint[i].position, Quaternion.identity);
+                PhotonNetwork.Instantiate("BadPot", badSpawnPoint[i].position, Quaternion.identity);
+            }
+            
+            
+            
         }
        
         // 每個人都生成自己的角色到場地上

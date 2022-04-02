@@ -13,33 +13,38 @@ public class Cooker : MonoBehaviourPunCallbacks
     public bool inCookArea;
     bool lastOccupy;
     bool isPotionNearBy;
-    Item sendItem;
+    
     public FoodTeam cookerTeam;
     
     public GameObject openRemain;
     PhotonView PV;
     MeshRenderer meshRenderer;
     RecipeManager recipeManager;
-    public Item[] ingredients;
+    public List<Item> ingredients;
     string cookerId;
     int PVVeiwId;
     string userId;
-
+    public Action<string, int> PutMaterialRPC;
+    public Action<string, int> RemoveMaterialRPC;
     struct ItemPacket
     {
         public int itemId;
         public int amount;
+        public string userId;
     }
 
     private new void OnEnable()
     {
         //Cooker to Ui
-        EventManager.instance.CookerToUI = SendMaterialToServer;
+        PutMaterialRPC = SendMaterialToServer;
+        RemoveMaterialRPC = RemoveMaterialFromServer;
+      
     }
     private new void OnDisable()
     {
         //disable cooker to Ui
-        EventManager.instance.CookerToUI -= SendMaterialToServer;
+        PutMaterialRPC -= SendMaterialToServer;
+        RemoveMaterialRPC -= RemoveMaterialFromServer;
     }
 
 
@@ -50,7 +55,7 @@ public class Cooker : MonoBehaviourPunCallbacks
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-        ingredients = new Item[3];
+        ingredients = new List<Item>();
 
     }
     private void Start()
@@ -58,18 +63,35 @@ public class Cooker : MonoBehaviourPunCallbacks
         myPlayerReference = FindObjectOfType<RoomManager>().myPlayer;
 
     }
-   
-    public void SendMaterialToServer(string itemPacket)
+   /// <summary>
+   /// Send addmaterial request to server
+   /// </summary>
+   /// <param name="itemPacket"></param>
+   /// <param name="slotIndex"></param>
+    public void SendMaterialToServer(string itemPacket, int slotIndex)
     {
-        Debug.LogError(string.Format("SendMaterial and item is {0}", itemPacket));
-        photonView.RPC("SendAddMaterialRequest", RpcTarget.MasterClient, itemPacket);
+        //Debug.LogError(string.Format("SendMaterial and item is {0}", itemPacket));
+        photonView.RPC("SendAddMaterialRequest", RpcTarget.MasterClient, itemPacket, slotIndex);
     }
+    public void RemoveMaterialFromServer(string itemPacket, int slotIndex)
+    {
+
+    }
+    /// <summary>
+    /// Client Sender: Client send request to server Who open the cooker
+    /// </summary>
+    /// <param name="_userId"></param>
     public void SendOpenRequestServerCooker(string _userId)
     {
 
         photonView.RPC("SendOpenRequest", RpcTarget.MasterClient, _userId);
 
     }
+
+    /// <summary>
+    /// Client Sender: Client send request to server Who close the cooker
+    /// </summary>
+    /// <param name="_userId"></param>
     public void SendCloseRequestServerCooker(string _userId)
     {
         photonView.RPC("SendCloseRequest", RpcTarget.MasterClient, _userId);
@@ -119,16 +141,41 @@ public class Cooker : MonoBehaviourPunCallbacks
 
     }
     #endregion
-
+    /// <summary>
+    /// Client Sender: Client send request to server Who add material
+    /// </summary>
+    /// <param name="_itemPacket"></param>
+    /// <param name="_slotIndex"></param>
     [PunRPC]
-    public void SendAddMaterialRequest(string _itemPacket)
+    public void SendAddMaterialRequest(string _itemPacket, int _slotIndex)
     {
        
         ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
 
-        sendItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
-        ingredients[0] = sendItem;
-        Debug.LogError(string.Format("Material is {0}, amount is {1}", sendItem.name, itemPacket.amount));
+        Item sendItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
+        if (!ingredients.Contains(sendItem))
+        {
+            ingredients.Add(sendItem);
+            photonView.RPC("ConfirmAddMaterialRequest", RpcTarget.All, _itemPacket, _slotIndex);
+            //Debug.LogError(string.Format("Material is {0}, amount is {1}, userId : {2}, from SlotIndex : {3}", sendItem.name, itemPacket.amount, itemPacket.userId, _slotIndex));
+        }
+        
+       
+    }
+    /// <summary>
+    /// Client reciver: Server confirm Client add material
+    /// </summary>
+    /// <param name="_itemPacket"></param>
+    /// <param name="_slotIndex"></param>
+    [PunRPC] 
+    public void ConfirmAddMaterialRequest(string _itemPacket, int _slotIndex)
+    {
+        ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
+        Item reciveItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
+        if (myPlayerReference.userId == itemPacket.userId)
+        {
+            InventoryManager.instance.AddItemToInventoryInCurrentSlot(reciveItem, itemPacket.amount, CookUI.instance._ingredientSlots[_slotIndex]);
+        }
     }
 
 
