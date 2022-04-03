@@ -34,26 +34,42 @@ public class CookUI : MonoBehaviour
     private void OnEnable()
     {
         //subscribe Cooker
-        //EventManager.instance.UIToCooker
+        //TODO: Refrash UI from server
         for (int i = 0; i < _ingredientSlots.Length; i++)
         {
 
-            
+        
+          
             _ingredientSlots[i].addButtomOnClick = SendSlotIndex;
         }
        
 
 
     }
+    private void OnDisable()
+    {
+        //Desubscribe Cooker
+       
+        for (int i = 0; i < _ingredientSlots.Length; i++)
+        {
+            if (_ingredientSlots[i].currentItem != null)
+            {
+                Debug.LogError(string.Format("slot :{0} is {1}", _ingredientSlots[i].index, _ingredientSlots[i].currentItem.name));
+                InventoryManager.instance.RemoveItemFromCurrentSlot(_ingredientSlots[i].currentItem, _ingredientSlots[i].currentItemAmount, _ingredientSlots[i]);
+            }
+           
+            
+            _ingredientSlots[i].addButtomOnClick -= SendSlotIndex;
+
+        }//EventManager.instance.UIToCooker
+    }
+
+
     private void SendSlotIndex(int index)
     {
         myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
     }
-    private void OnDisable()
-    {
-        //Desubscribe Cooker
-        //EventManager.instance.UIToCooker
-    }
+  
     
     private void InitPacket()
     {

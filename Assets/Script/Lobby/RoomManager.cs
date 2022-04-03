@@ -23,8 +23,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < goodSpawnPoint.Length; i++)
             {
-                PhotonNetwork.Instantiate("GoodPot", goodSpawnPoint[i].position, Quaternion.identity);
-                PhotonNetwork.Instantiate("BadPot", badSpawnPoint[i].position, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("GoodPot", goodSpawnPoint[i].position, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("BadPot", badSpawnPoint[i].position, Quaternion.identity);
             }
             
             

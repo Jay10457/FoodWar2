@@ -59,6 +59,29 @@ public class InventoryManager : MonoBehaviour
         }
         return remaining;
     }
+
+    public void RemoveItemFromCurrentSlot(Item _currentItem, int _currentAmount, IngredientSlot _currentSlot)
+    {
+        int remaining = _currentAmount;
+        if (_currentSlot.currentItem == _currentItem)
+        {
+            if (remaining >= _currentSlot.currentItemAmount)
+            {
+                remaining -= _currentSlot.currentItemAmount;
+                _currentSlot.SetItemInSlot(null, 0);
+            }
+            else
+            {
+                _currentSlot.SetItemInSlot(_currentItem, _currentSlot.currentItemAmount - remaining);
+                remaining = 0;
+            }
+            if (remaining <= 0)
+            {
+                return;
+            }
+        }
+        
+    }
     public static int AddItemToInventory(Item item, int amount)
     {
         int remaining = amount;

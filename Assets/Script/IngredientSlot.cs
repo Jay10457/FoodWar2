@@ -22,6 +22,8 @@ public class IngredientSlot : InventorySlot
     {
         addIngredientButtom.onClick.RemoveAllListeners();
         addIngredientButtom.onClick.AddListener(() => { if (addButtomOnClick != null) addButtomOnClick(index); });
+       
+      
     }
     private void OnDisable()
     {

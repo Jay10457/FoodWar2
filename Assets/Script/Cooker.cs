@@ -20,10 +20,11 @@ public class Cooker : MonoBehaviourPunCallbacks
     PhotonView PV;
     MeshRenderer meshRenderer;
     RecipeManager recipeManager;
-    public List<Item> ingredients;
+   
     string cookerId;
     int PVVeiwId;
     string userId;
+    public List<MaterialInfo> materialsInCooker;
     public Action<string, int> PutMaterialRPC;
     public Action<string, int> RemoveMaterialRPC;
     struct ItemPacket
@@ -31,6 +32,12 @@ public class Cooker : MonoBehaviourPunCallbacks
         public int itemId;
         public int amount;
         public string userId;
+    }
+    [Serializable]
+    public struct MaterialInfo
+    {
+        public Item material;
+        public int slotIndex;
     }
 
     private new void OnEnable()
@@ -55,7 +62,8 @@ public class Cooker : MonoBehaviourPunCallbacks
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-        ingredients = new List<Item>();
+        materialsInCooker = new List<MaterialInfo>();
+      
 
     }
     private void Start()
@@ -64,7 +72,7 @@ public class Cooker : MonoBehaviourPunCallbacks
 
     }
    /// <summary>
-   /// Send addmaterial request to server
+   /// Send add material request to server
    /// </summary>
    /// <param name="itemPacket"></param>
    /// <param name="slotIndex"></param>
@@ -73,6 +81,11 @@ public class Cooker : MonoBehaviourPunCallbacks
         //Debug.LogError(string.Format("SendMaterial and item is {0}", itemPacket));
         photonView.RPC("SendAddMaterialRequest", RpcTarget.MasterClient, itemPacket, slotIndex);
     }
+    /// <summary>
+    /// Send remove material request to server
+    /// </summary>
+    /// <param name="itemPacket"></param>
+    /// <param name="slotIndex"></param>
     public void RemoveMaterialFromServer(string itemPacket, int slotIndex)
     {
 
@@ -96,7 +109,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     {
         photonView.RPC("SendCloseRequest", RpcTarget.MasterClient, _userId);
     }
-
+    
     #region OpenUIRPC
     [PunRPC]
     private void SendCloseRequest(string _userId)
@@ -141,6 +154,8 @@ public class Cooker : MonoBehaviourPunCallbacks
 
     }
     #endregion
+    MaterialInfo currentMaterial;
+
     /// <summary>
     /// Client Sender: Client send request to server Who add material
     /// </summary>
@@ -149,19 +164,25 @@ public class Cooker : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SendAddMaterialRequest(string _itemPacket, int _slotIndex)
     {
-       
         ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
-
+    
         Item sendItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
-        if (!ingredients.Contains(sendItem))
+        if (!materialsInCooker.Contains(currentMaterial))
         {
-            ingredients.Add(sendItem);
+           
+            currentMaterial.material = sendItem;
+            currentMaterial.slotIndex = _slotIndex;
+           
+            Debug.LogError("add");
+            materialsInCooker.Add(currentMaterial);
             photonView.RPC("ConfirmAddMaterialRequest", RpcTarget.All, _itemPacket, _slotIndex);
             //Debug.LogError(string.Format("Material is {0}, amount is {1}, userId : {2}, from SlotIndex : {3}", sendItem.name, itemPacket.amount, itemPacket.userId, _slotIndex));
         }
         
        
     }
+
+    
     /// <summary>
     /// Client reciver: Server confirm Client add material
     /// </summary>
