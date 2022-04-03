@@ -15,7 +15,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     bool isPotionNearBy;
     
     public FoodTeam cookerTeam;
-    
+    public List<Item> materialsInCooker;
     public GameObject openRemain;
     PhotonView PV;
     MeshRenderer meshRenderer;
@@ -24,7 +24,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     string cookerId;
     int PVVeiwId;
     string userId;
-    public List<MaterialInfo> materialsInCooker;
+   
     public Action<string, int> PutMaterialRPC;
     public Action<string, int> RemoveMaterialRPC;
     struct ItemPacket
@@ -33,12 +33,7 @@ public class Cooker : MonoBehaviourPunCallbacks
         public int amount;
         public string userId;
     }
-    [Serializable]
-    public struct MaterialInfo
-    {
-        public Item material;
-        public int slotIndex;
-    }
+  
 
     private new void OnEnable()
     {
@@ -62,7 +57,8 @@ public class Cooker : MonoBehaviourPunCallbacks
         PV = this.gameObject.GetComponent<PhotonView>();
         openRemain.SetActive(false);
         recipeManager = RecipeManager.instance;
-        materialsInCooker = new List<MaterialInfo>();
+        materialsInCooker = new List<Item>();
+  
       
 
     }
@@ -154,7 +150,7 @@ public class Cooker : MonoBehaviourPunCallbacks
 
     }
     #endregion
-    MaterialInfo currentMaterial;
+  
 
     /// <summary>
     /// Client Sender: Client send request to server Who add material
@@ -165,18 +161,19 @@ public class Cooker : MonoBehaviourPunCallbacks
     public void SendAddMaterialRequest(string _itemPacket, int _slotIndex)
     {
         ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
-    
+        
         Item sendItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
-        if (!materialsInCooker.Contains(currentMaterial))
+        sendItem.slotIndex = _slotIndex;
+        if (!materialsInCooker.Contains(sendItem))
         {
            
-            currentMaterial.material = sendItem;
-            currentMaterial.slotIndex = _slotIndex;
-           
+
+          
+
             Debug.LogError("add");
-            materialsInCooker.Add(currentMaterial);
+            materialsInCooker.Add(sendItem);
             photonView.RPC("ConfirmAddMaterialRequest", RpcTarget.All, _itemPacket, _slotIndex);
-            //Debug.LogError(string.Format("Material is {0}, amount is {1}, userId : {2}, from SlotIndex : {3}", sendItem.name, itemPacket.amount, itemPacket.userId, _slotIndex));
+            Debug.LogError(string.Format("Material is {0}, amount is {1}, userId : {2}, from SlotIndex : {3}", sendItem.name, itemPacket.amount, itemPacket.userId, sendItem.slotIndex));
         }
         
        
@@ -193,7 +190,7 @@ public class Cooker : MonoBehaviourPunCallbacks
     {
         ItemPacket itemPacket = JsonUtility.FromJson<ItemPacket>(_itemPacket);
         Item reciveItem = ItemManager.instance.GetMaterialById(itemPacket.itemId);
-        if (myPlayerReference.userId == itemPacket.userId)
+        if (myPlayerReference.userId == itemPacket.userId || CookUI.instance.gameObject.activeSelf)
         {
             InventoryManager.instance.AddItemToInventoryInCurrentSlot(reciveItem, itemPacket.amount, CookUI.instance._ingredientSlots[_slotIndex]);
         }

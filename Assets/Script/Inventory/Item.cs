@@ -17,6 +17,7 @@ public class Item : ScriptableObject
     [Tooltip("If this is an equipable item, this is what GameObject will spawn when held/equipped.")]
    
     public int dropAmount;
+    public int slotIndex = -1;
    
 
     public GameObject dropGameObj()
