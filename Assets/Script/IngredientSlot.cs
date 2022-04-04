@@ -8,7 +8,8 @@ public class IngredientSlot : InventorySlot
 {
     public Button addIngredientButtom;
     public int index;
-    public Action<int> addButtomOnClick;
+    public Action<int> ButtomOnClick;
+ 
     
     
     private void Awake()
@@ -21,13 +22,15 @@ public class IngredientSlot : InventorySlot
     private void OnEnable()
     {
         addIngredientButtom.onClick.RemoveAllListeners();
-        addIngredientButtom.onClick.AddListener(() => { if (addButtomOnClick != null) addButtomOnClick(index); });
+        addIngredientButtom.onClick.AddListener(() => { if (ButtomOnClick != null) ButtomOnClick(index); });
+
        
       
     }
     private void OnDisable()
     {
         addIngredientButtom.onClick.RemoveAllListeners();
+        
     }
 
 

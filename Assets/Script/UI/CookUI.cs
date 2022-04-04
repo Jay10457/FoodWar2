@@ -17,6 +17,7 @@ public class CookUI : MonoBehaviour
     [SerializeField] CookManager myPlayerRef = null;
   
     ItemPacket itemPacket = new ItemPacket();
+    Action RefreshUI;
 
    
      struct ItemPacket
@@ -36,11 +37,14 @@ public class CookUI : MonoBehaviour
         //subscribe Cooker
         //TODO: Refrash UI from server
         for (int i = 0; i < _ingredientSlots.Length; i++)
+        {      
+            _ingredientSlots[i].ButtomOnClick = RemoveAndAddMaterialWithIndex;            
+        }
+        RefreshUI = RefreshUIFromServer;
+        if (myPlayerRef.currentCooker != null)
         {
-
-        
-          
-            _ingredientSlots[i].addButtomOnClick = SendSlotIndex;
+           
+            RefreshUI();
         }
        
 
@@ -50,6 +54,8 @@ public class CookUI : MonoBehaviour
     {
         //Desubscribe Cooker
        
+        RefreshUI -= RefreshUIFromServer;
+
         for (int i = 0; i < _ingredientSlots.Length; i++)
         {
             if (_ingredientSlots[i].currentItem != null)
@@ -59,15 +65,27 @@ public class CookUI : MonoBehaviour
             }
            
             
-            _ingredientSlots[i].addButtomOnClick -= SendSlotIndex;
+            _ingredientSlots[i].ButtomOnClick -= RemoveAndAddMaterialWithIndex;
+            
 
         }//EventManager.instance.UIToCooker
     }
-
-
-    private void SendSlotIndex(int index)
+  
+    private void RemoveAndAddMaterialWithIndex(int index)
     {
-        myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
+        if (_ingredientSlots[index].currentItem != null)
+        {
+            myPlayerRef.currentCooker.RemoveMaterialRPC(covertedItemPacketJson(), index);
+        }
+        else
+        {
+            myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
+        }
+        
+    }
+    private void RefreshUIFromServer()
+    {
+        myPlayerRef.currentCooker.RefreshUIFromServerRPC();
     }
   
     
@@ -98,7 +116,7 @@ public class CookUI : MonoBehaviour
     private void Start()
     {
         InitPacket();
-        //Debug.LogError(covertedItemPacketJson());
+       
        
     }
 

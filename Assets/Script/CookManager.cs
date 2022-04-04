@@ -17,6 +17,7 @@ public class CookManager : MonoBehaviourPunCallbacks
     public Cooker currentCooker;
     PhotonView PV;
     public string userId;
+    public FoodTeam myTeam;
     
 
     private void Start()
@@ -26,6 +27,7 @@ public class CookManager : MonoBehaviourPunCallbacks
         cookUI = CookUI.instance;
         cookUI.gameObject.SetActive(false);
         playerController = gameObject.GetComponent<PlayerController>();
+        myTeam = playerController.teamValue;
     }
 
     private void Update()
