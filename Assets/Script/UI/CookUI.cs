@@ -17,7 +17,7 @@ public class CookUI : MonoBehaviour
     [SerializeField] CookManager myPlayerRef = null;
   
     ItemPacket itemPacket = new ItemPacket();
-    Action RefreshUI;
+    Action<string> RefreshUI;
 
    
      struct ItemPacket
@@ -44,7 +44,8 @@ public class CookUI : MonoBehaviour
         if (myPlayerRef.currentCooker != null)
         {
            
-            RefreshUI();
+            RefreshUI(RoomManager.instance.myPlayer.userId);
+           
         }
        
 
@@ -60,7 +61,7 @@ public class CookUI : MonoBehaviour
         {
             if (_ingredientSlots[i].currentItem != null)
             {
-                Debug.LogError(string.Format("slot :{0} is {1}", _ingredientSlots[i].index, _ingredientSlots[i].currentItem.name));
+                //Debug.LogError(string.Format("slot :{0} is {1}", _ingredientSlots[i].index, _ingredientSlots[i].currentItem.name));
                 InventoryManager.instance.RemoveItemFromCurrentSlot(_ingredientSlots[i].currentItem, _ingredientSlots[i].currentItemAmount, _ingredientSlots[i]);
             }
            
@@ -83,9 +84,10 @@ public class CookUI : MonoBehaviour
         }
         
     }
-    private void RefreshUIFromServer()
+    private void RefreshUIFromServer(string _userId)
     {
-        myPlayerRef.currentCooker.RefreshUIFromServerRPC();
+        myPlayerRef.currentCooker.RefreshUIFromServerRPC(_userId);
+       
     }
   
     

@@ -2488,6 +2488,7 @@ MonoBehaviour:
   playerController: {fileID: 0}
   currentCooker: {fileID: 0}
   userId: 
+  myTeam: 0
 --- !u!114 &8210211198393601551
 MonoBehaviour:
   m_ObjectHideFlags: 0
