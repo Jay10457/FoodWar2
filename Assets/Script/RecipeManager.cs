@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RecipeManager 
 {
-    List<RecipeScriptableOBJ> recipes = new List<RecipeScriptableOBJ>();
+    public List<RecipeScriptableOBJ> recipes = new List<RecipeScriptableOBJ>();
     static RecipeManager _instance = null;
    public static RecipeManager instance
     {
@@ -19,5 +19,16 @@ public class RecipeManager
             }
             return _instance;
         }
+    }
+
+
+    public RecipeScriptableOBJ GetRecipeByName(string recipeName)
+    {
+        for (int i = 0; i < recipes.Count; i++)
+        {
+            if (recipes[i].name == recipeName)
+                return recipes[i];
+        }
+        return null;
     }
 }

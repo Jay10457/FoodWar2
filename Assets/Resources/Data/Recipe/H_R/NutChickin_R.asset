@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: NutChickin_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
+  - {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
   resultDish: {fileID: 11400000, guid: 12e7f8077620e924db10fa2e6b063184, type: 2}
   cookinTime: 15
   resultDishAmount: 1

@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: OilBomb_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
+  - {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
   resultDish: {fileID: 11400000, guid: 16f82a2fbce9f9a458215bf6eb42e6c0, type: 2}
   cookinTime: 15
   resultDishAmount: 1

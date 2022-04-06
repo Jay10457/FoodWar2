@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: NotIcecream_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
+  - {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
   resultDish: {fileID: 11400000, guid: 4797f6ca231eab244bcebf96c175edb7, type: 2}
   cookinTime: 15
   resultDishAmount: 1

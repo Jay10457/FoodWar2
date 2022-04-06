@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: BigNutBag_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
+  - {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
   resultDish: {fileID: 11400000, guid: 86f0a6c226497124f8efb9550a0c1e81, type: 2}
+  cookinTime: 15
   resultDishAmount: 1

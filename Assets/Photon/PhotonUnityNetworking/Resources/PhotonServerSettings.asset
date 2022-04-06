@@ -69,6 +69,10 @@ MonoBehaviour:
   - ConfirmRemoveMaterialRequest
   - ConfirmRefrashRequest
   - SendRefreshRequest
+  - ConfirmRefrashOthersRequest
+  - RefrashOthersUIRequest
+  - ConfirmStartCookRequest
+  - StartCookRequest
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

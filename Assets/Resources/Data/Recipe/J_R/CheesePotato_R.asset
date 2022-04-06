@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: CheesePotato_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
+  - {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
   resultDish: {fileID: 11400000, guid: 45c966957b22a98408cdb43af38aa605, type: 2}
   cookinTime: 15
   resultDishAmount: 1

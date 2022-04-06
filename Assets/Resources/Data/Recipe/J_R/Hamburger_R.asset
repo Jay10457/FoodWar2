@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Hamburger_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 5d9096a639bd35d4c9cd643b9203e568, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 5d9096a639bd35d4c9cd643b9203e568, type: 2}
+  - {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
   resultDish: {fileID: 11400000, guid: 752627bd0730c8a4a861aa933e614692, type: 2}
   cookinTime: 15
   resultDishAmount: 1

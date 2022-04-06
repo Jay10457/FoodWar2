@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: PineappleChickinSoup_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
+  - {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
+  - {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
   resultDish: {fileID: 11400000, guid: be768724460c0f64b83a57effa83543c, type: 2}
   cookinTime: 25
   resultDishAmount: 1

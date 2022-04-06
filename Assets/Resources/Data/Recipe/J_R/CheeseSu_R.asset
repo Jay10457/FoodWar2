@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: CheeseSu_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
+  - {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
   resultDish: {fileID: 11400000, guid: 1ecbcbddcf2e81041ae68ceee95c1354, type: 2}
   cookinTime: 15
   resultDishAmount: 1

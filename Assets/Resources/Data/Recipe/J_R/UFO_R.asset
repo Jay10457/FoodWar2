@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: UFO_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 5d9096a639bd35d4c9cd643b9203e568, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 5d9096a639bd35d4c9cd643b9203e568, type: 2}
+  - {fileID: 11400000, guid: 5a59b21f64b546c40b3f8aa1e606f93e, type: 2}
   resultDish: {fileID: 11400000, guid: 3e22edbbf84985f4cb490c43b7477d3f, type: 2}
   cookinTime: 15
   resultDishAmount: 1

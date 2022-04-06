@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Salaheiyo_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
+  - {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
   resultDish: {fileID: 11400000, guid: f9ef88717f2dcee48a03e004823ba1e3, type: 2}
+  cookinTime: 15
   resultDishAmount: 1

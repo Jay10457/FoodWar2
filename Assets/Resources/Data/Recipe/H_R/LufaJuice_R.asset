@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: LufaJuice_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
+  - {fileID: 11400000, guid: 3eebed27c8ea8324f962007d8a36cb87, type: 2}
+  - {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
   resultDish: {fileID: 11400000, guid: e08fb24e546d39a43b6480b7f5b6e3e8, type: 2}
   cookinTime: 25
   resultDishAmount: 1

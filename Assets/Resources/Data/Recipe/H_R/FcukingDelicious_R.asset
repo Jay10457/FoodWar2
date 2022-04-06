@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: FcukingDelicious_R
   m_EditorClassIdentifier: 
   ingredients:
-  - material: {fileID: 11400000, guid: 96ae6ec326aca5149876c4092001dbc6, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
-    amount: 1
-  - material: {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
-    amount: 1
+  - {fileID: 11400000, guid: 96ae6ec326aca5149876c4092001dbc6, type: 2}
+  - {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
+  - {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
   resultDish: {fileID: 11400000, guid: 35003e5729fd8c445a1e84d9183e962f, type: 2}
   cookinTime: 25
   resultDishAmount: 1

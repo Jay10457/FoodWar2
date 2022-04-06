@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Realtime;
+using Photon.Pun;
 
+[RequireComponent(typeof(PhotonView))]
 public class TrajectoryWeapon : MonoBehaviour
 {
     [SerializeField] GameObject Bullet = null;

@@ -177,7 +177,7 @@ MonoBehaviour:
   - {fileID: 4643225112067084057}
   - {fileID: 3063850416367852017}
   - {fileID: 3100979718976858164}
-  startCooking: {fileID: 7933399490734404132}
+  startCookingButtom: {fileID: 7933399490734404132}
   BGs:
   - {fileID: 3387087223126131300}
   - {fileID: 1864917396081555141}
@@ -3574,6 +3574,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 324e5abcce1c21e4d9408ef2fbabc2f8, type: 2}
   - {fileID: 11400000, guid: b7db06cb9793c9e4585602e7257a4521, type: 2}
   - {fileID: 11400000, guid: b1125dc4d9043d840b51859ee6c528df, type: 2}
+  amountText: {fileID: 7495303641689576981}
   currentCharacterMat: {fileID: 0}
 --- !u!1 &7495303641252888457
 GameObject:

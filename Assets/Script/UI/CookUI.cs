@@ -10,17 +10,18 @@ public class CookUI : MonoBehaviour
 {
     public static CookUI instance;
     public IngredientSlot[] _ingredientSlots;
-    public Button startCooking;
+    public Button startCookingButtom;
     private Camera cam;
     [SerializeField] GameObject[] BGs;
     [SerializeField] Vector3 offset;
     [SerializeField] CookManager myPlayerRef = null;
-  
+
     ItemPacket itemPacket = new ItemPacket();
     Action<string> RefreshUI;
+    Action<int> StartCooking;
 
-   
-     struct ItemPacket
+
+    struct ItemPacket
     {
         public int itemId;
         public int amount;
@@ -35,28 +36,31 @@ public class CookUI : MonoBehaviour
     private void OnEnable()
     {
         //subscribe Cooker
-        //TODO: Refrash UI from server
+        startCookingButtom.onClick.RemoveAllListeners();
+        startCookingButtom.onClick.AddListener(() => { if (StartCooking != null) StartCooking(myPlayerRef.currentCooker.PVVeiwId); });
+
+        StartCooking = StartCookRequestToServer;
         for (int i = 0; i < _ingredientSlots.Length; i++)
-        {      
-            _ingredientSlots[i].ButtomOnClick = RemoveAndAddMaterialWithIndex;            
+        {
+            _ingredientSlots[i].ButtomOnClick = RemoveAndAddMaterialWithIndex;
         }
         RefreshUI = RefreshUIFromServer;
         if (myPlayerRef.currentCooker != null)
         {
-           
+
             RefreshUI(RoomManager.instance.myPlayer.userId);
-           
+
         }
-       
+
 
 
     }
     private void OnDisable()
     {
         //Desubscribe Cooker
-       
-        RefreshUI -= RefreshUIFromServer;
 
+        RefreshUI -= RefreshUIFromServer;
+        StartCooking -= StartCookRequestToServer;
         for (int i = 0; i < _ingredientSlots.Length; i++)
         {
             if (_ingredientSlots[i].currentItem != null)
@@ -64,14 +68,14 @@ public class CookUI : MonoBehaviour
                 //Debug.LogError(string.Format("slot :{0} is {1}", _ingredientSlots[i].index, _ingredientSlots[i].currentItem.name));
                 InventoryManager.instance.RemoveItemFromCurrentSlot(_ingredientSlots[i].currentItem, _ingredientSlots[i].currentItemAmount, _ingredientSlots[i]);
             }
-           
-            
+
+
             _ingredientSlots[i].ButtomOnClick -= RemoveAndAddMaterialWithIndex;
-            
+
 
         }//EventManager.instance.UIToCooker
     }
-  
+
     private void RemoveAndAddMaterialWithIndex(int index)
     {
         if (_ingredientSlots[index].currentItem != null)
@@ -82,24 +86,27 @@ public class CookUI : MonoBehaviour
         {
             myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
         }
-        
+
     }
     private void RefreshUIFromServer(string _userId)
     {
         myPlayerRef.currentCooker.RefreshUIFromServerRPC(_userId);
-       
+
     }
-  
-    
+    private void StartCookRequestToServer(int cookerId)
+    {
+        myPlayerRef.currentCooker.StartCookRPC(cookerId);
+    }
+
     private void InitPacket()
     {
         itemPacket.itemId = MaterialSlot.instance.currentCharacterMat.Id;
         itemPacket.amount = 1;
         itemPacket.userId = RoomManager.instance.myPlayer.userId;
-       
+
 
     }
-  
+
     private void Awake()
     {
         cam = Camera.main;
@@ -109,7 +116,7 @@ public class CookUI : MonoBehaviour
         {
             instance = this;
         }
-        
+
 
         CheckTeamBG();
 
@@ -118,8 +125,8 @@ public class CookUI : MonoBehaviour
     private void Start()
     {
         InitPacket();
-       
-       
+
+
     }
 
     string covertedItemPacketJson()
