@@ -23,10 +23,7 @@ public partial class Cooker
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            
         }
         else if (recipe.ingredients.Count == 3)
         {
@@ -35,41 +32,45 @@ public partial class Cooker
                 return true;
             }
 
-            else
-            {
-                return false;
-            }
         }
 
         return false;
 
     }
 
-
-    public RecipeScriptableOBJ CheckRecipe()
+    public RecipeScriptableOBJ CheckThreeMatRecipe()
+    {
+        foreach (RecipeScriptableOBJ recipe in RecipeManager.instance.threeMatRecipes)
+        {
+            if (recipe.ingredients.Find(r => recipe.ingredients.Contains(ingredients[0]) && recipe.ingredients.Contains(ingredients[1])
+            && recipe.ingredients.Contains(ingredients[2])))
+            {
+                return recipe;
+            }
+            else if (cookerTeam == FoodTeam.GOOD)
+            {
+                return RecipeManager.instance.GetRecipeByName("MixShit_R");
+            }
+            else if (cookerTeam == FoodTeam.BAD)
+            {
+                return RecipeManager.instance.GetRecipeByName("Fat_R");
+            }
+        }
+        return null;
+    }
+    public RecipeScriptableOBJ CheckTwoMatRecipe()
     {
 
 
 
-        foreach (RecipeScriptableOBJ recipe in recipes)
+        foreach (RecipeScriptableOBJ recipe in RecipeManager.instance.twoMatRecipes)
         {
 
-
-
-            if (CheckIngredientsMethod(recipe))
+            if (recipe.ingredients.Find(r => recipe.ingredients.Contains(ingredients[0]) && recipe.ingredients.Contains(ingredients[1])))
             {
-                Debug.LogError(recipe.name);
                 return recipe;
+            }
 
-            }
-            else if (cookerTeam == FoodTeam.GOOD && ingredients.Count > 3)
-            {
-                return RecipeManager.instance.GetRecipeByName("MixShit_R");
-            }
-            else if (cookerTeam == FoodTeam.BAD && ingredients.Count > 3)
-            {
-                return RecipeManager.instance.GetRecipeByName("Fat_R");
-            }
         }
 
 

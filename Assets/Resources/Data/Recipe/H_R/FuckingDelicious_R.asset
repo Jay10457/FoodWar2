@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ba31f8904bc14844baeb4f608e8cd6c, type: 3}
-  m_Name: FcukingDelicious_R
+  m_Name: FuckingDelicious_R
   m_EditorClassIdentifier: 
   ingredients:
   - {fileID: 11400000, guid: 96ae6ec326aca5149876c4092001dbc6, type: 2}
   - {fileID: 11400000, guid: a7a9e3ea95bedb148ab1e2cec4f0da55, type: 2}
   - {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
   resultDish: {fileID: 11400000, guid: 35003e5729fd8c445a1e84d9183e962f, type: 2}
+  resultDishImage: {fileID: 21300000, guid: 44c187e6bb3d7cd4fb6b553916dbd48f, type: 3}
   cookinTime: 25
   resultDishAmount: 1

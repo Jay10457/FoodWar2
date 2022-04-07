@@ -16,5 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c351fc589e50cfe4c8c29ecc5b7a05ba, type: 2}
   - {fileID: 11400000, guid: fd794fc4b97dad545a2e4f739b6b49bb, type: 2}
   resultDish: {fileID: 11400000, guid: c8aafc98178b4c445a61bf0f1b783577, type: 2}
+  resultDishImage: {fileID: 21300000, guid: abad5d26657c40f468892c3c6b582410, type: 3}
   cookinTime: 15
   resultDishAmount: 1

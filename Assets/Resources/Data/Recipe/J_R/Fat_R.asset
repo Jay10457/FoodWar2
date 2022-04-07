@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredients: []
   resultDish: {fileID: 11400000, guid: 5edfe2992cedc694fb05c2c8f7e7af5e, type: 2}
+  resultDishImage: {fileID: 21300000, guid: 3e2943a9beff0bf479e526cfae14662e, type: 3}
   cookinTime: 25
   resultDishAmount: 1

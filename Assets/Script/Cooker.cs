@@ -17,11 +17,15 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     [SerializeField] CookManager myPlayerReference = null;
     [SerializeField] MaterialListSerializable<ItemStore> materialsInCooker;
     [SerializeField] ItemStore itemStore = new ItemStore();
+    [SerializeField] SpriteRenderer resultIconDisplayer = null;
+    [SerializeField] Canvas cookingProgressBar = null;
+
+
     public bool isCooking;
-    public bool isOccupy;
-    public bool inCookArea;
-    bool lastOccupy;
-    bool isPotionNearBy;
+   
+
+ 
+   
 
     public FoodTeam cookerTeam;
 
@@ -78,7 +82,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-
+        cookingProgressBar.gameObject.SetActive(false);
         meshRenderer = this.GetComponent<MeshRenderer>();
         PV = this.gameObject.GetComponent<PhotonView>();
         PVVeiwId = PV.ViewID;
@@ -329,25 +333,39 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
     public void StartCookRequest(int _cookerId)
     {
-        //TODO: if(<= 2)
-        CheckRecipe();
-        ingredients.Clear();
-        materialsInCooker.materialsStore.Clear();
-        photonView.RPC("ConfirmStartCookRequest", RpcTarget.All, _cookerId);
+
+        if (materialsInCooker.materialsStore.Count == 2)
+        {
+            currentRecipe = CheckTwoMatRecipe();
+            Debug.LogError(currentRecipe);
+        }
+        else if(materialsInCooker.materialsStore.Count == 3)
+        {
+            currentRecipe = CheckThreeMatRecipe();
+            Debug.LogError(currentRecipe);
+        }
+        if (materialsInCooker.materialsStore.Count >= 2)
+        {
+            ingredients.Clear();
+            materialsInCooker.materialsStore.Clear();
+            photonView.RPC("ConfirmStartCookRequest", RpcTarget.All, _cookerId, true);
+        }
         
+
 
     }
 
     [PunRPC]
-    public void ConfirmStartCookRequest(int _cookerId)
+    public void ConfirmStartCookRequest(int _cookerId, bool _isCooking)
     {
         //Debug.LogError(string.Format("CookerID: {0} start cooking!", _cookerId));
-        
-        if (myPlayerReference.currentCooker!= null && myPlayerReference.currentCooker.PVVeiwId == _cookerId)
+
+        if (myPlayerReference.currentCooker != null && myPlayerReference.currentCooker.PVVeiwId == _cookerId)
         {
+            isCooking = _isCooking;
             CookUI.instance.gameObject.SetActive(false);
         }
-        
+
     }
 
 }

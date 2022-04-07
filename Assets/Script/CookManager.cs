@@ -38,7 +38,7 @@ public class CookManager : MonoBehaviourPunCallbacks
 
     private void SendCookUIRequest()
     {
-        if (Input.GetKeyDown(KeyCode.E) && inCookerArea && !CookUI.instance.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.E) && inCookerArea && !CookUI.instance.gameObject.activeSelf && !currentCooker.isCooking)
         {
             //Open
             if (PV.IsMine)
@@ -50,7 +50,7 @@ public class CookManager : MonoBehaviourPunCallbacks
               
             
         }
-        else if (Input.GetKeyDown(KeyCode.E) && inCookerArea && CookUI.instance.gameObject.activeSelf)
+        else if (Input.GetKeyDown(KeyCode.E) && inCookerArea && CookUI.instance.gameObject.activeSelf && !currentCooker.isCooking)
         {
             //Close
             if (PV.IsMine)
@@ -93,7 +93,7 @@ public class CookManager : MonoBehaviourPunCallbacks
                     
                     if (currentCooker.cookerTeam.ToString() == playerController.teamValue.ToString())
                     {
-                        if (!CookUI.instance.gameObject.activeSelf)
+                        if (!CookUI.instance.gameObject.activeSelf && !currentCooker.isCooking)
                         {
                             currentCooker.openRemain.SetActive(true);
                         }
