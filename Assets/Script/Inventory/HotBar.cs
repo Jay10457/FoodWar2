@@ -11,6 +11,7 @@ public class HotBar : MonoBehaviourPunCallbacks
     [SerializeField] GameObject gameUI = null;
     [SerializeField] Transform playerPos = null;
     [SerializeField] WeaponBase[] weapons = null;
+    [SerializeField] DishBase[] dishes = null;
     [SerializeField] PlayerIK playerIK = null;
     [SerializeField] ParticleSystem dropFX;
 
@@ -43,12 +44,17 @@ public class HotBar : MonoBehaviourPunCallbacks
         slots = gameUI.GetComponentsInChildren<InventorySlot>();
         IM = GameObject.FindObjectOfType<InventoryManager>();
         weapons = this.gameObject.GetComponentsInChildren<WeaponBase>();
+        dishes = this.gameObject.GetComponentsInChildren<DishBase>();
         PV = this.gameObject.GetPhotonView();
        
         //weapons[0].gameObject.AddComponent<ProjectileWeapon>();
         for (int i = 0; i < weapons.Length; i++)
         {
             weapons[i].gameObject.SetActive(false);
+        }
+        for (int i = 0; i < dishes.Length; i++)
+        {
+            dishes[i].gameObject.SetActive(false);
         }
        
         

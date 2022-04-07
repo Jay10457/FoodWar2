@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using UnityEngine.UI;
 
 [Serializable]
 public class MaterialListSerializable<T>
@@ -18,7 +19,8 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     [SerializeField] MaterialListSerializable<ItemStore> materialsInCooker;
     [SerializeField] ItemStore itemStore = new ItemStore();
     [SerializeField] SpriteRenderer resultIconDisplayer = null;
-    [SerializeField] Canvas cookingProgressBar = null;
+    [SerializeField] Canvas cookingProgress = null;
+    [SerializeField] Image cookingProgressBar = null;
 
 
     public bool isCooking;
@@ -38,6 +40,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     string cookerId;
     public int PVVeiwId;
     string userId;
+    public float cookStartTime;
 
     public Action<string, int> PutMaterialRPC;
     public Action<string, int> RemoveMaterialRPC;
@@ -82,7 +85,9 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        cookingProgressBar.gameObject.SetActive(false);
+        cookingProgressBar.fillAmount = 0;
+        cookingProgress.gameObject.SetActive(false);
+      
         meshRenderer = this.GetComponent<MeshRenderer>();
         PV = this.gameObject.GetComponent<PhotonView>();
         PVVeiwId = PV.ViewID;
@@ -123,6 +128,21 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         //Debug.LogError("AddRequest");
         photonView.RPC("SendAddMaterialRequest", RpcTarget.MasterClient, itemPacket, slotIndex);
 
+    }
+
+    public IEnumerator CookingProgress(float time, string recepeName)
+    {
+        cookStartTime = Time.time;
+        while(Time.time < cookStartTime + time)
+        {
+            cookingProgressBar.fillAmount = Mathf.Abs((((cookStartTime + time) - Time.time) / time) - 1);
+          
+            yield return null;
+        }
+        cookingProgressBar.fillAmount = 0;
+        cookingProgress.gameObject.SetActive(false);
+        resultIconDisplayer.sprite = RecipeManager.instance.GetRecipeByName(recepeName).resultDishImage;
+        
     }
     /// <summary>
     /// Send remove material request to server
@@ -348,7 +368,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         {
             ingredients.Clear();
             materialsInCooker.materialsStore.Clear();
-            photonView.RPC("ConfirmStartCookRequest", RpcTarget.All, _cookerId, true);
+            photonView.RPC("ConfirmStartCookRequest", RpcTarget.All, _cookerId, true, currentRecipe.cookinTime, currentRecipe.name);
         }
         
 
@@ -356,7 +376,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void ConfirmStartCookRequest(int _cookerId, bool _isCooking)
+    public void ConfirmStartCookRequest(int _cookerId, bool _isCooking, float _cookingTime, string _recipeName)
     {
         //Debug.LogError(string.Format("CookerID: {0} start cooking!", _cookerId));
 
@@ -364,7 +384,10 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         {
             isCooking = _isCooking;
             CookUI.instance.gameObject.SetActive(false);
+            
         }
+        cookingProgress.gameObject.SetActive(true);
+        StartCoroutine(CookingProgress(_cookingTime, _recipeName));
 
     }
 

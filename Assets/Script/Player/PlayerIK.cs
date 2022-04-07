@@ -34,6 +34,10 @@ public class PlayerIK : MonoBehaviourPunCallbacks
     [SerializeField] Quaternion bombRot;
     [SerializeField] Vector3 bombHint;
 
+    [SerializeField] Vector3 dishPos;
+    [SerializeField] Quaternion dishRot;
+    [SerializeField] Vector3 dishHint;
+
     [SerializeField] PhotonView PV;
 
     public int currentWeaponId
@@ -151,10 +155,19 @@ public class PlayerIK : MonoBehaviourPunCallbacks
             rightHandWeight = 0.8f;
             leftHandWeight = 0;
         }
+        if (currentWeaponId > 9)
+        {
+
+        }
         if (currentWeaponId == -1)
         {
-            rightHandWeight = 0;
-            leftHandWeight = 0;
+            //rightHandWeight = 0;
+            //leftHandWeight = 0;
+            rHand.localPosition = dishPos;
+            rHand.localRotation = dishRot;
+            rHint.localPosition = dishHint;
+            rightHandWeight = 1f;
+
         }
         #region RightHand
         animator.SetIKPosition(AvatarIKGoal.RightHand, rHand.position);
