@@ -37,7 +37,7 @@ public partial class Cooker
         return false;
 
     }
-
+    
     public RecipeScriptableOBJ CheckThreeMatRecipe()
     {
         foreach (RecipeScriptableOBJ recipe in RecipeManager.instance.threeMatRecipes)

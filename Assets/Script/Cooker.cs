@@ -357,12 +357,12 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         if (materialsInCooker.materialsStore.Count == 2)
         {
             currentRecipe = CheckTwoMatRecipe();
-            Debug.LogError(currentRecipe);
+           // Debug.LogError(currentRecipe);
         }
         else if(materialsInCooker.materialsStore.Count == 3)
         {
             currentRecipe = CheckThreeMatRecipe();
-            Debug.LogError(currentRecipe);
+           // Debug.LogError(currentRecipe);
         }
         if (materialsInCooker.materialsStore.Count >= 2)
         {
@@ -374,7 +374,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
 
     }
-
+    
     [PunRPC]
     public void ConfirmStartCookRequest(int _cookerId, bool _isCooking, float _cookingTime, string _recipeName)
     {

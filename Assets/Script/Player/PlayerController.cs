@@ -6,6 +6,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+
 public class PlayerController : MonoBehaviourPunCallbacks
 {
 
@@ -245,6 +246,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         moveDir = Vector3.ClampMagnitude(transform.TransformDirection(playerMoveInput), 1) * velocity;
         //moveDir = transform.TransformDirection(playerMoveInput) * velocity;
         rb.velocity = new Vector3(moveDir.x, rb.velocity.y, moveDir.z);
+
+
 
         // 消極的同步座標 如果本尊移動位置就同步發送給鏡像
         float d = Vector3.Distance(rb.position, lastPos);
