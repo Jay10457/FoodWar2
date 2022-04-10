@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 nameSlotPos = new Vector3(0, 4.5f, 0);
             }
 
-            photonView.RPC("SetCharacter", RpcTarget.All, 0);//_characterId
+            photonView.RPC("SetCharacter", RpcTarget.All, 6);//_characterId
             photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName, R, G, B, nameSlotPos);
 
             _characterId = SaveManager.instance.nowData.characterID;
