@@ -15,7 +15,7 @@ public class Item : ScriptableObject
     [Tooltip("Color of the item slot border.")]
     public Color itemBorderColor = new Color(1, 1, 1, 1);
     [Tooltip("If this is an equipable item, this is what GameObject will spawn when held/equipped.")]
-   
+    public int score;
     public int dropAmount;
     public int slotIndex = -1;
    

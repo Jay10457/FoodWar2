@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class ExtendPotion : MonoBehaviourPunCallbacks
 {
@@ -11,42 +12,9 @@ public class ExtendPotion : MonoBehaviourPunCallbacks
     [SerializeField] ParticleSystem potionFX;
     [SerializeField] PhotonView PV;
 
+    public Action<int> addTime;
 
 
-
-    public override void OnEnable()
-    {
-        base.OnEnable();
-        currentTarget = null;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (PV.IsMine)
-        {
-            if (other.tag == "Pot")
-            {
-                isUseAble = true;
-                currentTarget = other.gameObject;
-               
-            }
-        }
-        
-        
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (PV.IsMine)
-        {
-            if (other.tag == "Pot")
-            {
-                isUseAble = false;
-            
-                currentTarget = null;
-            }
-        }
-       
-    }
 
     private void Update()
     {

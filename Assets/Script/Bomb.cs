@@ -67,7 +67,7 @@ public class Bomb : MonoBehaviour
         this.shooterId = shooterId;
         this.psss = poss;
         nowPoint = psss.Count-1;
-        Debug.LogError(psss.Count);
+        //Debug.LogError(psss.Count);
         canMove = true;
         StartCoroutine(ILagMove(lagTime));
     }
@@ -89,7 +89,7 @@ public class Bomb : MonoBehaviour
         PlayerController pc = other.transform.root.GetComponent<PlayerController>();
         if (pc != null)
         {
-            pc.TakeGunDamage();
+            //TODO: fly away
         }
 
         DetroySelf();

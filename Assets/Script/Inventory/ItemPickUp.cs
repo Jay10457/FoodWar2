@@ -18,7 +18,7 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
         {
             yield return null;
         }
-        //KillMe();
+        KillMe();
     }
     public void SetUpPickupable(string itemName, int amount)
     {

@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+
 
 
 public class GameManager
@@ -19,7 +19,7 @@ public class GameManager
 
     public bool 從房間退房 = false;
 
-    
+   
 }
 
 public enum FoodTeam
@@ -29,4 +29,5 @@ public enum FoodTeam
     /// <summary>5~9是不健康食物的英雄腳色</summary>
     BAD
 }
+
 

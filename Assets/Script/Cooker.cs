@@ -24,10 +24,10 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
 
     public bool isCooking;
-    
 
- 
-   
+
+
+
 
     public FoodTeam cookerTeam;
 
@@ -41,7 +41,6 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     public int PVVeiwId;
     string userId;
     public float cookStartTime;
-
     public Action<string, int> PutMaterialRPC;
     public Action<string, int> RemoveMaterialRPC;
     public Action<string> RefreshUIFromServerRPC;
@@ -71,7 +70,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         RemoveMaterialRPC = RemoveMaterialFromServer;
         StartCookRPC = StartCookRequestToServer;
         CheckIngredient = CheckIngredientsMethod;
-       
+
 
     }
     private new void OnDisable()
@@ -82,7 +81,8 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         RefreshUIFromServerRPC -= SendRefreshCookerUI;
         StartCookRPC -= StartCookRequestToServer;
         CheckIngredient -= CheckIngredientsMethod;
-       
+
+
     }
 
 
@@ -90,7 +90,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     {
         cookingProgressBar.fillAmount = 0;
         cookingProgress.gameObject.SetActive(false);
-      
+
         meshRenderer = this.GetComponent<MeshRenderer>();
         PV = this.gameObject.GetComponent<PhotonView>();
         PVVeiwId = PV.ViewID;
@@ -140,19 +140,27 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
     public IEnumerator CookingProgress(float time, string recepeName)
     {
+
         currentRecipe = RecipeManager.instance.GetRecipeByName(recepeName);
         cookStartTime = Time.time;
-        while(Time.time < cookStartTime + time)
+        while (Time.time < cookStartTime + time)
         {
             cookingProgressBar.fillAmount = Mathf.Abs((((cookStartTime + time) - Time.time) / time) - 1);
-          
+
+
             yield return null;
+
+
+
+
+
+
         }
         cookingProgressBar.fillAmount = 0;
         cookingProgress.gameObject.SetActive(false);
-        
+
         resultIconDisplay.sprite = currentRecipe.resultDishImage;
-        
+
     }
     /// <summary>
     /// Send remove material request to server
@@ -367,12 +375,12 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         if (materialsInCooker.materialsStore.Count == 2)
         {
             currentRecipe = CheckTwoMatRecipe();
-           // Debug.LogError(currentRecipe);
+            // Debug.LogError(currentRecipe);
         }
-        else if(materialsInCooker.materialsStore.Count == 3)
+        else if (materialsInCooker.materialsStore.Count == 3)
         {
             currentRecipe = CheckThreeMatRecipe();
-           // Debug.LogError(currentRecipe);
+            // Debug.LogError(currentRecipe);
         }
         if (materialsInCooker.materialsStore.Count >= 2)
         {
@@ -380,11 +388,11 @@ public partial class Cooker : MonoBehaviourPunCallbacks
             materialsInCooker.materialsStore.Clear();
             photonView.RPC("ConfirmStartCookRequest", RpcTarget.All, _cookerId, true, currentRecipe.cookinTime, currentRecipe.name);
         }
-        
+
 
 
     }
-    
+
     [PunRPC]
     public void ConfirmStartCookRequest(int _cookerId, bool _isCooking, float _cookingTime, string _recipeName)
     {
@@ -394,7 +402,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         {
             isCooking = _isCooking;
             CookUI.instance.gameObject.SetActive(false);
-            
+
         }
         cookingProgress.gameObject.SetActive(true);
         StartCoroutine(CookingProgress(_cookingTime, _recipeName));
@@ -404,7 +412,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     private void PickUpRequest(int _cookerId, string _userId)
     {
         isCooking = false;
-        
+
         photonView.RPC("ConfirmPickUpDish", RpcTarget.All, _cookerId, _userId, isCooking);
     }
     [PunRPC]
@@ -415,7 +423,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         if (myPlayerReference.userId == _userId && myPlayerReference.currentCooker.PVVeiwId == _cookerId)
         {
             InventoryManager.AddItemToInventory(currentRecipe.resultDish, 1);
-            
+
         }
     }
 

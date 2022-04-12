@@ -19,10 +19,13 @@ public class CookManager : MonoBehaviourPunCallbacks
     PhotonView PV;
     public string userId;
     public FoodTeam myTeam;
+    public int currentItemIndex;
+    MeshRenderer cookerMat;
     
 
     private void Start()
     {
+        currentItemIndex = -1;
         PV = this.GetComponent<PhotonView>();
         userId = PV.Owner.UserId;
         cookUI = CookUI.instance;
@@ -99,8 +102,13 @@ public class CookManager : MonoBehaviourPunCallbacks
                 Vector3 dir = cols[i].transform.position - this.transform.position;
                 if (Vector3.Angle(dir, this.transform.forward) < angle)
                 {
-
+                    
                     currentCooker = cols[i].GetComponent<Cooker>();
+                    if (currentItemIndex == 2 && currentCooker != null)
+                    {
+                        cookerMat = currentCooker.gameObject.GetComponent<MeshRenderer>();
+                        cookerMat.material.color = new Color(0.8627451f, 0.2745098f, 0.2666667f);
+                    }
                     if (currentCooker.resultIconDisplay.sprite != null)
                     {
                         canPickUpDish = true;
@@ -124,8 +132,14 @@ public class CookManager : MonoBehaviourPunCallbacks
                 }
                 else if (currentCooker != null)
                 {
+                    if (cookerMat != null)
+                    {
+                        cookerMat.material.color = Color.white;
+                        cookerMat = null;
+                    }
                     currentCooker.SendCloseRequestServerCooker(userId);
                     currentCooker.openRemain.SetActive(false);
+                   
                     canPickUpDish = false;
                     inCookerArea = false;
                     currentCooker = null;
@@ -138,8 +152,13 @@ public class CookManager : MonoBehaviourPunCallbacks
         }
         else if (currentCooker != null)
         {
+            if (cookerMat != null)
+            {
+                cookerMat.material.color = Color.white;
+                cookerMat = null;
+            }
             currentCooker.SendCloseRequestServerCooker(userId);
-            currentCooker.openRemain.SetActive(false);
+            currentCooker.openRemain.SetActive(false);            
             canPickUpDish = false;
             inCookerArea = false;
             currentCooker = null;

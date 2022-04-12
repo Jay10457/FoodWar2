@@ -13,7 +13,7 @@ public class TrajectoryWeapon : MonoBehaviour
     [SerializeField] float flySpeed = 1f;
 
     [SerializeField] Vector3 launchToPos;
-
+    [SerializeField] PhotonView PV;
     Vector3 randomPosOffset = Vector3.zero;
     [SerializeField] TrajectoryManager tm;
     bool launch;
@@ -24,14 +24,18 @@ public class TrajectoryWeapon : MonoBehaviour
     private void Start()
     {
         tm = GetComponent<TrajectoryManager>();
-
+        PV = this.gameObject.GetPhotonView();
         randomPosOffset = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
 
 
     }
     private void Update()
     {
-        ShootInput();
+        if (PV.IsMine)
+        {
+            ShootInput();
+        }
+       
     }
 
 

@@ -23,8 +23,9 @@ public class HotBar : MonoBehaviourPunCallbacks
     Item currentItem;
     PhotonView PV;
     ItemManager itemManager;
-    
-   
+    CookManager cookerManager;
+    ScoreManager scoreManager;
+
     int currentItemAmount;
     string dropItemName;
     Vector3 itemSpawnPos = Vector3.zero;
@@ -38,6 +39,7 @@ public class HotBar : MonoBehaviourPunCallbacks
     private void Start()
 
     {
+        scoreManager = this.GetComponent<ScoreManager>();
         playerPos = this.gameObject.transform;
         playerIK = GetComponentInChildren<PlayerIK>();
         gameUI = GameObject.FindWithTag("GameUI");
@@ -46,6 +48,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         weapons = this.gameObject.GetComponentsInChildren<WeaponBase>();
         dishes = this.gameObject.GetComponentsInChildren<DishBase>();
         PV = this.gameObject.GetPhotonView();
+        cookerManager = this.GetComponent<CookManager>();
        
         //weapons[0].gameObject.AddComponent<ProjectileWeapon>();
         for (int i = 0; i < weapons.Length; i++)
@@ -56,7 +59,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         {
             dishes[i].gameObject.SetActive(false);
         }
-        InventoryManager.AddItemToInventory(ItemManager.instance.GetMaterialById(21), 1);
+        InventoryManager.AddItemToInventory(ItemManager.instance.GetMaterialById(16), 1);
         
 
     }
@@ -68,6 +71,7 @@ public class HotBar : MonoBehaviourPunCallbacks
             instance = this;
         }
         itemManager = ItemManager.instance;
+        
         
         
     }
@@ -133,13 +137,16 @@ public class HotBar : MonoBehaviourPunCallbacks
                     {
                         photonView.RPC("EquipDish", RpcTarget.All, slots[currentSlotIndex].currentItem.Id);
                     }
-
+                    scoreManager.currentDishId = slots[currentSlotIndex].currentItem.Id;
                     playerIK.currentWeaponId = slots[currentSlotIndex].currentItem.Id;
+                    cookerManager.currentItemIndex = slots[currentSlotIndex].currentItem.Id;
 
                 }
                 else if (slots[currentSlotIndex].currentItem == null)
                 {
+                    scoreManager.currentDishId = -1;
                     playerIK.currentWeaponId = -1;
+                    cookerManager.currentItemIndex = -1;
                     playerIK.isEquipWeapon = false;
                 }
                

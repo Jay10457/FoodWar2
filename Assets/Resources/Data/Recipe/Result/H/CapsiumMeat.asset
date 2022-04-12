@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 17
   stackLimit: 1
-  itemSprite: {fileID: 21300000, guid: 2bba6a642a4edfe4199ef19c754f1dc0, type: 3}
+  itemSprite: {fileID: 21300000, guid: aa5a7a23541b67848b32aeeb519194a2, type: 3}
   itemPrefab: {fileID: 7165825160761546129, guid: 0f3658f8e72a0a244b9b61459ddedd5e, type: 3}
   type: 0
   itemBorderColor: {r: 1, g: 1, b: 1, a: 0}
   dropAmount: 1
+  slotIndex: -1

@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] CookManager cookManager;
     [SerializeField] List<GameObject> playerList;
     float stunRemainTime = -1;
-
+    //$"{remainingDuration / 60:00}:{remainingDuration % 60:00}"
 
 
     public List<GameObject> characters;
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     bool isSkillOk = true;
     public bool isGameBegin = false;
-
+    double gameTime = 600;
 
 
     public FoodTeam teamValue;
@@ -136,10 +136,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void ConnectionCheck()
     {
-       
+
         if (!isGameBegin && gameObject != null)
         {
-            if ( playerList.Count < PhotonNetwork.CurrentRoom.PlayerCount && !playerList.Contains(gameObject))
+            if (playerList.Count < PhotonNetwork.CurrentRoom.PlayerCount && !playerList.Contains(gameObject))
             {
 
 
@@ -148,34 +148,86 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (playerList.Count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 playerList.Add(null);
+                playerList.Add(null);
+
+
                 photonView.RPC("StartGameCountDown", RpcTarget.All);
+
+
+
+
+
             }
         }
 
-      
+
     }
 
-   
+
     private IEnumerator GameBeginCountdown()
     {
-        
+
         GameBeginCountDown.instance.countDownText.gameObject.SetActive(true);
-        float startTime = Time.time;
-        while (Time.time < startTime + 5)
+        double startTime = PhotonNetwork.Time;
+        while (PhotonNetwork.Time < startTime + 5)
         {
-            GameBeginCountDown.instance.countDownText.SetText(((startTime + 5) - Time.time).ToString("0"));
+            GameBeginCountDown.instance.countDownText.SetText(((startTime + 5) - PhotonNetwork.Time).ToString("0"));
             yield return null;
         }
         GameBeginCountDown.instance.countDownText.gameObject.SetActive(false);
         isGameBegin = true;
+        
+        if (photonView.IsMine)
+        {
+            photonView.RPC("GameTimerBegin", RpcTarget.All);
+            
+        }
+        
+
+
+    }
+    [PunRPC]
+    public void GameTimerBegin()
+    {
+
+        if (photonView.IsMine)
+        {
+            StartCoroutine(GameTimer());
+        }
+
+
+
+
     }
 
+
+    public IEnumerator GameTimer()
+    {
+        double startTime = PhotonNetwork.Time;
+        while (PhotonNetwork.Time < startTime + gameTime)
+        {
+
+            double time = ((startTime + gameTime) - PhotonNetwork.Time);
+            System.TimeSpan ts = new System.TimeSpan(0, 0, (int)time);
+            ScoreBarAndTimer.instance.timerText.text = $"{ts.Minutes:00}:{ts.Seconds:00}";
+            if (time <= 60)
+            {
+                ScoreBarAndTimer.instance.timerText.color = new Color(0.8627451f, 0.2745098f, 0.2666667f);
+            }
+
+            yield return null;
+        }
+        isGameBegin = false;
+
+
+
+    }
     //PlayerInput;
     private void Update()
     {
-       
+
         ConnectionCheck();
-        
+
         if (photonView.IsMine && isGameBegin)
         {
             InputMagnitude(isStun);
@@ -474,7 +526,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         // 如果受傷的是本尊
         if (photonView.IsMine)
         {
-            oilBlindPower += 3f;
+            oilBlindPower += 4f;
             oilBlindPower = (float)Mathf.CeilToInt(oilBlindPower);
             PlayerHUD.instance.oilGunFX.SetFloat("OilBlindPower", oilBlindPower);
         }
@@ -489,7 +541,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         get
         {
-            return  PlayerHUD.instance.oilGunFX.GetFloat("OilBlindPower");
+            return PlayerHUD.instance.oilGunFX.GetFloat("OilBlindPower");
         }
         set
         {
@@ -551,6 +603,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             StartCoroutine(GameBeginCountdown());
         }
+
+
+
+
     }
 
     [PunRPC]
