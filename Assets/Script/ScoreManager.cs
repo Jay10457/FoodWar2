@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     ScoreBarAndTimer score;
     HotBar hotBar;
     Item dish;
-    public Action<int> SendAddScoreRPC;
+  
     public int currentDishId;
 
 
@@ -24,14 +24,14 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     {
         currentDishId = -1;
         score = ScoreBarAndTimer.instance;
-        SendAddScoreRPC = SendAddScoreRequest;
+      
         
     }
     private void SendDish()
     {
         if (currentDishId > 9 && Input.GetMouseButton(0))
         {
-            Debug.LogError(ScoreCheck(currentDishId));
+            SendAddScoreRequest(ScoreCheck(currentDishId));
             hotBar.WeaponUse();
             
         }
@@ -55,6 +55,6 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void SendAddScoreRequestToServer(int _score)
     {
-        
+        Debug.LogError("you score is :" + _score);
     }
 }
