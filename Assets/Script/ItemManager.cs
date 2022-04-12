@@ -27,7 +27,7 @@ public class ItemManager
     /// <summary>用名稱取得相對應的道具</summary>
     /// <param name="itemName"></param>
     /// <returns></returns>
-    public Item GetItmeByName(string itemName)
+    public Item GetItemByName(string itemName)
     {
         for (int i = 0; i < items.Count; i++)
         {

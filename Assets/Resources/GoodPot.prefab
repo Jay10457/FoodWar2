@@ -44,6 +44,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8264411164497263128}
     - target: {fileID: -3036961485262978928, guid: 15162fb597b3cf2418dad62e50625cd8, type: 3}
+      propertyPath: resultIconDisplay
+      value: 
+      objectReference: {fileID: 6612359414876418451}
+    - target: {fileID: -3036961485262978928, guid: 15162fb597b3cf2418dad62e50625cd8, type: 3}
       propertyPath: cookingProgressBar
       value: 
       objectReference: {fileID: 7758358708573196523}

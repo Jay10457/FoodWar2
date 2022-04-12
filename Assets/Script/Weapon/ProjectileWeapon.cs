@@ -5,11 +5,11 @@ using Photon.Realtime;
 using Photon.Pun;
 
 [RequireComponent(typeof(PhotonView))]
-public class ProjectileWeapon : MonoBehaviour
+public class ProjectileWeapon : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject bullet;
    
-    [SerializeField] float shootForce = 400;
+    float shootForce = 100;
     [SerializeField] float upwardForce;
     [SerializeField] float timeBetweenShooting;
     [SerializeField] float spread;
@@ -31,7 +31,11 @@ public class ProjectileWeapon : MonoBehaviour
     }
     private void Update()
     {
-        ShootInput();
+        if (photonView.IsMine)
+        {
+            ShootInput();
+        }
+        
     }
 
     void ShootInput()
@@ -50,12 +54,26 @@ public class ProjectileWeapon : MonoBehaviour
 
         Vector3 shootDir = targetPoint - firePoint.position;
 
-        GameObject currentBullet = Instantiate(bullet, firePoint.position, Quaternion.identity);
-        currentBullet.transform.forward = shootDir.normalized;
+        //GameObject currentBullet = Instantiate(bullet, firePoint.position, Quaternion.identity);
+        //currentBullet.transform.forward = shootDir.normalized;
+        // currentBullet.GetComponent<Rigidbody>().AddForce(shootDir.normalized * shootForce, ForceMode.Impulse);
+        // 0~255
+        firePoint.LookAt(targetPoint);
+        photonView.RPC("RPCShoot", RpcTarget.All, firePoint.position, firePoint.rotation.eulerAngles);
 
-        currentBullet.GetComponent<Rigidbody>().AddForce(shootDir.normalized * shootForce, ForceMode.Impulse);
         HotBar.instance.WeaponUse();
         Invoke("ResetShoot", 0.1f);
+    }
+
+    [PunRPC]
+    public void RPCShoot(Vector3 startPos, Vector3 startDir, PhotonMessageInfo info)
+    {
+        GameObject temp = Instantiate(bullet, startPos, Quaternion.Euler(startDir));
+        Bullet script = temp.GetComponent<Bullet>();
+        // 求出訊息發送到接收的時間
+        double lag = PhotonNetwork.Time - info.SentServerTime;
+        script.speed = shootForce;
+        script.LagMove(lag, this.transform.root.GetInstanceID());
     }
 
     void ResetShoot()

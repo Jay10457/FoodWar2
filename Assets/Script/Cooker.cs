@@ -18,13 +18,13 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     [SerializeField] CookManager myPlayerReference = null;
     [SerializeField] MaterialListSerializable<ItemStore> materialsInCooker;
     [SerializeField] ItemStore itemStore = new ItemStore();
-    [SerializeField] SpriteRenderer resultIconDisplayer = null;
+    public SpriteRenderer resultIconDisplay = null;
     [SerializeField] Canvas cookingProgress = null;
     [SerializeField] Image cookingProgressBar = null;
 
 
     public bool isCooking;
-   
+    
 
  
    
@@ -46,6 +46,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     public Action<string, int> RemoveMaterialRPC;
     public Action<string> RefreshUIFromServerRPC;
     public Action<int> StartCookRPC;
+    public Action<int> PickUpDishRPC;
     struct ItemPacket
     {
         public int itemId;
@@ -70,6 +71,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         RemoveMaterialRPC = RemoveMaterialFromServer;
         StartCookRPC = StartCookRequestToServer;
         CheckIngredient = CheckIngredientsMethod;
+       
 
     }
     private new void OnDisable()
@@ -80,6 +82,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         RefreshUIFromServerRPC -= SendRefreshCookerUI;
         StartCookRPC -= StartCookRequestToServer;
         CheckIngredient -= CheckIngredientsMethod;
+       
     }
 
 
@@ -117,6 +120,11 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         photonView.RPC("StartCookRequest", RpcTarget.MasterClient, _cookerId);
     }
 
+    public void PickUPDishRequestToServer(int _cookerId, string _userId)
+    {
+        photonView.RPC("PickUpRequest", RpcTarget.MasterClient, _cookerId, _userId);
+    }
+
     /// <summary>
     /// Send add material request to server
     /// </summary>
@@ -132,6 +140,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
     public IEnumerator CookingProgress(float time, string recepeName)
     {
+        currentRecipe = RecipeManager.instance.GetRecipeByName(recepeName);
         cookStartTime = Time.time;
         while(Time.time < cookStartTime + time)
         {
@@ -141,7 +150,8 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         }
         cookingProgressBar.fillAmount = 0;
         cookingProgress.gameObject.SetActive(false);
-        resultIconDisplayer.sprite = RecipeManager.instance.GetRecipeByName(recepeName).resultDishImage;
+        
+        resultIconDisplay.sprite = currentRecipe.resultDishImage;
         
     }
     /// <summary>
@@ -389,6 +399,24 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         cookingProgress.gameObject.SetActive(true);
         StartCoroutine(CookingProgress(_cookingTime, _recipeName));
 
+    }
+    [PunRPC]
+    private void PickUpRequest(int _cookerId, string _userId)
+    {
+        isCooking = false;
+        
+        photonView.RPC("ConfirmPickUpDish", RpcTarget.All, _cookerId, _userId, isCooking);
+    }
+    [PunRPC]
+    private void ConfirmPickUpDish(int _cookerId, string _userId, bool _isCooking)
+    {
+        isCooking = _isCooking;
+        resultIconDisplay.sprite = null;
+        if (myPlayerReference.userId == _userId && myPlayerReference.currentCooker.PVVeiwId == _cookerId)
+        {
+            InventoryManager.AddItemToInventory(currentRecipe.resultDish, 1);
+            
+        }
     }
 
 }

@@ -18,7 +18,7 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
         {
             yield return null;
         }
-        KillMe();
+        //KillMe();
     }
     public void SetUpPickupable(string itemName, int amount)
     {
@@ -28,7 +28,7 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPCSetUpPickupable(string itemName, int amount)
     {
-        _item = ItemManager.instance.GetItmeByName(itemName);
+        _item = ItemManager.instance.GetItemByName(itemName);
         itemAmount = amount;
         GetComponentInChildren<SpriteRenderer>().sprite = _item.itemSprite;
     }

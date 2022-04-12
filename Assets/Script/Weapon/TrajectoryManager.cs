@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 [RequireComponent(typeof(LineRenderer))]
-public class TrajectoryManager : MonoBehaviour
+public class TrajectoryManager : MonoBehaviourPunCallbacks
 {
-    
+    [SerializeField] GameObject bombObj;
     [SerializeField] LayerMask ignoreLayer;
     [SerializeField] bool showTrajectory;
     [SerializeField] bool showTrajectoryAlways;
@@ -66,7 +68,7 @@ public class TrajectoryManager : MonoBehaviour
         showTrajectoryAlways = true;
 
         archLineCount = 50;
-        archCalcInterval = 0.2f;
+        archCalcInterval = 0.1f;
         archHeightLimit = ground.transform.position.y;
         shootRange = 150f;
 
@@ -83,14 +85,24 @@ public class TrajectoryManager : MonoBehaviour
 
     }
 
-    public void ShootObj(GameObject shootObj, Vector3 hitPos)
+    public void ShootObj(Vector3 hitPos)
     {
         CheckVector(hitPos);
-        GameObject obj = Instantiate(shootObj, launchPoint.transform.position, Quaternion.identity);
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        Vector3 force = launchVec * rb.mass;
-        rb.AddForce(force, ForceMode.Impulse);
+        //GameObject obj = Instantiate(shootObj, launchPoint.transform.position, Quaternion.identity);
+        //Rigidbody rb = obj.GetComponent<Rigidbody>();
+        //rb.AddForce(force, ForceMode.Impulse);
+        photonView.RPC("RPCThorow", RpcTarget.All, launchPoint.transform.position, JsonUtility.ToJson(tempPl));
         line.positionCount = 0;
+    }
+    [PunRPC]
+    public void RPCThorow(Vector3 startPos, string json, PhotonMessageInfo info)
+    {
+        //Debug.LogError(json);
+        GameObject bomb = Instantiate(bombObj, startPos, Quaternion.identity);
+        Bomb script = bomb.GetComponent<Bomb>();
+        double lag = PhotonNetwork.Time - info.SentServerTime;
+        PosList pl = JsonUtility.FromJson<PosList>(json);
+        script.LagMove(lag, pl.poss, this.transform.root.GetInstanceID());
     }
 
     public void CheckVector(Vector3 hitPos)
@@ -196,5 +208,15 @@ public class TrajectoryManager : MonoBehaviour
         line.SetPositions(archVerts.ToArray());
         line.useWorldSpace = true;
 
+        PosList ntp = new PosList();
+        ntp.poss = new List<Vector3>(archVerts);
+        tempPl = ntp;
     }
+    PosList tempPl = new PosList();
+}
+[System.Serializable]
+public struct PosList
+{
+    [SerializeField]
+    public List<Vector3> poss;
 }

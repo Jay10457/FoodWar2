@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 nameSlotPos = new Vector3(0, 4.5f, 0);
             }
 
-            photonView.RPC("SetCharacter", RpcTarget.All, 6);//_characterId
+            photonView.RPC("SetCharacter", RpcTarget.All, _characterId);//_characterId
             photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName, R, G, B, nameSlotPos);
 
             _characterId = SaveManager.instance.nowData.characterID;
@@ -189,8 +189,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
         }
-
-
+        if (photonView.IsMine)
+            UpdateOilBlindAnim();
     }
 
 
@@ -469,9 +469,33 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     }
 
+    public void TakeGunDamage()
+    {
+        // 如果受傷的是本尊
+        if (photonView.IsMine)
+        {
+            oilBlindPower += 3f;
+            oilBlindPower = (float)Mathf.CeilToInt(oilBlindPower);
+            PlayerHUD.instance.oilGunFX.SetFloat("OilBlindPower", oilBlindPower);
+        }
+    }
+    void UpdateOilBlindAnim()
+    {
+        oilBlindPower -= Time.deltaTime;
+        oilBlindPower = Mathf.Clamp(oilBlindPower, 0f, 18f);
+    }
 
-
-
+    float oilBlindPower
+    {
+        get
+        {
+            return  PlayerHUD.instance.oilGunFX.GetFloat("OilBlindPower");
+        }
+        set
+        {
+            PlayerHUD.instance.oilGunFX.SetFloat("OilBlindPower", value);
+        }
+    }
 
 
     #region ApplyStun
@@ -539,6 +563,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
+            Debug.Log("ApplyStun");
             StartCoroutine(StunCountDown());
 
         }

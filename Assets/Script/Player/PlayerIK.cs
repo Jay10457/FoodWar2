@@ -157,16 +157,17 @@ public class PlayerIK : MonoBehaviourPunCallbacks
         }
         if (currentWeaponId > 9)
         {
-
-        }
-        if (currentWeaponId == -1)
-        {
-            //rightHandWeight = 0;
-            //leftHandWeight = 0;
             rHand.localPosition = dishPos;
             rHand.localRotation = dishRot;
             rHint.localPosition = dishHint;
             rightHandWeight = 1f;
+            leftHandWeight = 0f;
+        }
+        if (currentWeaponId == -1)
+        {
+            rightHandWeight = 0;
+            leftHandWeight = 0;
+           
 
         }
         #region RightHand

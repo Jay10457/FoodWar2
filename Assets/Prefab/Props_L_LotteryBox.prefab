@@ -113,7 +113,6 @@ MonoBehaviour:
   itemDrops:
   - {fileID: 11400000, guid: 4911acf9f9264e0408e7a09cb1e0cc1c, type: 2}
   - {fileID: 11400000, guid: 21a43957aad3abc44973b6ce49529fae, type: 2}
-  - {fileID: 11400000, guid: bccb8a34932278b4cac10c1ca6197fe7, type: 2}
   itemPrefab: {fileID: 0}
   dropAmount: 0
   dropPerItem: 0

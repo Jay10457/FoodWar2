@@ -56,7 +56,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         {
             dishes[i].gameObject.SetActive(false);
         }
-       
+        InventoryManager.AddItemToInventory(ItemManager.instance.GetMaterialById(21), 1);
         
 
     }
@@ -68,6 +68,7 @@ public class HotBar : MonoBehaviourPunCallbacks
             instance = this;
         }
         itemManager = ItemManager.instance;
+        
         
     }
     private void Update()
@@ -128,6 +129,10 @@ public class HotBar : MonoBehaviourPunCallbacks
                     {
                         photonView.RPC("EquipItem", RpcTarget.All, slots[currentSlotIndex].currentItem.Id);
                     }
+                    if (slots[currentSlotIndex].currentItem.type == Item.Type.dish)
+                    {
+                        photonView.RPC("EquipDish", RpcTarget.All, slots[currentSlotIndex].currentItem.Id);
+                    }
 
                     playerIK.currentWeaponId = slots[currentSlotIndex].currentItem.Id;
 
@@ -187,6 +192,14 @@ public class HotBar : MonoBehaviourPunCallbacks
        
     }
     [PunRPC]
+    private void EquipDish(int dishId)
+    {
+        
+        currentEquip = dishes[dishId - 10].gameObject;
+        dishes[dishId - 10].gameObject.SetActive(true);
+
+    }
+    [PunRPC]
     private void unEquipItem()
     {
         currentEquip.gameObject.SetActive(false);
@@ -196,7 +209,7 @@ public class HotBar : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            if (collision.gameObject.tag == "Weapon")
+            if (collision.gameObject.tag == "Weapon" || collision.gameObject.tag == "Dish")
             {
                 ItemPickUp itemPick = collision.transform.GetComponent<ItemPickUp>();
                 int remaining = InventoryManager.AddItemToInventory(itemPick._item, itemPick.itemAmount);

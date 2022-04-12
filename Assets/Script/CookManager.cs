@@ -15,6 +15,7 @@ public class CookManager : MonoBehaviourPunCallbacks
     [SerializeField] CookUI cookUI;
     [SerializeField] PlayerController playerController;
     public Cooker currentCooker;
+    public bool canPickUpDish;
     PhotonView PV;
     public string userId;
     public FoodTeam myTeam;
@@ -33,9 +34,19 @@ public class CookManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         SendCookUIRequest();
+        PickUpDish();
     }
     
-
+    private void PickUpDish()
+    {
+        if (canPickUpDish && Input.GetKeyDown(KeyCode.E))
+        {
+            if (PV.IsMine)
+            {
+                currentCooker.PickUPDishRequestToServer(currentCooker.PVVeiwId, userId);
+            }
+        }
+    }
     private void SendCookUIRequest()
     {
         if (Input.GetKeyDown(KeyCode.E) && inCookerArea && !CookUI.instance.gameObject.activeSelf && !currentCooker.isCooking)
@@ -90,6 +101,10 @@ public class CookManager : MonoBehaviourPunCallbacks
                 {
 
                     currentCooker = cols[i].GetComponent<Cooker>();
+                    if (currentCooker.resultIconDisplay.sprite != null)
+                    {
+                        canPickUpDish = true;
+                    }
                     
                     if (currentCooker.cookerTeam.ToString() == playerController.teamValue.ToString())
                     {
@@ -111,6 +126,7 @@ public class CookManager : MonoBehaviourPunCallbacks
                 {
                     currentCooker.SendCloseRequestServerCooker(userId);
                     currentCooker.openRemain.SetActive(false);
+                    canPickUpDish = false;
                     inCookerArea = false;
                     currentCooker = null;
                     currentCookerTrans = null;
@@ -124,6 +140,7 @@ public class CookManager : MonoBehaviourPunCallbacks
         {
             currentCooker.SendCloseRequestServerCooker(userId);
             currentCooker.openRemain.SetActive(false);
+            canPickUpDish = false;
             inCookerArea = false;
             currentCooker = null;
             currentCookerTrans = null;

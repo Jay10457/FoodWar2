@@ -18,6 +18,7 @@ TagManager:
   - Potion
   - Bullet
   - BillBoard
+  - Dish
   layers:
   - Default
   - TransparentFX

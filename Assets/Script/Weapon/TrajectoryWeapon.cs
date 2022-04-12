@@ -7,7 +7,7 @@ using Photon.Pun;
 [RequireComponent(typeof(PhotonView))]
 public class TrajectoryWeapon : MonoBehaviour
 {
-    [SerializeField] GameObject Bullet = null;
+    
     [SerializeField] Transform launchPoint;
     [SerializeField] float force = 10f;
     [SerializeField] float flySpeed = 1f;
@@ -60,7 +60,7 @@ public class TrajectoryWeapon : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && state == AimState.Move)
             {
 
-                tm.ShootObj(Bullet, launchToPos);
+                tm.ShootObj(launchToPos);
                 HotBar.instance.WeaponUse();
 
 
@@ -69,7 +69,7 @@ public class TrajectoryWeapon : MonoBehaviour
             else if (Input.GetMouseButtonDown(0) && state == AimState.None)
             {
                 launchToPos = CrossHair.instance.transform.position;
-                tm.ShootObj(Bullet, launchToPos + randomPosOffset);
+                tm.ShootObj(launchToPos + randomPosOffset);
                 HotBar.instance.WeaponUse();
 
             }
@@ -94,10 +94,7 @@ public class TrajectoryWeapon : MonoBehaviour
 
     }
 
-    private void FireBullet()
-    {
-
-    }
+    
 
     private enum AimState
     {
