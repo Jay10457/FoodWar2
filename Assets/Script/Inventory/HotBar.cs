@@ -23,8 +23,8 @@ public class HotBar : MonoBehaviourPunCallbacks
     Item currentItem;
     PhotonView PV;
     ItemManager itemManager;
-    CookManager cookerManager;
-    ScoreManager scoreManager;
+    CookController cookController;
+    ScoreController scoreController;
 
     int currentItemAmount;
     string dropItemName;
@@ -39,7 +39,7 @@ public class HotBar : MonoBehaviourPunCallbacks
     private void Start()
 
     {
-        scoreManager = this.GetComponent<ScoreManager>();
+        scoreController = this.GetComponent<ScoreController>();
         playerPos = this.gameObject.transform;
         playerIK = GetComponentInChildren<PlayerIK>();
         gameUI = GameObject.FindWithTag("GameUI");
@@ -48,7 +48,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         weapons = this.gameObject.GetComponentsInChildren<WeaponBase>();
         dishes = this.gameObject.GetComponentsInChildren<DishBase>();
         PV = this.gameObject.GetPhotonView();
-        cookerManager = this.GetComponent<CookManager>();
+        cookController = this.GetComponent<CookController>();
        
         //weapons[0].gameObject.AddComponent<ProjectileWeapon>();
         for (int i = 0; i < weapons.Length; i++)
@@ -59,7 +59,7 @@ public class HotBar : MonoBehaviourPunCallbacks
         {
             dishes[i].gameObject.SetActive(false);
         }
-        InventoryManager.AddItemToInventory(ItemManager.instance.GetMaterialById(16), 1);
+        InventoryManager.AddItemToInventory(ItemManager.instance.GetMaterialById(Random.Range(10, 23)), 1);
         
 
     }
@@ -80,6 +80,14 @@ public class HotBar : MonoBehaviourPunCallbacks
         if (PV.IsMine)
         {
 
+            if (slots[2].currentItem != null)
+            {
+                cookController.isContainsDish = true;
+            }
+            else
+            {
+                cookController.isContainsDish = false;
+            }
 
             //Scale up currently selected slot
             for (int i = 0; i < slots.Length; i++)
@@ -137,16 +145,16 @@ public class HotBar : MonoBehaviourPunCallbacks
                     {
                         photonView.RPC("EquipDish", RpcTarget.All, slots[currentSlotIndex].currentItem.Id);
                     }
-                    scoreManager.currentDishId = slots[currentSlotIndex].currentItem.Id;
+                    scoreController.currentDishId = slots[currentSlotIndex].currentItem.Id;
                     playerIK.currentWeaponId = slots[currentSlotIndex].currentItem.Id;
-                    cookerManager.currentItemIndex = slots[currentSlotIndex].currentItem.Id;
+                    cookController.currentItemIndex = slots[currentSlotIndex].currentItem.Id;
 
                 }
                 else if (slots[currentSlotIndex].currentItem == null)
                 {
-                    scoreManager.currentDishId = -1;
+                    scoreController.currentDishId = -1;
                     playerIK.currentWeaponId = -1;
-                    cookerManager.currentItemIndex = -1;
+                    cookController.currentItemIndex = -1;
                     playerIK.isEquipWeapon = false;
                 }
                

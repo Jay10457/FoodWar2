@@ -1533,6 +1533,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: S1_Target
       objectReference: {fileID: 0}
+    - target: {fileID: 5009969219868357840, guid: e4dad68bb813fdb438052637711a66d8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 9073803341702895784, guid: e4dad68bb813fdb438052637711a66d8, type: 3}
       propertyPath: m_RootOrder
       value: 1

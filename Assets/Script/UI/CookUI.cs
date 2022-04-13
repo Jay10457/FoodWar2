@@ -14,7 +14,7 @@ public class CookUI : MonoBehaviour
     private Camera cam;
     [SerializeField] GameObject[] BGs;
     [SerializeField] Vector3 offset;
-    [SerializeField] CookManager myPlayerRef = null;
+    [SerializeField] CookController myPlayerRef = null;
 
     ItemPacket itemPacket = new ItemPacket();
     Action<string> RefreshUI;
@@ -84,7 +84,11 @@ public class CookUI : MonoBehaviour
         }
         else
         {
-            myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
+            if (MaterialSlot.instance.materialAmount > 0)
+            {
+                myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
+            }
+            
         }
 
     }

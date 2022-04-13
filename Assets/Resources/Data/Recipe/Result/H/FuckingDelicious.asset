@@ -18,5 +18,6 @@ MonoBehaviour:
   itemPrefab: {fileID: 4252577210301515615, guid: 7a6dee34d90b5b74abd01faa3e570507, type: 3}
   type: 0
   itemBorderColor: {r: 1, g: 1, b: 1, a: 0}
+  score: 300
   dropAmount: 1
   slotIndex: -1

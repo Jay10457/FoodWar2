@@ -9,7 +9,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
-
+    [SerializeField] ParticleSystem stunFx;
+    [SerializeField] ParticleSystem dashHitFx;
+    [SerializeField] ParticleSystem dashingFx;
     [SerializeField] Animator ani = null;
     [SerializeField] Rigidbody rb = null;
     [SerializeField] Collider characterCollider = null;
@@ -36,7 +38,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] TextMesh floatingId;
     [SerializeField] SpriteRenderer nameSlot;
     [SerializeField] float R, G, B;
-    [SerializeField] CookManager cookManager;
+    [SerializeField] CookController cookController;
     [SerializeField] List<GameObject> playerList;
     float stunRemainTime = -1;
     //$"{remainingDuration / 60:00}:{remainingDuration % 60:00}"
@@ -85,7 +87,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
 
             CrossHair.instance.gameObject.transform.position = this.gameObject.transform.forward;
-            cookManager = this.GetComponent<CookManager>();
+            cookController = this.GetComponent<CookController>();
             skillCoolDown = GameObject.FindObjectOfType<SkillCoolDown>();
 
             _characterId = SaveManager.instance.nowData.characterID;
@@ -96,6 +98,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 G = 0.5686275f;
                 B = 0.4470588f;
                 nameSlotPos = new Vector3(0, 5.3f, 0);
+                stunFx.gameObject.transform.localPosition = new Vector3(0, 4, 0);
 
             }
             else if (_characterId >= 5)
@@ -105,8 +108,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 G = 0.282353f;
                 B = 0.2745098f;
                 nameSlotPos = new Vector3(0, 4.5f, 0);
+                stunFx.gameObject.transform.localPosition = new Vector3(0, 4, 0);
             }
-
+            stunFx.Stop();
             photonView.RPC("SetCharacter", RpcTarget.All, _characterId);//_characterId
             photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName, R, G, B, nameSlotPos);
 
@@ -176,13 +180,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         GameBeginCountDown.instance.countDownText.gameObject.SetActive(false);
         isGameBegin = true;
-        
+
         if (photonView.IsMine)
         {
             photonView.RPC("GameTimerBegin", RpcTarget.All);
-            
+
         }
-        
+
 
 
     }
@@ -357,6 +361,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
             playerIK.isIKActive = false;
             velocity = sprintForce;
 
+            photonView.RPC("DashingFx", RpcTarget.All);
+
+
 
             yield return null;
             isSprinting = false;
@@ -367,6 +374,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         StartCoroutine(CoolDown());
     }
+
     private IEnumerator CoolDown()
     {
         float startTime = Time.time;
@@ -553,6 +561,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     #region ApplyStun
     private void OnCollisionEnter(Collision collision)
     {
+        if (isSprinting)
+        {
+            photonView.RPC("HitFx", RpcTarget.All);
+        }
         if (isSprinting && collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<PhotonView>().RPC("ApplyStun", RpcTarget.All);
@@ -564,6 +576,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private IEnumerator StunCountDown()
     {
         isStun = true;
+        stunFx.Play();
         yaw = 0f;
         pitch = 0f;
         float startTime = Time.time;
@@ -580,7 +593,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         stunRemainTime = 0;
         isStun = false;
-
+        stunFx.Stop();
 
 
 
@@ -608,7 +621,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     }
-
+    [PunRPC]
+    private void HitFx()
+    {
+        Instantiate(dashHitFx, gameObject.transform.position + new Vector3(0, 3, 0), Quaternion.identity);
+    }
+    [PunRPC]
+    private void DashingFx()
+    {
+        Instantiate(dashingFx, gameObject.transform.position, Quaternion.identity);
+    }
     [PunRPC]
     public void StunAnim(bool _stun)
     {

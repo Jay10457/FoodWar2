@@ -295,12 +295,16 @@ MonoBehaviour:
     itemId: 0
     amount: 0
     slotIndex: 0
+  resultIconDisplay: {fileID: 0}
+  cookingProgress: {fileID: 0}
+  cookingProgressBar: {fileID: 0}
   isCooking: 0
-  isOccupy: 1
-  inCookArea: 0
   cookerTeam: 0
   openRemain: {fileID: 8113018450240491087}
+  goodPotFX: {fileID: 0}
+  badPotFX: {fileID: 0}
   PVVeiwId: 0
+  cookStartTime: 0
   recipes: []
   currentRecipe: {fileID: 0}
   ingredients: []

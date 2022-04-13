@@ -82,6 +82,15 @@ MonoBehaviour:
   - GameTimerBegin
   - GameOver
   - SendAddScoreRequestToServer
+  - ConfirmAddScoreRequest
+  - GreenScore
+  - RedScore
+  - ScoreFX
+  - CookDone
+  - DishBeTake
+  - HitFx
+  - DashingFx
+  - SendAddScoreRequest
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

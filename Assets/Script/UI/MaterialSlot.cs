@@ -10,7 +10,7 @@ public class MaterialSlot : MonoBehaviour
     public List<GameObject> materials;
     [SerializeField] Item[] materialItems;
     [SerializeField] TMP_Text amountText = null;
-    int materialAmount;
+    public int materialAmount;
     public Item currentCharacterMat;
     public Action addMaterialAmount;
     public Action reduceMaterialAmount;

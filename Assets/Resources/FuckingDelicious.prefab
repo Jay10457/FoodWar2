@@ -122,6 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _item: {fileID: 0}
   itemAmount: 0
+  destroyFX: {fileID: 19806788, guid: 792d0041510cc4f428f4bbb5c2532f47, type: 3}
 --- !u!65 &1250552877199281450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -230,6 +231,6 @@ SpriteRenderer:
   m_Size: {x: 4.0499997, y: 2.6103513}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

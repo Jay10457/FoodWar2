@@ -135,6 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _item: {fileID: 0}
   itemAmount: 0
+  destroyFX: {fileID: 19806788, guid: 792d0041510cc4f428f4bbb5c2532f47, type: 3}
 --- !u!54 &9107994232581236478
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -230,6 +231,6 @@ SpriteRenderer:
   m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

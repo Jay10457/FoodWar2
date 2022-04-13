@@ -182,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _item: {fileID: 0}
   itemAmount: 0
+  destroyFX: {fileID: 19806788, guid: 792d0041510cc4f428f4bbb5c2532f47, type: 3}
 --- !u!65 &4492164757756629544
 BoxCollider:
   m_ObjectHideFlags: 0

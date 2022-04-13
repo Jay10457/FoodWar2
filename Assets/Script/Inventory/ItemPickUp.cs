@@ -9,6 +9,7 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
     public Item _item;
     public int itemAmount;
     float destroyTime = 5;
+    [SerializeField] ParticleSystem destroyFX;
 
    
     public IEnumerator countDownToDetroy()
@@ -44,7 +45,9 @@ public class ItemPickUp : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RpcKillMe()
     {
+        Instantiate(destroyFX, this.gameObject.transform.position, Quaternion.identity);
         PhotonNetwork.Destroy(this.gameObject);
+        
     }
 
     

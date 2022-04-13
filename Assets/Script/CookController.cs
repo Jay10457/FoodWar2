@@ -6,7 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 
 
-public class CookManager : MonoBehaviourPunCallbacks
+public class CookController : MonoBehaviourPunCallbacks
 {
 
     public bool inCookerArea;
@@ -14,12 +14,14 @@ public class CookManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform currentCookerTrans = null;
     [SerializeField] CookUI cookUI;
     [SerializeField] PlayerController playerController;
+   
     public Cooker currentCooker;
     public bool canPickUpDish;
     PhotonView PV;
     public string userId;
     public FoodTeam myTeam;
     public int currentItemIndex;
+    public bool isContainsDish;
     MeshRenderer cookerMat;
     
 
@@ -36,17 +38,19 @@ public class CookManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        
         SendCookUIRequest();
         PickUpDish();
     }
     
     private void PickUpDish()
     {
-        if (canPickUpDish && Input.GetKeyDown(KeyCode.E))
+        if (canPickUpDish && Input.GetKeyDown(KeyCode.E) && currentCooker.resultIconDisplay.gameObject.activeSelf && !isContainsDish)
         {
             if (PV.IsMine)
             {
                 currentCooker.PickUPDishRequestToServer(currentCooker.PVVeiwId, userId);
+                
             }
         }
     }
@@ -109,7 +113,7 @@ public class CookManager : MonoBehaviourPunCallbacks
                         cookerMat = currentCooker.gameObject.GetComponent<MeshRenderer>();
                         cookerMat.material.color = new Color(0.8627451f, 0.2745098f, 0.2666667f);
                     }
-                    if (currentCooker.resultIconDisplay.sprite != null)
+                    if (currentCooker.resultIconDisplay.sprite != null && currentCooker.isCooking)
                     {
                         canPickUpDish = true;
                     }

@@ -33,9 +33,10 @@ public class Lobby : MonoBehaviourPunCallbacks
             OnConnectedToMaster();
             return;
         }
-        
-        萬讀.ins.info = "開始連線到伺服器...";
         萬讀.ins.isOpen = true;
+        萬讀.ins.info = "開始連線到伺服器...";
+        
+ 
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -43,6 +44,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     {
         萬讀.ins.info = "連上伺服器...";
         萬讀.ins.isOpen = false;
+  
         連上了 = true;
         
         OpenMenu();
@@ -50,6 +52,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         萬讀.ins.isOpen = false;
+      
         搜尋房間.ins.Close();
         房間列表.ins.Close();
         創建房間.ins.Close();
@@ -92,6 +95,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     public void 建立房間(string v, int number)
     {
         萬讀.ins.info = "創建房間中...";
+       
         萬讀.ins.isOpen = true;
 
         RoomOptions ro = new RoomOptions();
@@ -103,6 +107,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     {
         // 任何情況下進入房間都會來到此
         萬讀.ins.isOpen = false;
+
         // 房主決定到哪個場景 房客會自動跟隨
         if (PhotonNetwork.IsMasterClient)
         {
@@ -112,6 +117,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         萬讀.ins.isOpen = false;
+     
         幹話.ins.講幹話("房間名稱衝突了。");
     }
     #endregion
@@ -119,11 +125,13 @@ public class Lobby : MonoBehaviourPunCallbacks
     public void 進入房間(string 房名)
     {
         萬讀.ins.isOpen = true;
+
         萬讀.ins.info = "正在加入房間...";
         PhotonNetwork.JoinRoom(房名);
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
+ 
         萬讀.ins.isOpen = false;
         幹話.ins.講幹話("房間人數已滿或房間不存在。");
     }
