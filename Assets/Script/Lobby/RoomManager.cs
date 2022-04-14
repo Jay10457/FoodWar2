@@ -23,8 +23,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < goodSpawnPoint.Length; i++)
             {
-                PhotonNetwork.InstantiateRoomObject("GoodPot", goodSpawnPoint[i].position, Quaternion.identity);
-                PhotonNetwork.InstantiateRoomObject("BadPot", badSpawnPoint[i].position, Quaternion.identity);
+                PhotonNetwork.InstantiateRoomObject("GoodPot", goodSpawnPoint[i].position, Quaternion.Euler(0, Random.Range(-360, 360), 0));
+                PhotonNetwork.InstantiateRoomObject("BadPot", badSpawnPoint[i].position, Quaternion.Euler(0, Random.Range(-360, 360), 0));
             }
             PhotonNetwork.InstantiateRoomObject("ScoreManager", transform.position, Quaternion.identity);
             
@@ -53,6 +53,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
 
+    }
+    public void MeLeftRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(0);
     }
 }
 

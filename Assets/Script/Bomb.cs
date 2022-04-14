@@ -43,19 +43,12 @@ public class Bomb : MonoBehaviour
                 nowPoint--;
         }
     }
-
+    Collider[] cols;
     private void DetroySelf()
     {
 
-        Collider[] cols;
-        cols = Physics.OverlapSphere(this.transform.position, 10f);
-        for (int i = 0; i < cols.Length; i++)
-        {
-            if (cols[i].transform.root.tag == "Player")
-            {
-                cols[i].transform.root.GetComponent<PlayerController>().ApplyStun();
-            }
-        }
+      
+       
         Instantiate(impactParticle, this.transform.position, this.transform.rotation);
         Destroy(this.gameObject);
     }
@@ -94,6 +87,17 @@ public class Bomb : MonoBehaviour
 
         DetroySelf();
     }
+    private void OnDestroy()
+    {
+        cols = Physics.OverlapSphere(this.transform.position, 10f);
+        for (int i = 0; i < cols.Length; i++)
+        {
+            if (cols[i].transform.root.tag == "Player")
+            {
+                cols[i].transform.root.GetComponent<PlayerController>().ApplyStun();
+            }
+        }
+    }
 
-    
+
 }

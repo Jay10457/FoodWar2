@@ -11,7 +11,8 @@ public class ScoreController : MonoBehaviourPunCallbacks
     ScoreBarAndTimer score;
     HotBar hotBar;
     Item dish;
-    ScoreManager scoreManager;
+    [SerializeField] AudioClip[] scoreFXs;
+    [SerializeField] AudioSource SFXplayer;
 
     public int currentDishId;
     [SerializeField] ParticleSystem scoreFX;
@@ -27,7 +28,7 @@ public class ScoreController : MonoBehaviourPunCallbacks
     {
         PV = this.gameObject.GetPhotonView();
         hotBar = this.gameObject.GetComponent<HotBar>();
-        scoreManager = FindObjectOfType<ScoreManager>();
+ 
         
     }
     private void Start()
@@ -43,7 +44,9 @@ public class ScoreController : MonoBehaviourPunCallbacks
         if (currentDishId > 9 && Input.GetMouseButton(0) && canSend)
         {
 
-            scoreManager.SendScoreRequest(ScoreCheck(currentDishId));
+            EventManager.instance.AddScore(ScoreCheck(currentDishId));
+            photonView.RPC("SendFX", RpcTarget.All);
+            SFXplayer.PlayOneShot(scoreFXs[UnityEngine.Random.Range(0, scoreFXs.Length)]);
             hotBar.WeaponUse();
 
         }
@@ -88,7 +91,11 @@ public class ScoreController : MonoBehaviourPunCallbacks
 
  
 
-
+    [PunRPC]
+    private void SendFX()
+    {
+        Instantiate(scoreFX, this.gameObject.transform.position + new Vector3(0, 4, 0), Quaternion.identity);
+    }
 
 
 

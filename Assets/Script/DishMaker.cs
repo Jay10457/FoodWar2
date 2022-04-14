@@ -42,6 +42,10 @@ public partial class Cooker
     {
         foreach (RecipeScriptableOBJ recipe in RecipeManager.instance.threeMatRecipes)
         {
+            if (ingredients == null)
+                break;
+            if (ingredients.Count < 3)
+                break;
             if (recipe.ingredients.Find(r => recipe.ingredients.Contains(ingredients[0]) && recipe.ingredients.Contains(ingredients[1])
             && recipe.ingredients.Contains(ingredients[2])))
             {
@@ -65,7 +69,10 @@ public partial class Cooker
 
         foreach (RecipeScriptableOBJ recipe in RecipeManager.instance.twoMatRecipes)
         {
-
+            if (ingredients == null)
+                break;
+            if (ingredients.Count < 2)
+                break;
             if (recipe.ingredients.Find(r => recipe.ingredients.Contains(ingredients[0]) && recipe.ingredients.Contains(ingredients[1])))
             {
                 return recipe;

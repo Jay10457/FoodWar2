@@ -14,9 +14,9 @@ public class EventManager
             return _instance;
         }
     }
-    
-    public Action UIToCooker;
-    public Action<string> CookerToUI;
+
+    public Action<int> AddScore;
+    public Action GameOver;
 
 
 }

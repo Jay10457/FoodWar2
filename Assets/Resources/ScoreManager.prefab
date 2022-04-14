@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5038093040831278580}
   - component: {fileID: 6191520323336581296}
   - component: {fileID: 1663245788532669425}
+  - component: {fileID: 632363299737774801}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -66,3 +67,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cabed075bc1a0f4eb5da6496282cea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &632363299737774801
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346256311765358112}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 65b0fd0c3780f464d9073b44fa4c2928, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

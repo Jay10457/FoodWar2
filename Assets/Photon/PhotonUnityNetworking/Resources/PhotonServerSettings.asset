@@ -91,6 +91,14 @@ MonoBehaviour:
   - HitFx
   - DashingFx
   - SendAddScoreRequest
+  - StunFX
+  - ConfirmAddScore
+  - SendFX
+  - SendFinalScoreToAll
+  - SendGameResultCal
+  - AddTimeRpc
+  - SprintFXAndAni
+  - StunFXAndAni
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

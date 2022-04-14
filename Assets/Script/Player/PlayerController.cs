@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
+    [SerializeField] AudioSource SFXPlayer;
+    [SerializeField] AudioClip sprintSFX;
     [SerializeField] ParticleSystem stunFx;
     [SerializeField] ParticleSystem dashHitFx;
     [SerializeField] ParticleSystem dashingFx;
@@ -110,7 +112,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 nameSlotPos = new Vector3(0, 4.5f, 0);
                 stunFx.gameObject.transform.localPosition = new Vector3(0, 4, 0);
             }
-            stunFx.Stop();
+            
             photonView.RPC("SetCharacter", RpcTarget.All, _characterId);//_characterId
             photonView.RPC("SetPlayerName", RpcTarget.All, SaveManager.instance.nowData.playerName, R, G, B, nameSlotPos);
 
@@ -222,7 +224,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             yield return null;
         }
         isGameBegin = false;
-
+        if (PhotonNetwork.IsMasterClient)
+        {
+            EventManager.instance.GameOver();
+        }
 
 
     }
@@ -266,6 +271,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
             jump = Input.GetKeyDown(KeyCode.Space) ? true : false;
             sprint = Input.GetKeyDown(KeyCode.LeftShift) ? true : false;
 
+        }
+        else
+        {
+            yaw = 0;
+            pitch = 0;
+            playerMoveInput = Vector3.zero;
         }
 
 
@@ -352,7 +363,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         float startTime = Time.time;
         float originVelocity = velocity;
-
+        SFXPlayer.PlayOneShot(sprintSFX);
+        photonView.RPC("SprintFXAndAni", RpcTarget.All, true);
         isSkillOk = false;
         while (Time.time < startTime + sprintTime)
         {
@@ -361,7 +373,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             playerIK.isIKActive = false;
             velocity = sprintForce;
 
-            photonView.RPC("DashingFx", RpcTarget.All);
+            
 
 
 
@@ -372,9 +384,23 @@ public class PlayerController : MonoBehaviourPunCallbacks
             velocity = originVelocity;
 
         }
+        photonView.RPC("SprintFXAndAni", RpcTarget.All, false);
         StartCoroutine(CoolDown());
     }
+    [PunRPC]
+    private void SprintFXAndAni(bool _isSprting)
+    {
+        ani.SetBool("Sprint", _isSprting);
+        if (_isSprting)
+        {
+            dashingFx.Play();
+        }
+        else
+        {
+            dashingFx.Stop();
+        }
 
+    }
     private IEnumerator CoolDown()
     {
         float startTime = Time.time;
@@ -404,10 +430,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
+            if (isGameBegin)
+            {
+                Move();
 
-            Move();
+                PlayerRotate();
+            }
 
-            PlayerRotate();
+           
 
         }
         else
@@ -425,25 +455,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             // ¦P¨B
             photonView.RPC("SendAnim", RpcTarget.Others, lastAnim.x, lastAnim.y);
         }
-        if (isStun && stunRemainTime == stunTime)
-        {
-            SendStunAnim();
-
-        }
-        else if (!isStun && stunRemainTime == 0)
-        {
-            stunRemainTime = -1;
-            SendStunAnim();
-
-        }
+       
 
     }
-    private void SendStunAnim()
-    {
-        photonView.RPC("StunAnim", RpcTarget.Others, isStun);
-
-    }
-
+   
     private void CameraRotation()
     {
         camLookAt.transform.rotation *= Quaternion.AngleAxis(pitch * MOUSE_SENTIVY, Vector3.up);
@@ -474,22 +489,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         ani.SetFloat("MoveX", playerMoveInput.x);
         ani.SetFloat("MoveZ", playerMoveInput.z);
-        if (isSprinting)
-        {
-            ani.SetBool("Sprint", true);
-        }
-        else
-        {
-            ani.SetBool("Sprint", false);
-        }
-        if (isStun)
-        {
-            ani.SetBool("Stun", true);
-        }
-        else
-        {
-            ani.SetBool("Stun", false);
-        }
+       
 
 
     }
@@ -576,7 +576,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private IEnumerator StunCountDown()
     {
         isStun = true;
-        stunFx.Play();
+        photonView.RPC("StunFXAndAni", RpcTarget.All, isStun);
         yaw = 0f;
         pitch = 0f;
         float startTime = Time.time;
@@ -593,7 +593,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         stunRemainTime = 0;
         isStun = false;
-        stunFx.Stop();
+        photonView.RPC("StunFXAndAni", RpcTarget.All, isStun);
+        
 
 
 
@@ -622,26 +623,31 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     }
     [PunRPC]
+    private void StunFXAndAni(bool _isStun)
+    {
+        ani.SetBool("Stun", _isStun);
+        if (_isStun)
+        {
+            stunFx.Play();
+        }
+        else
+        {
+            stunFx.Stop();
+        }
+    }
+    [PunRPC]
     private void HitFx()
     {
         Instantiate(dashHitFx, gameObject.transform.position + new Vector3(0, 3, 0), Quaternion.identity);
     }
-    [PunRPC]
-    private void DashingFx()
-    {
-        Instantiate(dashingFx, gameObject.transform.position, Quaternion.identity);
-    }
-    [PunRPC]
-    public void StunAnim(bool _stun)
-    {
-        ani.SetBool("Stun", _stun);
-    }
+   
+   
     [PunRPC]
     public void ApplyStun()
     {
         if (photonView.IsMine)
         {
-            Debug.Log("ApplyStun");
+          
             StartCoroutine(StunCountDown());
 
         }
@@ -662,6 +668,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         characters[cid].SetActive(true);
         ani = characters[cid].GetComponent<Animator>();
         characterCollider = characters[cid].GetComponent<Collider>();
+        stunFx.Stop();
+        dashingFx.Stop();
     }
     [PunRPC]
     public void SetPlayerName(string playerName, float r, float g, float b, Vector3 namePos)

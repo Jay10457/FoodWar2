@@ -21,6 +21,10 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     public SpriteRenderer resultIconDisplay = null;
     public Canvas cookingProgress = null;
     [SerializeField] Image cookingProgressBar = null;
+    [SerializeField] AudioSource SFXPlayer;
+    [SerializeField] AudioClip dingFX;
+    [Range(0, 1)]
+    [SerializeField] float pitch;
 
 
     public bool isCooking;
@@ -100,7 +104,14 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         ingredients = new List<Item>();
         recipes = RecipeManager.instance.recipes;
         materialsInCooker = new MaterialListSerializable<ItemStore>();
-
+        if (cookerTeam == FoodTeam.GOOD)
+        {
+            pitch = 1;
+        }
+        else
+        {
+            pitch = 0.8f;
+        }
 
 
 
@@ -141,16 +152,28 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         photonView.RPC("SendAddMaterialRequest", RpcTarget.MasterClient, itemPacket, slotIndex);
 
     }
+    
 
+
+    public void AddCookerTime(float addTime)
+    {
+        photonView.RPC("AddTimeRpc", RpcTarget.All, addTime);
+    }
+
+    [PunRPC]
+    private void AddTimeRpc(float addTime)
+    {
+        cookStartTime = cookStartTime + addTime;
+    }
     public IEnumerator CookingProgress(float time, string recepeName)
     {
 
-       
+        
         cookStartTime = Time.time;
         while (Time.time < cookStartTime + time)
         {
             cookingProgressBar.fillAmount = Mathf.Abs((((cookStartTime + time) - Time.time) / time) - 1);
-
+            
 
             yield return null;
 
@@ -160,9 +183,7 @@ public partial class Cooker : MonoBehaviourPunCallbacks
 
 
         }
-        PotFX.Stop();
-        cookingProgressBar.fillAmount = 0;
-        cookingProgress.gameObject.SetActive(false);
+        
         if (PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("CookDone", RpcTarget.All, recepeName);
@@ -374,23 +395,27 @@ public partial class Cooker : MonoBehaviourPunCallbacks
     }
 
     #endregion
-
+    float lestStartCookTime = 0;
     [PunRPC]
-
     public void StartCookRequest(int _cookerId)
     {
+        if (Time.time < lestStartCookTime + 0.2f)
+        {
+            return;
+        }
+        lestStartCookTime = Time.time;
 
-        if (materialsInCooker.materialsStore.Count == 2)
+        if (ingredients.Count == 2)
         {
             currentRecipe = CheckTwoMatRecipe();
             // Debug.LogError(currentRecipe);
         }
-        else if (materialsInCooker.materialsStore.Count == 3)
+        else if (ingredients.Count == 3)
         {
             currentRecipe = CheckThreeMatRecipe();
             // Debug.LogError(currentRecipe);
         }
-        if (materialsInCooker.materialsStore.Count >= 2)
+        if (ingredients.Count >= 2)
         {
             photonView.RPC("ConfirmStartCookRequest", RpcTarget.All, _cookerId, true, currentRecipe.cookinTime, currentRecipe.name);
             ingredients.Clear();
@@ -418,11 +443,14 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         StartCoroutine(CookingProgress(_cookingTime, _recipeName));
 
     }
+    float lestPickUpRequestTime = 0f;
     [PunRPC]
     private void PickUpRequest(int _cookerId, string _userId)
     {
+        if (Time.time < lestPickUpRequestTime + 0.2f)
+            return;
+        lestPickUpRequestTime = Time.time;
         isCooking = false;
-
         photonView.RPC("ConfirmPickUpDish", RpcTarget.All, _cookerId, _userId, isCooking);
     }
     [PunRPC]
@@ -435,16 +463,21 @@ public partial class Cooker : MonoBehaviourPunCallbacks
         if (myPlayerReference.userId == _userId && myPlayerReference.currentCooker.PVVeiwId == _cookerId)
         {
             InventoryManager.AddItemToInventory(currentRecipe.resultDish, 1);
-       
         }
     }
   
     [PunRPC]
     private void CookDone(string recepeName)
     {
+        PotFX.Stop();
+        cookingProgressBar.fillAmount = 0;
+        cookingProgress.gameObject.SetActive(false);
+
         resultIconDisplay.gameObject.SetActive(true);
         currentRecipe = RecipeManager.instance.GetRecipeByName(recepeName);
         resultIconDisplay.sprite = currentRecipe.resultDishImage;
+        SFXPlayer.pitch = pitch;
+        SFXPlayer.PlayOneShot(dingFX);
     }
 
 }

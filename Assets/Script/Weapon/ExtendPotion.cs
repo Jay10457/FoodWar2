@@ -7,34 +7,47 @@ using System;
 
 public class ExtendPotion : MonoBehaviourPunCallbacks
 {
-    bool isUseAble;
-    GameObject currentTarget;
+   
+    Cooker currentTarget;
     [SerializeField] ParticleSystem potionFX;
     [SerializeField] PhotonView PV;
+    [SerializeField] CookController myPlayer;
 
-    public Action<int> addTime;
+    
 
-
+    private void Awake()
+    {
+        myPlayer = this.gameObject.transform.root.GetComponent<CookController>();
+    }
 
     private void Update()
     {
-        UsePotion();
+        if (myPlayer.canUsePotion)
+        {
+            UsePotion();
+        }
+        if (myPlayer.currentCooker != null)
+        {
+            currentTarget = myPlayer.currentCooker;
+        }
+        
     }
 
     private void UsePotion()
     {
-        if (Input.GetMouseButtonDown(0) && isUseAble && !CookUI.instance.gameObject.activeSelf && currentTarget != null)
+        if (Input.GetMouseButtonDown(0)&& !CookUI.instance.gameObject.activeSelf && currentTarget != null)
         {
 
-            if (currentTarget.gameObject.GetComponent<Cooker>())
+            if (currentTarget != null)
             {
                 if (PV.IsMine)
                 {
-                    photonView.RPC("PotionFX", RpcTarget.All, currentTarget.transform.position);
+                    currentTarget.AddCookerTime(10f);
+                    photonView.RPC("PotionFX", RpcTarget.All, currentTarget.gameObject.transform.position);
                 }
                 
                 HotBar.instance.WeaponUse();
-                currentTarget.GetComponent<MeshRenderer>().material.color = Color.white;
+                
 
             }
         }

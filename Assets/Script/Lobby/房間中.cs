@@ -106,6 +106,7 @@ public class 房間中 : SingletonMonoBehaviourPun<房間中>
     {
 
         PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
         //SceneManager.LoadSceneAsync("S01");
         PhotonNetwork.LoadLevel("Loading");
         //async = SceneManager.LoadSceneAsync("S01");

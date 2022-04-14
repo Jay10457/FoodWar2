@@ -14,6 +14,9 @@ public class CookController : MonoBehaviourPunCallbacks
     [SerializeField] Transform currentCookerTrans = null;
     [SerializeField] CookUI cookUI;
     [SerializeField] PlayerController playerController;
+    [SerializeField] AudioSource SFXPlayer;
+    [SerializeField] AudioClip pickUpSFX;
+    [SerializeField] AudioClip errorSFX;
    
     public Cooker currentCooker;
     public bool canPickUpDish;
@@ -22,6 +25,7 @@ public class CookController : MonoBehaviourPunCallbacks
     public FoodTeam myTeam;
     public int currentItemIndex;
     public bool isContainsDish;
+    public bool canUsePotion;
     MeshRenderer cookerMat;
     
 
@@ -41,6 +45,7 @@ public class CookController : MonoBehaviourPunCallbacks
         
         SendCookUIRequest();
         PickUpDish();
+       
     }
     
     private void PickUpDish()
@@ -50,9 +55,15 @@ public class CookController : MonoBehaviourPunCallbacks
             if (PV.IsMine)
             {
                 currentCooker.PickUPDishRequestToServer(currentCooker.PVVeiwId, userId);
+                SFXPlayer.PlayOneShot(pickUpSFX);
                 
             }
         }
+        else if (canPickUpDish && Input.GetKeyDown(KeyCode.E) && currentCooker.resultIconDisplay.gameObject.activeSelf && isContainsDish)
+        {
+            SFXPlayer.PlayOneShot(errorSFX);
+        }
+      
     }
     private void SendCookUIRequest()
     {
@@ -62,6 +73,8 @@ public class CookController : MonoBehaviourPunCallbacks
             if (PV.IsMine)
             {
                 currentCooker.SendOpenRequestServerCooker(userId);
+                playerController.pitch = 0;
+                playerController.yaw = 0;
                 
             }
 
@@ -112,6 +125,7 @@ public class CookController : MonoBehaviourPunCallbacks
                     {
                         cookerMat = currentCooker.gameObject.GetComponent<MeshRenderer>();
                         cookerMat.material.color = new Color(0.8627451f, 0.2745098f, 0.2666667f);
+                        canUsePotion = true;
                     }
                     if (currentCooker.resultIconDisplay.sprite != null && currentCooker.isCooking)
                     {
@@ -141,6 +155,7 @@ public class CookController : MonoBehaviourPunCallbacks
                         cookerMat.material.color = Color.white;
                         cookerMat = null;
                     }
+                    canUsePotion = false;
                     currentCooker.SendCloseRequestServerCooker(userId);
                     currentCooker.openRemain.SetActive(false);
                    
@@ -161,6 +176,7 @@ public class CookController : MonoBehaviourPunCallbacks
                 cookerMat.material.color = Color.white;
                 cookerMat = null;
             }
+            canUsePotion = false;
             currentCooker.SendCloseRequestServerCooker(userId);
             currentCooker.openRemain.SetActive(false);            
             canPickUpDish = false;

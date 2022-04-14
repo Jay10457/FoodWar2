@@ -15,6 +15,10 @@ public class CookUI : MonoBehaviour
     [SerializeField] GameObject[] BGs;
     [SerializeField] Vector3 offset;
     [SerializeField] CookController myPlayerRef = null;
+    [SerializeField] AudioClip putSFX;
+    [SerializeField] AudioClip removeSFX;
+    [SerializeField] AudioClip noMatErrorSFX;
+    [SerializeField] AudioSource SFXPlayer;
 
     ItemPacket itemPacket = new ItemPacket();
     Action<string> RefreshUI;
@@ -81,12 +85,20 @@ public class CookUI : MonoBehaviour
         if (_ingredientSlots[index].currentItem != null)
         {
             myPlayerRef.currentCooker.RemoveMaterialRPC(covertedItemPacketJson(), index);
+            SFXPlayer.PlayOneShot(removeSFX);
         }
         else
         {
             if (MaterialSlot.instance.materialAmount > 0)
             {
                 myPlayerRef.currentCooker.PutMaterialRPC(covertedItemPacketJson(), index);
+                SFXPlayer.PlayOneShot(putSFX);
+                
+            }
+            else
+            {
+                MaterialSlot.instance.AmountTextPop();
+                SFXPlayer.PlayOneShot(noMatErrorSFX);
             }
             
         }
